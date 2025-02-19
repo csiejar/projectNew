@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>題庫系統</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/styles.css">
+    <script src="/static/script.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="d-flex align-items-center justify-content-between p-3 bg-dark text-white">
+        <!-- 漢堡選單 -->
+        <button class="btn text-white" id="menuBtn">☰</button>
+        
+        <!-- Logo -->
+        <h1 class="m-0">📚 電子學題庫系統</h1>
+
+        <!-- 右側按鈕 -->
+        <!-- 地球 -->
+        <div>
+            <button class="btn btn-outline-light" id="google-translate">
+              🌍 <!-- 這是地球符號 -->
+            </button>
+          
+            <!-- Google 翻譯小工具容器 -->
+            <div id="google_translate_element" style="display: none; position: absolute; top: 80px; right: 0px; z-index: 10000;"></div>
+          
+            <!-- Google 翻譯初始化腳本 -->
+            <script type="text/javascript">
+              // 預設隱藏翻譯工具
+              document.getElementById('google_translate_element').style.display = 'none';
+              
+              // 初始化 Google 翻譯工具
+              function googleTranslateElementInit() {
+                new google.translate.TranslateElement({
+                  pageLanguage: 'zh-TW', // 網頁語言
+                  includedLanguages: 'en,zh-CN,zh-TW', // 可選語言
+                  layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+                }, 'google_translate_element');
+              }
+          
+              // 點擊地球按鈕顯示/隱藏翻譯工具
+              document.getElementById('google-translate').addEventListener('click', function() {
+                const translateElement = document.getElementById('google_translate_element');
+                // 顯示或隱藏翻譯選項
+                if (translateElement.style.display === 'none') {
+                  translateElement.style.display = 'block';
+                } else {
+                  translateElement.style.display = 'none';
+                }
+              });
+            </script>
+          
+            <!-- Google 翻譯腳本 -->
+            <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+            <button class="btn btn-outline-light" id="userBtn">👤</button>
+          </div>
+          
+    </header>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <button class="btn close-btn" id="closeSidebar">×</button>
+        <h2>選單</h2>
+        <ul>
+            <li><a href="#">首頁</a></li>
+            <li><a href="#">練習模式</a></li>
+            <li><a href="#">考試模式</a></li>
+        </ul>
+    </div>
+
+    <!-- 題目區塊 -->
+    <div class="container mt-5">
+        <h2>題目：</h2>
+        <p id="questionText">請點擊按鈕獲取題目</p>
+        <ul id="optionsList"></ul>
+        <button class="btn btn-primary mt-3" id="getQuestionBtn">獲取題目</button>
+    </div>
+
+    <!-- 小浮動視窗 -->
+    <div class="modal-overlay" id="customModal">
+        <div class="modal">
+            <span class="close">&times;</span>
+            <h2>提示</h2>
+            <p>這是浮動的小視窗</p>
+        </div>
+    </div>
+
+<!-- 登入彈出視窗（可拖動） -->
+<div id="loginModal" class="modal">
+    <div class="modal-header">
+        <span class="close" id="loginModalCloseBtn">&times;</span>
+        <h2>登入</h2>
+    </div>
+    <div class="modal-content">
+        <input type="text" placeholder="帳號" id="username">
+        <input type="password" placeholder="密碼" id="password">
+        <button class="btn btn-primary" id="loginBtn">登入</button>
+    </div>
+</div>
+
+    
+    <style>
+        /* 底部區域樣式 */
+        #footer {
+          position: fixed; /* 固定在頁面底部 */
+          bottom: 0; /* 距離頁面底部 0px */
+          left: 50%; /* 水平居中 */
+          transform: translateX(-50%); /* 使用 transform 居中 */
+          background-color: #333; /* 背景顏色 */
+          color: white; /* 文字顏色 */
+          text-align: center; /* 文字居中 */
+          padding: 10px 0; /* 上下內邊距 */
+          width: 100%; /* 寬度設為 100% */
+          z-index: 9999; /* 確保它顯示在其他元素之上 */
+        }
+    
+      </style>
+    </head>
+    <body>
+      <!-- 其他頁面內容 -->
+    
+      <!-- 底部區域 -->
+      <div id="footer">
+        <p>© 2025 電子學題庫系統 版權所有</p>
+      </div>
+
+      <!-- JavaScript 放在這裡 -->
+    <script src="/static/script.js"></script>
+
+    
+    </body>
+    
+</body>
+</html>

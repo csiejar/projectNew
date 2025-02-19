@@ -1,0 +1,114 @@
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 250px;
+    height: 100%;
+    background: #343a40;
+    padding: 20px;
+    color: white;
+    transition: 0.3s;
+}
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+.sidebar ul li {
+    padding: 10px 0;
+}
+.sidebar ul li a {
+    color: white;
+    text-decoration: none;
+}
+.sidebar.show {
+    left: 0;
+}
+.close-btn {
+    background: red;
+    color: white;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+}
+
+/* 登入視窗 */
+/* 背景遮罩 */
+.modal-overlay {
+    display: none; /* 預設隱藏 */
+    position: fixed;
+    top: 40%;
+    right: 5%; /* 預設靠近右上角 */
+    width: 350px;
+    height: 550px;
+    border-radius: 10px;
+    transform: translate(0, -50%);
+}
+
+/* 小直向長方形的 Modal */
+.modal {
+    display: none;
+    position: fixed;  /* 改成 fixed，讓它可以全螢幕拖動 */
+    top: 50%;
+    left: 50%;
+    width: 280px;
+    height: 450px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    transform: translate(-50%, -50%);
+    cursor: grab; /* 提示使用者可以拖曳 */
+    z-index: 10000; /* 確保視窗在最上層 */
+}
+
+/* 拖曳時游標變成"抓住" */
+.modal.dragging {
+    cursor: grabbing;
+}
+
+/* 標題區作為拖曳區域 */
+.modal-header {
+    cursor: grab;
+    padding: 10px;
+    background: #ffffff;
+    color: rgb(0, 0, 0);
+    border-radius: 10px 10px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+
+/* 📱 手機版調整（螢幕寬度小於 768px 時） */
+@media screen and (max-width: 768px) {
+    .modal-overlay, .modal {
+        top: 50%;
+        right: auto;
+        left: 50%;
+        width: 90%;  /* 讓 Modal 更加適應小螢幕 */
+        height: auto; /* 高度自適應 */
+        transform: translate(-50%, -50%);
+    }
+}
+
+/* 🖥️ 超大螢幕（寬度超過 1200px 時，靠右邊更多） */
+@media screen and (min-width: 1200px) {
+    .modal-overlay, .modal {
+        right: 10%;
+        width: 300px;
+        height: 500px;
+    }
+}
+
+/* 關閉按鈕 */
+.modal .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+    font-size: 18px;
+}
+
