@@ -112,3 +112,12 @@
     font-size: 18px;
 }
 
+
+/* Use a unique and descriptive class name */
+.inter-800-weight {
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400; /* You can adjust this from 100 to 900 */
+    font-style: normal; /* Set this to 'italic' if you want italic style */
+  }
+  
