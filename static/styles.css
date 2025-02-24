@@ -5,7 +5,7 @@
     left: -250px; /* 預設隱藏在左側 */
     width: 250px;
     height: 100%;
-    background: #343a40;
+    background: #ffffff;
     padding: 20px;
     color: white;
     transition: left 0.3s ease-in-out; /* 平滑動畫 */
@@ -18,17 +18,19 @@
 
 /* Sidebar 按鈕 */
 .close-btn {
-    background: red;
-    color: white;
+    position: absolute; /* 使用絕對定位 */
+    top: 20px;  /* 距離頂部 20px */
+    right: 20px; /* 距離右邊 20px */
+    color: black;
     border: none;
-    padding: 5px;
     cursor: pointer;
 }
+
 
 /* Sidebar - Logo 設計 */
 .sidebar-logo {
     text-align: center; /* 讓 logo 置中 */
-    padding: 20px 0; /* 上下內距 */
+    padding: 50px 0; /* 上下內距 */
 }
 
 .sidebar-logo img {

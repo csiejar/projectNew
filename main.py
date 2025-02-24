@@ -8,17 +8,6 @@ app = FastAPI(debug=True)
 # 靜態檔案（提供 HTML、CSS、JS）
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# 題庫資料（模擬數據）
-questions = [
-    {"id": 1, "question": "2 + 2 = ?", "options": ["3", "4", "5", "6"], "answer": "4"},
-    {"id": 2, "question": "5 + 3 = ?", "options": ["5", "7", "8", "9"], "answer": "8"},
-]
-
-# API - 獲取題目
-@app.get("/api/questions")
-async def get_questions():
-    return JSONResponse(content={"questions": questions})
-
 # API - 登入
 class LoginRequest(BaseModel):
     username: str

@@ -68,14 +68,15 @@
     </header>
 
     <div id="sidebar" class="sidebar">
+      <!-- 關閉按鈕 -->
+      <button id="closeSidebar" class="close-btn">✖︎</button>
+  
       <!-- 加入 Logo -->
       <div class="sidebar-logo">
           <img src="img/logo.png" alt="Logo">
       </div>
       
-      <!-- 關閉按鈕 -->
-      <button id="closeSidebar" class="close-btn">關閉</button>
-  
+      
       <!-- 其他 Sidebar 內容 -->
       <ul>
           <li><a href="#">首頁</a></li>
@@ -83,15 +84,6 @@
           <li><a href="#">聯絡我們</a></li>
       </ul>
   </div>
-  
-
-    <!-- 題目區塊 -->
-    <div class="container mt-5">
-        <h2>題目：</h2>
-        <p id="questionText">請點擊按鈕獲取題目</p>
-        <ul id="optionsList"></ul>
-        <button class="btn btn-primary mt-3" id="getQuestionBtn">獲取題目</button>
-    </div>
 
     <!-- 小浮動視窗 -->
     <div class="modal-overlay" id="customModal">
@@ -116,8 +108,8 @@
 </div>
     </head>
     <body>
-      <!-- 其他頁面內容 -->
-    
+      <h1 style="font-weight: 800; margin-bottom: 20px;">電子學題庫平台</h1>
+      <h4 style="font-weight: 550; margin-top: 0;">本網站提供各式題庫,提供個人化的電子練習以及模擬試題等</h4>
       <!-- 底部區域 -->
       <div id="footer">
         <p>© 2025 電子學題庫系統 版權所有</p>
