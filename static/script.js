@@ -1,14 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
     let currentQuestion = null;
-    
-    // 漢堡選單
-    document.getElementById("menuBtn").addEventListener("click", function () {
-        document.getElementById("sidebar").classList.add("show");
-    });
-    document.getElementById("closeSidebar").addEventListener("click", function () {
-        document.getElementById("sidebar").classList.remove("show");
-    });
-
     // 獲取題目
     function loadQuestion() {
         answered = false;
@@ -148,6 +139,7 @@ document.addEventListener("DOMContentLoaded", function () {
         modal.style.display = "none";
     });
 
+
     // 點擊 userBtn 顯示 Modal
     document.getElementById("userBtn").addEventListener("click", function () {
         modal.style.display = "block";
@@ -156,6 +148,26 @@ document.addEventListener("DOMContentLoaded", function () {
     // 點擊關閉按鈕
     document.getElementById("loginModalCloseBtn").addEventListener("click", function () {
         modal.style.display = "none";
+    });
+    const menuBtn = document.getElementById("menuBtn");
+    const sidebar = document.getElementById("sidebar");
+    const closeSidebar = document.getElementById("closeSidebar");
+
+    // 點擊按鈕開啟 Sidebar
+    menuBtn.addEventListener("click", function () {
+        sidebar.classList.add("show"); // 添加 show 類別
+    });
+
+    // 點擊關閉按鈕隱藏 Sidebar
+    closeSidebar.addEventListener("click", function () {
+        sidebar.classList.remove("show"); // 移除 show 類別
+    });
+
+    // 點擊側邊欄外部時關閉
+    document.addEventListener("click", function (event) {
+        if (!sidebar.contains(event.target) && !menuBtn.contains(event.target)) {
+            sidebar.classList.remove("show");
+        }
     });
 });
 

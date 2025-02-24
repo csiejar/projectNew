@@ -14,18 +14,17 @@
 </head>
 <body>
     <!-- Header -->
-    <header class="d-flex align-items-center justify-content-between p-3 bg-dark text-white">
+    <header class="d-flex align-items-center justify-content-between p-3 bg-white text-dark">
         <!-- 漢堡選單 -->
-        <button class="btn text-white" id="menuBtn">☰</button>
+        <button class="btn text-dark" id="menuBtn">☰</button>
         
         <!-- Logo -->
-        <h1 class="m-0 inter-800-weight"><b><i>ElecForge</i></b></h1>
-
+        <img src="img/logo.png" alt="Logo" style="height: 50px;">
 
         <!-- 右側按鈕 -->
         <!-- 地球 -->
         <div>
-            <button class="btn btn-outline-light" id="google-translate">
+            <button class="btn btn-outline-dark" id="google-translate">
               <i class="bi bi-globe"></i> <!-- 地球 -->
             </button>
           
@@ -60,7 +59,7 @@
           
             <!-- Google 翻譯腳本 -->
             <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-            <button class="btn btn-outline-light" id="userBtn">
+            <button class="btn btn-outline-dark" id="userBtn">
               <i class="bi bi-person"></i>
             </button>
             
@@ -68,16 +67,23 @@
           
     </header>
 
-    <!-- Sidebar -->
     <div id="sidebar" class="sidebar">
-        <button class="btn close-btn" id="closeSidebar">×</button>
-        <h2>選單</h2>
-        <ul>
-            <li><a href="#">首頁</a></li>
-            <li><a href="#">練習模式</a></li>
-            <li><a href="#">考試模式</a></li>
-        </ul>
-    </div>
+      <!-- 加入 Logo -->
+      <div class="sidebar-logo">
+          <img src="img/logo.png" alt="Logo">
+      </div>
+      
+      <!-- 關閉按鈕 -->
+      <button id="closeSidebar" class="close-btn">關閉</button>
+  
+      <!-- 其他 Sidebar 內容 -->
+      <ul>
+          <li><a href="#">首頁</a></li>
+          <li><a href="#">功能</a></li>
+          <li><a href="#">聯絡我們</a></li>
+      </ul>
+  </div>
+  
 
     <!-- 題目區塊 -->
     <div class="container mt-5">
@@ -108,24 +114,6 @@
         <button class="btn btn-primary" id="loginBtn">登入</button>
     </div>
 </div>
-
-    
-    <style>
-        /* 底部區域樣式 */
-        #footer {
-          position: fixed; /* 固定在頁面底部 */
-          bottom: 0; /* 距離頁面底部 0px */
-          left: 50%; /* 水平居中 */
-          transform: translateX(-50%); /* 使用 transform 居中 */
-          background-color: #333; /* 背景顏色 */
-          color: white; /* 文字顏色 */
-          text-align: center; /* 文字居中 */
-          padding: 10px 0; /* 上下內邊距 */
-          width: 100%; /* 寬度設為 100% */
-          z-index: 9999; /* 確保它顯示在其他元素之上 */
-        }
-    
-      </style>
     </head>
     <body>
       <!-- 其他頁面內容 -->

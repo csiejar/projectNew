@@ -1,29 +1,22 @@
-/* Sidebar */
+/* Sidebar - 預設隱藏 */
 .sidebar {
     position: fixed;
     top: 0;
-    left: -250px;
+    left: -250px; /* 預設隱藏在左側 */
     width: 250px;
     height: 100%;
     background: #343a40;
     padding: 20px;
     color: white;
-    transition: 0.3s;
+    transition: left 0.3s ease-in-out; /* 平滑動畫 */
 }
-.sidebar ul {
-    list-style: none;
-    padding: 0;
-}
-.sidebar ul li {
-    padding: 10px 0;
-}
-.sidebar ul li a {
-    color: white;
-    text-decoration: none;
-}
+
+/* Sidebar - 開啟 */
 .sidebar.show {
-    left: 0;
+    left: 0; /* 當有 `.show` 類別時，顯示 */
 }
+
+/* Sidebar 按鈕 */
 .close-btn {
     background: red;
     color: white;
@@ -31,6 +24,18 @@
     padding: 5px;
     cursor: pointer;
 }
+
+/* Sidebar - Logo 設計 */
+.sidebar-logo {
+    text-align: center; /* 讓 logo 置中 */
+    padding: 20px 0; /* 上下內距 */
+}
+
+.sidebar-logo img {
+    width: 120px; /* 設定 Logo 大小 */
+    height: auto; /* 保持比例 */
+}
+
 
 /* 登入視窗 */
 /* 背景遮罩 */
@@ -120,4 +125,18 @@
     font-weight: 400; /* You can adjust this from 100 to 900 */
     font-style: normal; /* Set this to 'italic' if you want italic style */
   }
-  
+
+
+/* 底部區域樣式 */
+#footer {
+    position: fixed; /* 固定在頁面底部 */
+    bottom: 0; /* 距離頁面底部 0px */
+    left: 50%; /* 水平居中 */
+    transform: translateX(-50%); /* 使用 transform 居中 */
+    background-color: #333; /* 背景顏色 */
+    color: white; /* 文字顏色 */
+    text-align: center; /* 文字居中 */
+    padding: 10px 0; /* 上下內邊距 */
+    width: 100%; /* 寬度設為 100% */
+    z-index: 9999; /* 確保它顯示在其他元素之上 */
+  }
