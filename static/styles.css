@@ -1,25 +1,85 @@
+/* Sidebar */
 .sidebar {
-    width: 250px;
-    height: 100vh;
-    background: #ffffff;
+    position: fixed; /* 固定在畫面左側 */
+    top: 0; /* 讓 Sidebar 從最頂端開始 */
+    left: 0;
+    width: 250px; /* 展開時的寬度 */
+    height: 100vh; /* 讓 Sidebar 滿版高度 */
+    background: #e9e6e6;
     color: rgb(0, 0, 0);
-    transition: width 0.3s;
+    transition: width 0.3s ease-in-out;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
+
+/* 收合時 Sidebar */
 .sidebar.collapsed {
-    width: 60px;
+    width: 60px; /* 只留 LOGO 大小 */
 }
+
+/* Sidebar - Logo */
+.sidebar-logo {
+    position: relative; /* 使 LOGO 可以相對定位 */
+    width: 100%; /* 讓 Logo 置中 */
+    text-align: center;
+    padding-top: 80px; /* 調整 LOGO 距離上方的距離 */
+    margin-bottom: 20px; /* 增加 LOGO 和選單按鈕之間的間距 */
+}
+
+/* LOGO 位置及大小 */
+.sidebar-logo img {
+    width: 40px; /* LOGO 保持適中大小 */
+    height: auto;
+    transition: width 0.3s ease-in-out;
+}
+
+/* Sidebar 展開時 LOGO 保持大小 */
+.sidebar:not(.collapsed) .sidebar-logo img {
+    width: 120px;
+}
+
+/* 側邊欄選單 */
 .sidebar ul {
     list-style: none;
-    padding: 10px;
+    padding: 0;
+    width: 100%;
+    margin-top: 0; /* 確保選單與 LOGO 之間沒有額外的間距 */
 }
+
 .sidebar ul li {
     padding: 15px;
+    text-align: center;
     cursor: pointer;
+    transition: background 0.3s;
 }
+
+.sidebar ul li i {
+    font-size: 24px;
+}
+
+/* 滑鼠懸停時變色 */
 .sidebar ul li:hover {
     background: #858585;
 }
+
+/* 收合時隱藏文字，保留 icon */
+.sidebar.collapsed ul li {
+    text-align: center;
+}
+
+.sidebar.collapsed ul li i {
+    display: block;
+    margin: auto;
+}
+
+/* 隱藏收合後的選單名稱 */
+.sidebar.collapsed ul li span {
+    display: none;
+}
+
+/* Sidebar 切換按鈕 */
 .toggle-btn {
     position: absolute;
     top: 10px;
@@ -29,121 +89,86 @@
     border: none;
     padding: 10px;
     cursor: pointer;
+    z-index: 999;
 }
 
-
-/* Sidebar - Logo 設計 */
-.sidebar-logo {
-    text-align: center; /* 讓 logo 置中 */
-    padding: 50px 0; /* 上下內距 */
-}
-
-.sidebar-logo img {
-    width: 120px; /* 設定 Logo 大小 */
-    height: auto; /* 保持比例 */
-}
-
-
-/* 登入視窗 */
-/* 背景遮罩 */
-.modal-overlay {
+/* 登入彈窗樣式 */
+#loginModal {
     display: none; /* 預設隱藏 */
     position: fixed;
-    top: 40%;
-    right: 5%; /* 預設靠近右上角 */
-    width: 350px;
-    height: 550px;
-    border-radius: 10px;
-    transform: translate(0, -50%);
-}
-
-/* 小直向長方形的 Modal */
-.modal {
-    display: none;
-    position: fixed;  /* 改成 fixed，讓它可以全螢幕拖動 */
     top: 50%;
     left: 50%;
-    width: 280px;
-    height: 450px;
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
     transform: translate(-50%, -50%);
-    cursor: grab; /* 提示使用者可以拖曳 */
-    z-index: 10000; /* 確保視窗在最上層 */
+    width: 300px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 9999; /* 確保在所有元素之上 */
 }
 
-/* 拖曳時游標變成"抓住" */
-.modal.dragging {
-    cursor: grabbing;
-}
-
-/* 標題區作為拖曳區域 */
-.modal-header {
-    cursor: grab;
-    padding: 10px;
-    background: #ffffff;
-    color: rgb(0, 0, 0);
-    border-radius: 10px 10px 0 0;
+#loginModal .modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
 }
 
-
-
-/* 📱 手機版調整（螢幕寬度小於 768px 時） */
-@media screen and (max-width: 768px) {
-    .modal-overlay, .modal {
-        top: 50%;
-        right: auto;
-        left: 50%;
-        width: 90%;  /* 讓 Modal 更加適應小螢幕 */
-        height: auto; /* 高度自適應 */
-        transform: translate(-50%, -50%);
-    }
-}
-
-/* 🖥️ 超大螢幕（寬度超過 1200px 時，靠右邊更多） */
-@media screen and (min-width: 1200px) {
-    .modal-overlay, .modal {
-        right: 10%;
-        width: 300px;
-        height: 500px;
-    }
-}
-
-/* 關閉按鈕 */
-.modal .close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    color: rgb(0, 0, 0);
-    cursor: pointer;
+#loginModal .modal-header h2 {
+    margin: 0;
     font-size: 18px;
 }
 
+#loginModal .modal-content {
+    margin-top: 15px;
+}
 
-/* Use a unique and descriptive class name */
-.inter-800-weight {
-    font-family: "Inter", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 400; /* You can adjust this from 100 to 900 */
-    font-style: normal; /* Set this to 'italic' if you want italic style */
-  }
+#loginModal input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+#loginModal button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#loginModal button:hover {
+    background-color: #0056b3;
+}
+
+/* 關閉按鈕樣式 */
+#loginModal .close {
+    font-size: 24px;
+    cursor: pointer;
+}
 
 
-/* 底部區域樣式 */
+/* 固定 Footer 在頁面底部 */
 #footer {
-    position: fixed; /* 固定在頁面底部 */
-    bottom: 0; /* 距離頁面底部 0px */
-    left: 50%; /* 水平居中 */
-    transform: translateX(-50%); /* 使用 transform 居中 */
-    background-color: #333; /* 背景顏色 */
-    color: white; /* 文字顏色 */
-    text-align: center; /* 文字居中 */
-    padding: 10px 0; /* 上下內邊距 */
-    width: 100%; /* 寬度設為 100% */
-    z-index: 9999; /* 確保它顯示在其他元素之上 */
-  }
+    position: fixed;
+    bottom: 10px; /* 與底部保持一點距離 */
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    width: 100%;
+}
+
+/* 版權文字設為浮水印 */
+.watermark {
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.1); /* 設置透明度 */
+    font-weight: bold;
+    user-select: none; /* 防止選取 */
+}
