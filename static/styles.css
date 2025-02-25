@@ -1,28 +1,33 @@
-/* Sidebar - 預設隱藏 */
 .sidebar {
-    position: fixed;
-    top: 0;
-    left: -250px; /* 預設隱藏在左側 */
     width: 250px;
-    height: 100%;
+    height: 100vh;
     background: #ffffff;
-    padding: 20px;
-    color: white;
-    transition: left 0.3s ease-in-out; /* 平滑動畫 */
+    color: rgb(0, 0, 0);
+    transition: width 0.3s;
+    overflow: hidden;
 }
-
-/* Sidebar - 開啟 */
-.sidebar.show {
-    left: 0; /* 當有 `.show` 類別時，顯示 */
+.sidebar.collapsed {
+    width: 60px;
 }
-
-/* Sidebar 按鈕 */
-.close-btn {
-    position: absolute; /* 使用絕對定位 */
-    top: 20px;  /* 距離頂部 20px */
-    right: 20px; /* 距離右邊 20px */
-    color: black;
+.sidebar ul {
+    list-style: none;
+    padding: 10px;
+}
+.sidebar ul li {
+    padding: 15px;
+    cursor: pointer;
+}
+.sidebar ul li:hover {
+    background: #858585;
+}
+.toggle-btn {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #ffffff;
+    color: rgb(0, 0, 0);
     border: none;
+    padding: 10px;
     cursor: pointer;
 }
 

@@ -60,30 +60,27 @@
             <!-- Google 翻譯腳本 -->
             <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
             <button class="btn btn-outline-dark" id="userBtn">
-              <i class="bi bi-person"></i>
+              <i class="bi bi-person-circle"></i>
             </button>
             
           </div>
           
     </header>
 
-    <div id="sidebar" class="sidebar">
-      <!-- 關閉按鈕 -->
-      <button id="closeSidebar" class="close-btn">✖︎</button>
-  
-      <!-- 加入 Logo -->
-      <div class="sidebar-logo">
+    <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+    <div class="sidebar collapsed" id="sidebar">
+        <!-- 加入 Logo -->
+        <div class="sidebar-logo">
           <img src="img/logo.png" alt="Logo">
       </div>
-      
-      
-      <!-- 其他 Sidebar 內容 -->
-      <ul>
-          <li><a href="#">首頁</a></li>
-          <li><a href="#">功能</a></li>
-          <li><a href="#">聯絡我們</a></li>
-      </ul>
-  </div>
+        <ul>
+            <li><i class="bi bi-house"></i></li>
+            <li><i class="bi bi-person"></i></li>
+            <li><i class="bi bi-file-earmark-post-fill"></i></li>
+            <li><i class="bi bi-calendar"></i></li>
+            <li><i class="bi bi-bar-chart"></i></li>
+        </ul>
+    </div>
 
     <!-- 小浮動視窗 -->
     <div class="modal-overlay" id="customModal">
