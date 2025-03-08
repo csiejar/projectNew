@@ -1,134 +1,107 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>題庫系統</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/static/styles.css">
-    <script src="/static/script.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>題庫系統</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="/static/script.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+    rel="stylesheet">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
+
 <body>
-    <!-- Header -->
-    <header class="d-flex align-items-center justify-content-between p-3 bg-white text-dark">
-        <!-- 漢堡選單 -->
-        <button class="btn text-dark" id="menuBtn">☰</button>
-        
-        <!-- Logo -->
-        <img src="../static/img/logo.png" alt="Logo" style="height: 50px;" onclick="location.href='/'">
-
-        <!-- 右側按鈕 -->
-        <!-- 地球 -->
-        <div>
-            <button class="btn btn-outline-dark" id="google-translate">
-              <i class="bi bi-globe"></i> <!-- 地球 -->
-            </button>
-          
-            <!-- Google 翻譯小工具容器 -->
-            <div id="google_translate_element" style="display: none; position: absolute; top: 80px; right: 0px; z-index: 10000;"></div>
-          
-            <!-- Google 翻譯初始化腳本 -->
-            <script type="text/javascript">
-              // 預設隱藏翻譯工具
-              document.getElementById('google_translate_element').style.display = 'none';
-              
-              // 初始化 Google 翻譯工具
-              function googleTranslateElementInit() {
-                new google.translate.TranslateElement({
-                  pageLanguage: 'zh-TW', // 網頁語言
-                  includedLanguages: 'en,zh-CN,zh-TW', // 可選語言
-                  layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-                }, 'google_translate_element');
-              }
-          
-              // 點擊地球按鈕顯示/隱藏翻譯工具
-              document.getElementById('google-translate').addEventListener('click', function() {
-                const translateElement = document.getElementById('google_translate_element');
-                // 顯示或隱藏翻譯選項
-                if (translateElement.style.display === 'none') {
-                  translateElement.style.display = 'block';
-                } else {
-                  translateElement.style.display = 'none';
-                }
-              });
-            </script>
-          
-            <!-- Google 翻譯腳本 -->
-            <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-            <button class="btn btn-outline-dark" id="userBtn">
-              <i class="bi bi-person-circle"></i>
-            </button>
-            
-          </div>
-          
-    </header>
-
-    <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
-    <div class="sidebar collapsed" id="sidebar">
-        <!-- 加入 Logo -->
-        <div class="sidebar-logo">
-          <img src="../static/img/mark.png" alt="Logo">
-      </div>
-      <ul>
-        <li>
-            <i class="bi bi-house"></i>
-            <span class="text">首頁</span>
-        </li>
-        <li>
-          <i class="bi bi-book"></i>
-            <span class="text">題庫</span>
-        </li>
-        <li>
-          <i class="bi bi-pencil"></i></i>
-            <span class="text">模擬測驗</span>
-        </li>
-        <li>
-          <i class="bi bi-journal-x"></i>
-            <span class="text">錯題本</span>
-        </li>
-      </ul>
-      
+  <!-- Sidebar -->
+  <div class="sidebar collapsed" id="sidebar">
+    <div class="sidebar-logo">
+      <img src="../static/img/mark.png" alt="Logo">
     </div>
+    <ul>
+      <li><i class="bi bi-house"></i><span class="text">首頁</span></li>
+      <li><i class="bi bi-book"></i><span class="text">題庫</span></li>
+      <li><i class="bi bi-pencil"></i><span class="text">模擬測驗</span></li>
+      <li><i class="bi bi-journal-x"></i><span class="text">錯題本</span></li>
+    </ul>
+  </div>
+  <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
 
-    <!-- 小浮動視窗 -->
-    <div class="modal-overlay" id="customModal">
-        <div class="modal">
-            <span class="close">&times;</span>
-            <h2>提示</h2>
-            <p>這是浮動的小視窗</p>
-        </div>
+  <!-- Header -->
+  <header class="d-flex align-items-center justify-content-between p-3 bg-white text-dark">
+    <button class="btn text-dark" id="menuBtn">☰</button>
+    <img src="../static/img/logo.png" alt="Logo" style="height: 50px;" onclick="location.href='/'">
+    <div>
+      <button class="btn btn-outline-dark" id="google-translate">
+        <i class="bi bi-globe"></i>
+      </button>
+      <div id="google_translate_element"
+        style="display: none; position: absolute; top: 80px; right: 0px; z-index: 10000;"></div>
+      <script type="text/javascript">
+        document.getElementById('google_translate_element').style.display = 'none';
+        function googleTranslateElementInit() {
+          new google.translate.TranslateElement({
+            pageLanguage: 'zh-TW',
+            includedLanguages: 'en,zh-CN,zh-TW',
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+          }, 'google_translate_element');
+        }
+        document.getElementById('google-translate').addEventListener('click', function () {
+          const translateElement = document.getElementById('google_translate_element');
+          translateElement.style.display = translateElement.style.display === 'none' ? 'block' : 'none';
+        });
+      </script>
+      <script type="text/javascript"
+        src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+      <button class="btn btn-outline-dark" id="userBtn">
+        <i class="bi bi-person-circle"></i>
+      </button>
     </div>
+  </header>
 
-<!-- 登入彈出視窗（可拖動） -->
-<div id="loginModal" class="modal">
+  <!-- 主內容區域 -->
+  <div class="main-content" style="margin-left: 250px; padding: 20px;">
+    <h1 class="fw-bold mb-4">電子學題庫系統</h1>
+    <p class="fs-5 mt-4" style="color: #444;">本網站提供各式題庫，提供個人化的電子學練習及模擬試題</p>
+  </div>
+
+  <!-- 新增電路圖圖片 -->
+  <div class="announcemaent" style="margin-left: 250px; padding: 20px;">
+    <img src="../static/img/damn.png " alt="damn">
+  </div>
+
+  <!-- 新增科目主題 -->
+  <div class="mt-4" style="margin-left: 250px; padding: 20px;">
+    <h2 class="fw-bold">科目主題</h2>
+
+
+
+  <!-- 登入彈出視窗（可拖動） -->
+  <div id="loginModal" class="modal">
     <div class="modal-header">
-        <span class="close" id="loginModalCloseBtn">&times;</span>
-        <h2>登入</h2>
+      <span class="close" id="loginModalCloseBtn">&times;</span>
+      <h2>登入</h2>
     </div>
     <div class="modal-content">
-        <input type="text" placeholder="帳號" id="username">
-        <input type="password" placeholder="密碼" id="password">
-        <button class="btn btn-primary" id="loginBtn">登入</button>
+      <!-- Google 產生的登入按鈕 -->
+      <div id="g_id_onload" data-client_id="1071265157577-7bcbr8qejtvtbmnchgs06ohr9ke46v97.apps.googleusercontent.com"
+        data-callback="handleCredentialResponse" data-auto_select="true">
+      </div>
+
+      <div class="g_id_signin" data-type="standard"></div>
     </div>
-</div>
-    </head>
-    <body>
-      <h1 style="font-weight: 800; margin-bottom: 20px;">電子學題庫平台</h1>
-      <h4 style="font-weight: 550; margin-top: 0;">本網站提供各式題庫,提供個人化的電子練習以及模擬試題等</h4>
-    <!-- 底部區域 -->
-   <div id="footer">
-       <p class="watermark">© 2025 ElecForge 版權所有</p>
-   </div>
+  </div>
 
-
-      <!-- JavaScript 放在這裡 -->
-    <script src="/static/script.js"></script>
-    
-    </body>
-    
+  <!-- 底部區域 -->
+  <div id="footer">
+    <p class="watermark">© 2025 ElecForge 版權所有</p>
+  </div>
+  <script src="/static/script.js"></script>
 </body>
+
 </html>

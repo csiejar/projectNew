@@ -6,29 +6,6 @@
         document.getElementById("loginModal").style.display = "none";
     });
 
-    document.getElementById("loginBtn").addEventListener("click", function () {
-        let username = document.getElementById("username").value;
-        let password = document.getElementById("password").value;
-        fetch("/api/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                username: username,
-                password: password
-            })
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.message === "登入成功") {
-                    document.getElementById("loginModal").style.display = "none";
-                    document.getElementById("userBtn").textContent = username;
-                } else {
-                    alert("登入失敗");
-                }
-            });
-    });
 
 document.addEventListener("DOMContentLoaded", function () {
     const modal = document.getElementById("loginModal");
@@ -100,5 +77,15 @@ function toggleSidebar() {
     document.getElementById('sidebar').classList.toggle('collapsed');
 }
 
-
-
+function handleCredentialResponse(response) {
+    console.log("JWT ID Token:", response.credential);
+    // 發送 token 到後端驗證
+    fetch('/verify-token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: response.credential })
+    })
+    .then(res => res.json())
+    .then(data => console.log("後端回應:", data))
+    .catch(err => console.error("驗證錯誤:", err));
+}
