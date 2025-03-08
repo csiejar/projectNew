@@ -3,3 +3,4 @@ fastapi == 0.115.8
 pydantic == 2.10.6
 pydantic_core == 2.27.2
 cryptography == 44.0.2
+google == 3.0.0
