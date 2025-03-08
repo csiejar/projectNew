@@ -37,7 +37,7 @@
 
 /* Sidebar 展開時 LOGO 保持大小 */
 .sidebar:not(.collapsed) .sidebar-logo img {
-    width: 120px;
+    width: 40px;
 }
 
 /* 側邊欄選單 */

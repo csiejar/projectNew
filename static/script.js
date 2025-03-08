@@ -33,7 +33,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     const modal = document.getElementById("loginModal");
     const header = modal.querySelector(".modal-header"); // 設定拖動區域
-    const modalBox = modal.querySelector(".modal");
+    // const modalBox = modal.querySelector(".modal");
     let isDragging = false;
     let offsetX, offsetY;
 

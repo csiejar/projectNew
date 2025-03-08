@@ -19,7 +19,7 @@
         <button class="btn text-dark" id="menuBtn">☰</button>
         
         <!-- Logo -->
-        <img src="img/logo.png" alt="Logo" style="height: 50px;">
+        <img src="../static/img/logo.png" alt="Logo" style="height: 50px;" onclick="location.href='/'">
 
         <!-- 右側按鈕 -->
         <!-- 地球 -->
@@ -71,15 +71,27 @@
     <div class="sidebar collapsed" id="sidebar">
         <!-- 加入 Logo -->
         <div class="sidebar-logo">
-          <img src="img/logo.png" alt="Logo">
+          <img src="../static/img/mark.png" alt="Logo">
       </div>
-        <ul>
-            <li><i class="bi bi-house"></i></li>
-            <li><i class="bi bi-person"></i></li>
-            <li><i class="bi bi-file-earmark-post-fill"></i></li>
-            <li><i class="bi bi-calendar"></i></li>
-            <li><i class="bi bi-bar-chart"></i></li>
-        </ul>
+      <ul>
+        <li>
+            <i class="bi bi-house"></i>
+            <span class="text">首頁</span>
+        </li>
+        <li>
+          <i class="bi bi-book"></i>
+            <span class="text">題庫</span>
+        </li>
+        <li>
+          <i class="bi bi-pencil"></i></i>
+            <span class="text">模擬測驗</span>
+        </li>
+        <li>
+          <i class="bi bi-journal-x"></i>
+            <span class="text">錯題本</span>
+        </li>
+      </ul>
+      
     </div>
 
     <!-- 小浮動視窗 -->
@@ -115,7 +127,6 @@
 
       <!-- JavaScript 放在這裡 -->
     <script src="/static/script.js"></script>
-
     
     </body>
     
