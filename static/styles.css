@@ -12,6 +12,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    z-index: 10; /* 確保 Sidebar 位於內容區域的上方 */
 }
 
 /* 收合時 Sidebar */
@@ -38,6 +39,19 @@
 /* Sidebar 展開時 LOGO 保持大小 */
 .sidebar:not(.collapsed) .sidebar-logo img {
     width: 40px;
+}
+
+/* Sidebar 切換按鈕 */
+.toggle-btn {
+    position: fixed; /* 固定按鈕位置 */
+    top: 10px; /* 設定距離頂部的距離 */
+    left: 10px; /* 設定距離左邊的距離 */
+    background: #ffffff;
+    color: rgb(0, 0, 0);
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 999; /* 確保按鈕在最上層 */
 }
 
 /* 側邊欄選單 */
@@ -77,19 +91,6 @@
 /* 隱藏收合後的選單名稱 */
 .sidebar.collapsed ul li span {
     display: none;
-}
-
-/* Sidebar 切換按鈕 */
-.toggle-btn {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background: #ffffff;
-    color: rgb(0, 0, 0);
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    z-index: 999;
 }
 
 /* 登入彈窗樣式 */
@@ -155,6 +156,13 @@
 }
 
 
+/* 主內容區域 */
+.main-content {
+    margin-left: 250px; /* 讓內容區域不被 Sidebar 擋住 */
+    padding: 20px;
+    z-index: 1; /* 確保內容區域位於 Sidebar 之後 */
+}
+
 /* 固定 Footer 在頁面底部 */
 #footer {
     position: fixed;
@@ -172,4 +180,3 @@
     font-weight: bold;
     user-select: none; /* 防止選取 */
 }
-
