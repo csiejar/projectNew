@@ -155,7 +155,6 @@
     cursor: pointer;
 }
 
-
 /* 主內容區域 */
 .main-content {
     margin-left: 250px; /* 讓內容區域不被 Sidebar 擋住 */
@@ -163,20 +162,16 @@
     z-index: 1; /* 確保內容區域位於 Sidebar 之後 */
 }
 
-/* 固定 Footer 在頁面底部 */
+/* 讓 footer 顯示在內容區域的最底部 */
 #footer {
-    position: fixed;
-    bottom: 10px; /* 與底部保持一點距離 */
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
     width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);  /* 背景顏色 */
+    color: white;  /* 文字顏色 */
+    text-align: center;
+    padding: 10px 0;
+    font-size: 14px;
+    position: relative;  /* 這樣footer會隨著內容在最底部 */
+    margin-top: 20px;  /* 防止 footer 太接近內容 */
 }
 
-/* 版權文字設為浮水印 */
-.watermark {
-    font-size: 14px;
-    color: rgba(0, 0, 0, 0.1); /* 設置透明度 */
-    font-weight: bold;
-    user-select: none; /* 防止選取 */
-}
+
