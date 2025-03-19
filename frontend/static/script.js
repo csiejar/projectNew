@@ -78,9 +78,8 @@ function toggleSidebar() {
 }
 
 function handleCredentialResponse(response) {
-    console.log("JWT ID Token:", response.credential);
     // 發送 token 到後端驗證
-    fetch('/verify-token', {
+    fetch('/api/googleLogin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token: response.credential })

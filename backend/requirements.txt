@@ -4,3 +4,6 @@ pydantic == 2.10.6
 pydantic_core == 2.27.2
 cryptography == 44.0.2
 google == 3.0.0
+google-auth == 2.23.0
+sqlalchemy == 1.4.52
+fastapi-sessions == 0.3.2

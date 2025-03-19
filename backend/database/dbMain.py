@@ -1,8 +1,10 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-
+from uuid import uuid4
 from .dbClass import *
+# from dbClass import *
 from fastapi import HTTPException
+import generator
 
 # 設定資料庫連接
 DATABASE_URL = "mysql+pymysql://hank:hankbeststudent@10.147.17.41/hank"
@@ -69,6 +71,43 @@ def getAllTopics():
             for topic in topics
         ]
         return topics
+    except Exception as e:
+        return f"Error: {str(e)}"
+    finally:
+        session.close()
+
+# 建立使用者
+def createUser(googleID, name, email):
+    try:
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        new_user = UsersSQL(
+            userID=generator.userID,
+            googleID=googleID,
+            name=name,
+            email=email,
+            sessionToken=generator.sessionToken,
+            recoveryCode=generator.recoveryCode,
+            sex=0 # 不願透露-0 男-1 女-2
+        )
+        session.add(new_user)
+        session.commit()
+        return {"name": new_user.name, "sessionToken": new_user.sessionToken, "recoveryCode": new_user.recoveryCode}
+    except Exception as e:
+        return f"Error: {str(e)}"
+    finally:
+        session.close()
+
+# 確認使用者是否存在
+def checkUserExist(googleID):
+    try:
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        user = session.query(UsersSQL).filter_by(googleID=googleID).first()
+        if user:
+            return True,user.sessionToken
+        else:
+            return False,None
     except Exception as e:
         return f"Error: {str(e)}"
     finally:
