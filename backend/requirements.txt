@@ -8,3 +8,4 @@ google-auth == 2.23.0
 sqlalchemy == 1.4.52
 fastapi-sessions == 0.3.2
 dotenv == 0.9.9
+httpx == 0.28.1

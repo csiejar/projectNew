@@ -23,8 +23,6 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from backend.APIRouter import router as APIRouter  # For API use
 from backend.pageRouter import router as pageRouter # For page use
-from backend.session import router as sessionRouter # For session use
-
 
 app = FastAPI(debug=True)
 
@@ -34,10 +32,9 @@ app.mount("/static", StaticFiles(directory="./frontend/static"), name="static")
 # 註冊 router
 app.include_router(APIRouter)
 app.include_router(pageRouter)
-app.include_router(sessionRouter)
 
 
 # 啟動 FastAPI
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
