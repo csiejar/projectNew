@@ -75,115 +75,60 @@
     <img src="../static/img/damn.png " alt="damn" width="90%">
   </div>
 
-  <!-- 新增科目主題 -->
-<div class="mt-4" style="margin-left: 250px; padding: 20px;">
-  <h1 class="fw-bold">科目主題</h1>
-
- <!-- Bootstrap Carousel -->
-<div id="carouselExampleIndicators" class="carousel slide mt-4" data-bs-ride="carousel">
-
-  <!-- Carousel Content -->
-  <div class="carousel-inner">
-    <!-- Slide 1 -->
-    <div class="carousel-item active">
-      <div class="d-flex justify-content-center">
-        <div class="card mx-2" style="width: 18rem;">
-          <img src="../static/img/subject1.png" class="card-img-top" alt="subject1" style="height: 250px;">
-          <div class="card-body">
-            <h5 class="card-title">主題一</h5>
-            <p class="card-text">這是主題一的簡介，提供基本概念學習。</p>
-            <a href="#" class="btn btn-primary">前往學習</a>
-          </div>
-        </div>
-        <div class="card mx-2" style="width: 18rem;">
-          <img src="../static/img/subject2.png" class="card-img-top" alt="subject2" style="height: 250px;">
-          <div class="card-body">
-            <h5 class="card-title">主題二</h5>
-            <p class="card-text">這是主題二的簡介，深入探討重點知識。</p>
-            <a href="#" class="btn btn-primary">前往學習</a>
-          </div>
-        </div>
-        <div class="card mx-2" style="width: 18rem;">
-          <img src="../static/img/subject3.png" class="card-img-top" alt="subject3" style="height: 250px;">
-          <div class="card-body">
-            <h5 class="card-title">主題三</h5>
-            <p class="card-text">這是主題三的簡介，提升學習理解能力。</p>
-            <a href="#" class="btn btn-primary">前往學習</a>
-          </div>
-        </div>
-        <div class="card mx-2" style="width: 18rem;">
-          <img src="../static/img/subject4.png" class="card-img-top" alt="subject4" style="height: 250px;">
-          <div class="card-body">
-            <h5 class="card-title">主題四</h5>
-            <p class="card-text">這是主題四的簡介，進一步強化應用能力。</p>
-            <a href="#" class="btn btn-primary">前往學習</a>
-          </div>
-        </div>
+  <!-- 科目主題區域 -->
+  <div class="mt-4" style="margin-left: 250px; padding: 20px;">
+    <h1 class="fw-bold">科目主題</h1>
+    <div id="carouselSubjects" class="carousel slide mt-4" data-bs-ride="carousel">
+      <div class="carousel-inner" id="subjectCarousel">
+        <!-- 這裡的內容由 JavaScript 動態生成 -->
       </div>
-    </div>
-
-    <!-- Slide 2 -->
-    <div class="carousel-item">
-      <div class="d-flex justify-content-center">
-        <div class="card mx-2" style="width: 18rem;">
-          <img src="../static/img/subject5.png" class="card-img-top" alt="subject5" style="height: 250px;">
-          <div class="card-body">
-            <h5 class="card-title">主題五</h5>
-            <p class="card-text">這是主題五的簡介，讓學習更加扎實。</p>
-            <a href="#" class="btn btn-primary">前往學習</a>
-          </div>
-        </div>
-        <div class="card mx-2" style="width: 18rem;">
-          <img src="../static/img/subject6.png" class="card-img-top" alt="subject6" style="height: 250px;">
-          <div class="card-body">
-            <h5 class="card-title">主題六</h5>
-            <p class="card-text">這是主題六的簡介，幫助掌握進階內容。</p>
-            <a href="#" class="btn btn-primary">前往學習</a>
-          </div>
-        </div>
-        <div class="card mx-2" style="width: 18rem;">
-          <img src="../static/img/subject7.png" class="card-img-top" alt="subject7" style="height: 250px;">
-          <div class="card-body">
-            <h5 class="card-title">主題七</h5>
-            <p class="card-text">這是主題七的簡介，應用知識解決問題。</p>
-            <a href="#" class="btn btn-primary">前往學習</a>
-          </div>
-        </div>
-        <div class="card mx-2" style="width: 18rem;">
-          <img src="../static/img/subject8.png" class="card-img-top" alt="subject8" style="height: 250px;">
-          <div class="card-body">
-            <h5 class="card-title">主題八</h5>
-            <p class="card-text">這是主題八的簡介，強化綜合應用能力。</p>
-            <a href="#" class="btn btn-primary">前往學習</a>
-          </div>
-        </div>
-      </div>
+      <a class="carousel-control-prev" href="#carouselSubjects" role="button" data-bs-slide="prev" style="left: -125px;">
+        <span class="carousel-control-prev-icon" aria-hidden="true" style="filter: invert(1);"></span>
+      </a>
+      <a class="carousel-control-next" href="#carouselSubjects" role="button" data-bs-slide="next" style="right: -100px;">
+        <span class="carousel-control-next-icon" aria-hidden="true" style="filter: invert(1);"></span>
+      </a>
     </div>
   </div>
 
- <!-- Carousel Controls -->
-<a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-bs-slide="prev"
-style="left: -50px;">
-<span class="carousel-control-prev-icon" aria-hidden="true" style="filter: invert(1);"></span>
-</a>
-<a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-bs-slide="next"
-style="right: -50px;">
-<span class="carousel-control-next-icon" aria-hidden="true" style="filter: invert(1);"></span>
-</a>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // 呼叫後端 API 取得科目資料
+      fetch('/api/getAllTopics') // 這裡的 URL 是後端 API 的路徑
+        .then(response => response.json())
+        .then(topics => {
+          const carouselInner = document.getElementById("subjectCarousel");
+          for (let i = 0; i < topics.length; i += 3) {
+            let activeClass = i === 0 ? "active" : "";
+            let items = topics.slice(i, i + 3).map(topic => `
+              <div class="col flex-grow-1" style="padding: 0 1px;">
+                <div class="card" style="width: 95%; margin: 0 auto;">
+                  <img src="/static/img/${topic.img}.png" class="card-img-top" alt="${topic.title}" style="height: 150px;">
+                  <div class="card-body">
+                    <h5 class="card-title">${topic.title}</h5>
+                    <p class="card-text">${topic.content}</p>
+                    <a href="${topic.link}" class="btn btn-primary">前往學習</a>
+                  </div>
+                </div>
+              </div>`).join('');
 
-</div>
-</div>
+            carouselInner.innerHTML += `<div class="carousel-item ${activeClass}"><div class="row g-0 justify-content-center" style="max-width: 90%; margin: 0 auto;">${items}</div></div>`;
+          }
+        })
+        .catch(error => console.error('Error fetching topics:', error));
+    });
+  </script>
 
-<!-- 公告與更新 -->
-<div class="mt-4" style="margin-left: 250px; padding: 20px;">
-  <h1 class="fw-bold">公告與更新</h1>
-  <p class="fs-5" style="color: #444;">
-    最新公告：本網站將於 2025 年 5 月 1 日進行系統升級，屆時部分功能可能會暫停，請使用者見諒。
-  </p>
-  <p class="fs-5" style="color: #444;">
-    更新內容：新增「進階模擬測驗」功能，提供更多題型與即時解析。
-  </p>
-</div>
+  <!-- 公告與更新 -->
+  <div class="mt-4" style="margin-left: 250px; padding: 20px;">
+    <h1 class="fw-bold">公告與更新</h1>
+    <p class="fs-5" style="color: #444;">
+      最新公告：本網站將於 2025 年 5 月 1 日進行系統升級，屆時部分功能可能會暫停，請使用者見諒。
+    </p>
+    <p class="fs-5" style="color: #444;">
+      更新內容：新增「進階模擬測驗」功能，提供更多題型與即時解析。
+    </p>
+  </div>
 
   <!-- **按鈕區塊，與公告內容完全對齊** -->
   <div class="row mt-3">
@@ -192,18 +137,15 @@ style="right: -50px;">
       <a href="/contact" class="btn btn-outline-secondary px-4">聯絡我們</a>
     </div>
   </div>
-</div>
 
-<!-- 題目討論 -->
-<div class="mt-4" style="margin-left: 250px; padding: 20px;">
-  <h1 class="fw-bold">題目討論</h1>
+  <!-- 題目討論 -->
+  <div class="mt-4" style="margin-left: 250px; padding: 20px;">
+    <h1 class="fw-bold">題目討論</h1>
+  </div>
 
-</div>
-
-<!-- 引入 Bootstrap -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
+  <!-- 引入 Bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <!-- 登入彈出視窗（可拖動） -->
   <div id="loginModal" class="modal">
@@ -216,17 +158,15 @@ style="right: -50px;">
       <div id="g_id_onload" data-client_id="1071265157577-7bcbr8qejtvtbmnchgs06ohr9ke46v97.apps.googleusercontent.com"
         data-callback="handleCredentialResponse" data-auto_select="true">
       </div>
-
       <div class="g_id_signin" data-type="standard"></div>
     </div>
   </div>
 
   <!-- Footer -->
-<div id="footer">
-  <p>© 2025 Elec Forge 版權所有</p>
-</div>
+  <div id="footer">
+    <p>© 2025 Elec Forge 版權所有</p>
+  </div>
 
- 
   <script src="../static/script.js"></script>
 </body>
 
