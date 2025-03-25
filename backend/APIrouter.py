@@ -46,10 +46,11 @@ async def googleLogin(request: GoogleLoginRequest):
         email = id_info["email"]
         name = id_info["name"]
         # # 檢查使用者是否已存在於資料庫
-        isUserExisted, sessionToken = dbMain.checkUserExist(user_id)
-        # print(isUserExisted, sessionToken)
+        isUserExisted, originalSessionToken = dbMain.checkUserExist(user_id)
         if isUserExisted:
             # 使用者已存在，更新 sessionToken
+            sessionToken = dbMain.updateUserSessionToken(originalSessionToken)
+            print(sessionToken)
             return setTokenToCookies(sessionToken)
         else:
             # 使用者不存在，新增使用者
@@ -60,13 +61,19 @@ async def googleLogin(request: GoogleLoginRequest):
     
 @router.get("/api/getUserInfo")
 async def getUserInfo(userToken: str = Depends(findTokenFromCookies)):
-    print(userToken)
     if userToken:
         try:
             userInfo = dbMain.getUserInfoByToken(userToken)
-            return JSONResponse(content=userInfo, status_code=200)
+            return JSONResponse(content=userInfo, status_code=200,headers={"Content-Type": "application/json; charset=utf-8"})
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
     else:
         raise HTTPException(status_code=401, detail="Unauthorized")
     
+@router.get("/api/authUser")
+async def authUser(userToken: str = Depends(findTokenFromCookies)):
+    if userToken:
+        userData = dbMain.getUserDataByToken(userToken)
+        return JSONResponse(content={"message": "已登入", "userData":userData}, status_code=200, headers={"Content-Type": "application/json; charset=utf-8"})
+    else:
+        raise HTTPException(status_code=401, detail="Unauthorized")

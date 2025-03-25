@@ -8,7 +8,7 @@ def install_requirements():
     if os.path.exists(req_file):
         print("🔍 檢查並安裝需求套件...")
         try:
-            subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", req_file])
+            subprocess.check_call([sys.executable, "-m", "pip3", "install", "-r", req_file])
             print("✅ 所有套件已安裝！")
         except subprocess.CalledProcessError:
             print("⚠️ 安裝 `requirements.txt` 失敗，請手動執行 `pip install -r requirements.txt`")
@@ -37,4 +37,5 @@ app.include_router(pageRouter)
 # 啟動 FastAPI
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    # uvicorn.run("main:app",host='0.0.0.0',port=8000, reload=True)
+    uvicorn.run("main:app",port=8000, reload=True)

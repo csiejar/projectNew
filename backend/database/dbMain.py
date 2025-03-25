@@ -105,7 +105,7 @@ def checkUserExist(googleID):
         session = Session()
         user = session.query(UsersSQL).filter_by(googleID=googleID).first()
         if user:
-            return True,user.sessionToken
+            return True, user.sessionToken
         else:
             return False,None
     except Exception as e:
@@ -127,6 +127,43 @@ def getUserInfoByToken(token):
             }
         else:
             return None
+    except Exception as e:
+        return f"Error: {str(e)}"
+    finally:
+        session.close()
+
+def getUserDataByToken(sessionToken):
+    try:
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        user = session.query(UsersSQL).filter_by(sessionToken=sessionToken).first()
+        if user:
+            return {
+                "userID": user.userID,
+                "googleID": user.googleID,
+                "name": user.name,
+                "email": user.email,
+                "sex": user.sex
+            }
+        else:
+            return None
+    except Exception as e:
+        return f"Error: {str(e)}"
+    finally:
+        session.close()
+
+def updateUserSessionToken(originalToken):
+    newToken = generator.generateSessionToken()
+    try:
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        user = session.query(UsersSQL).filter_by(sessionToken=originalToken).first()
+        if user:
+            user.sessionToken = newToken
+            session.commit()
+            return newToken
+        else:
+            return False
     except Exception as e:
         return f"Error: {str(e)}"
     finally:
