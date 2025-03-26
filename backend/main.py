@@ -21,7 +21,7 @@ import platform
 import os
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from backend.APIRouter import router as APIRouter  # For API use
+from backend.APIrouter import router as APIRouter  # For API use
 from backend.pageRouter import router as pageRouter # For page use
 
 app = FastAPI(debug=True)
