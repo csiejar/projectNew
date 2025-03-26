@@ -24,3 +24,25 @@ class topicsSQL(Base):
     content = Column(Text)
     link = Column(String(255))
     img = Column(String(255))
+
+# 題庫資料表
+class questionsSQL(Base):
+    __tablename__ = 'questions'
+    questionID = Column(Integer, primary_key=True)
+    topicID = Column(Integer)
+    question = Column(Text)
+    optionA = Column(Text)
+    optionB = Column(Text)
+    optionC = Column(Text)
+    optionD = Column(Text)
+    answer = Column(String(1))
+    image = Column(String(512))
+    source = Column(String(255))
+
+# 留言討論區資料表
+class commentsSQL(Base):
+    __tablename__ = 'comments'
+    commentID = Column(Integer, primary_key=True)
+    questionID = Column(Integer)
+    userID = Column(String(255))
+    comment = Column(Text)

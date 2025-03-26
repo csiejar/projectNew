@@ -168,3 +168,110 @@ def updateUserSessionToken(originalToken):
         return f"Error: {str(e)}"
     finally:
         session.close()
+
+def getAllQuestions():
+    try:
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        questions = session.query(questionsSQL).all()
+        # 將資料轉換為字典格式
+        questions = [
+            {
+                "questionID": question.questionID,
+                "topicID": question.topicID,
+                "question": question.question,
+                "optionA": question.optionA,
+                "optionB": question.optionB,
+                "optionC": question.optionC,
+                "optionD": question.optionD,
+                "answer": question.answer,
+                "image": question.image,
+                "source": question.source,
+            }
+            for question in questions
+        ]
+        return questions
+    except Exception as e:
+        return f"Error: {str(e)}"
+    finally:
+        session.close()
+
+def checkAnswer(questionID, answer):
+    try:
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        question = session.query(questionsSQL).filter_by(questionID=questionID).first()
+        if question:
+            if question.answer == answer:
+                return True
+            else:
+                return False
+        else:
+            return False
+    except Exception as e:
+        return f"Error: {str(e)}"
+    finally:
+        session.close()
+
+def getAllComments():
+    try:
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        comments = session.query(commentsSQL).all()
+        # 將資料轉換為字典格式
+        comments = [
+            {
+                "commentID": comment.commentID,
+                "questionID": comment.questionID,
+                "userID": comment.userID,
+                "comment": comment.comment,
+            }
+            for comment in comments
+        ]
+        return comments
+    except Exception as e:
+        return f"Error: {str(e)}"
+    finally:
+        session.close()
+
+def getCommentsByQuestionID(questionID):
+    try:
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        comments = session.query(commentsSQL).filter_by(questionID=questionID).all()
+        # 將資料轉換為字典格式
+        comments = [
+            {
+                "commentID": comment.commentID,
+                "questionID": comment.questionID,
+                "userID": comment.userID,
+                "comment": comment.comment,
+            }
+            for comment in comments
+        ]
+        return comments
+    except Exception as e:
+        return f"Error: {str(e)}"
+    finally:
+        session.close()
+
+def Comment(questionID, userID, comment):
+    try:
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        lastCommentID = session.query(commentsSQL).order_by(commentsSQL.commentID.desc()).first()
+        if lastCommentID:
+            commentID = lastCommentID.commentID + 1
+        new_comment = commentsSQL(
+            commentID=commentID,
+            questionID=questionID,
+            userID=userID,
+            comment=comment
+        )
+        session.add(new_comment)
+        session.commit()
+        return True
+    except Exception as e:
+        return f"Error: {str(e)}"
+    finally:
+        session.close()

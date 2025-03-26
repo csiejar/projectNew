@@ -1,0 +1,38 @@
+[
+  {
+    "commentID": 1,
+    "questionID": 1,
+    "userID": "user123",
+    "comment": "這題可以再詳細解釋一下嗎？"
+  },
+  {
+    "commentID": 2,
+    "questionID": 2,
+    "userID": "user123",
+    "comment": "這題有爭議，應該再確認資料來源。"
+  },
+  {
+    "commentID": 3,
+    "questionID": 3,
+    "userID": "user-8718c962-0bad-4c84-9073-7f2a2812aa12",
+    "comment": "這個概念可以對應到RL電路分析，很有幫助！"
+  },
+  {
+    "commentID": 4,
+    "questionID": 4,
+    "userID": "user-b6831b07-0d19-486e-8931-f78fd96b00e2",
+    "comment": "我覺得應該補充一些圖表來說明電容行為。"
+  },
+  {
+    "commentID": 5,
+    "questionID": 5,
+    "userID": "user-51260194-574e-4780-9f4d-6375b00a0375",
+    "comment": "MOSFET 的開關應用真的很廣泛！"
+  },
+  {
+    "commentID": 6,
+    "questionID": 1,
+    "userID": "user-8718c962-0bad-4c84-9073-7f2a2812aa12",
+    "comment": "好像不難"
+  }
+]

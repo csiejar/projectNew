@@ -30,7 +30,7 @@ app = FastAPI(debug=True)
 app.mount("/static", StaticFiles(directory="./frontend/static"), name="static")
 
 # 註冊 router
-app.include_router(APIRouter)
+app.include_router(APIRouter, prefix="/api")
 app.include_router(pageRouter)
 
 

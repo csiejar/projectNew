@@ -18,14 +18,14 @@ class LoginRequest(BaseModel):
     username: str
     password: str
 
-@router.post("/api/login")
+@router.post("/login")
 async def login(request: LoginRequest):
     if request.username != "admin" or request.password != "admin":
         return JSONResponse(content={"message": "登入失敗"}, status_code=401)
     else:
         return JSONResponse(content={"message": "登入成功"})
     
-@router.get("/api/getAllTopics")
+@router.get("/getAllTopics")
 async def getAllTopics():
     try:
         topics = dbMain.getAllTopics()
@@ -35,7 +35,7 @@ async def getAllTopics():
 
 class GoogleLoginRequest(BaseModel):
     token: str
-@router.post("/api/googleLogin")
+@router.post("/googleLogin")
 async def googleLogin(request: GoogleLoginRequest):
     GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
     try:
@@ -50,7 +50,6 @@ async def googleLogin(request: GoogleLoginRequest):
         if isUserExisted:
             # 使用者已存在，更新 sessionToken
             sessionToken = dbMain.updateUserSessionToken(originalSessionToken)
-            print(sessionToken)
             return setTokenToCookies(sessionToken)
         else:
             # 使用者不存在，新增使用者
@@ -59,21 +58,58 @@ async def googleLogin(request: GoogleLoginRequest):
     except Exception as e:
         raise HTTPException(status_code=400, detail="Invalid Google token")
     
-@router.get("/api/getUserInfo")
-async def getUserInfo(userToken: str = Depends(findTokenFromCookies)):
-    if userToken:
+@router.get("/authUser")
+async def authUser(userToken: str = Depends(findTokenFromCookies)):
+    if userToken and (userToken != "None"):
+        userData = dbMain.getUserDataByToken(userToken)
+        return JSONResponse(content={"message": "已登入", "userData":userData}, status_code=200, headers={"Content-Type": "application/json; charset=utf-8"})
+    else:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+@router.get("/getUserInfoByToken")
+async def getUserInfoByToken(userToken: str):
+    if userToken and (userToken != "None"):
+        userData = dbMain.getUserDataByToken(userToken)
+        return JSONResponse(content=userData, status_code=200, headers={"Content-Type": "application/json; charset=utf-8"})
+    else:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+@router.post("/logout")
+async def logout():
+    deleteCookies()
+    return JSONResponse(content={"message": "登出成功"}, status_code=200 , headers={"Content-Type": "application/json; charset=utf-8"})
+@router.get("/getAllQuestions")
+async def getAllQuestions():
+    try:
+        questions = dbMain.getAllQuestions()
+        return JSONResponse(content=questions, status_code=200)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@router.post("/submitComment")
+async def submitComment(questionID: int, comment: str, userToken: str = Depends(findTokenFromCookies)):
+    if userToken and (userToken != "None"):
         try:
-            userInfo = dbMain.getUserInfoByToken(userToken)
-            return JSONResponse(content=userInfo, status_code=200,headers={"Content-Type": "application/json; charset=utf-8"})
+            userID = dbMain.getUserInfoByToken(userToken)["userID"]
+            dbMain.Comment(questionID,userID ,comment)
+            return JSONResponse(content={"message": "留言成功"}, status_code=200)
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
     else:
         raise HTTPException(status_code=401, detail="Unauthorized")
     
-@router.get("/api/authUser")
-async def authUser(userToken: str = Depends(findTokenFromCookies)):
-    if userToken:
-        userData = dbMain.getUserDataByToken(userToken)
-        return JSONResponse(content={"message": "已登入", "userData":userData}, status_code=200, headers={"Content-Type": "application/json; charset=utf-8"})
-    else:
-        raise HTTPException(status_code=401, detail="Unauthorized")
+@router.get("/getAllComments")
+async def getAllComments():
+    try:
+        comments = dbMain.getAllComments()
+        return JSONResponse(content=comments, status_code=200, headers={"Content-Type": "application/json; charset=utf-8"})
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@router.get("/getCommentsByQuestionID")
+async def getCommentsByQuestionID(questionID: int):
+    try:
+        comments = dbMain.getCommentsByQuestionID(questionID)
+        return JSONResponse(content=comments, status_code=200)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
