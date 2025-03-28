@@ -25,6 +25,53 @@ app.get('/api/subjects', (req, res) => {
   res.json(subjects);
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+  fetch('/api/authUser', { 
+      method: 'GET',
+      credentials: 'include' // 確保攜帶 cookies
+  })
+  .then(response => {
+      if (!response.ok) {
+          throw new Error(`HTTP 錯誤! 狀態碼: ${response.status}`);
+      }
+      return response.json();
+  })
+  .then(data => {
+      if (data && data.message === "已登入") {
+          console.log("用戶資料:", data.userData);
+      } else {
+          console.log("用戶未登入");
+      }
+  })
+  .catch(error => console.error('Error fetching authUser:', error));
+});
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  const logoutButton = document.getElementById("logoutBtn");
+  if (logoutButton) {
+      logoutButton.addEventListener("click", function () {
+          fetch('/api/logout', { method: 'POST' })
+              .then(response => response.json())
+              .then(result => {
+                  if (result.message === "登出成功") {
+                      console.log("用戶已登出");
+                      
+                      // 清除所有 cookies
+                      document.cookie.split(";").forEach(function(c) {
+                          document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date(0).toUTCString() + ";path=/");
+                      });
+
+                      // 強制跳轉到首頁或登入頁面
+                      window.location.href = "/";
+                  }
+              })
+              .catch(error => console.error('Error during logout:', error));
+      });
+  }
+});
+
+
 // 啟動伺服器
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
