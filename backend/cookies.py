@@ -8,11 +8,10 @@ def setTokenToCookies(sessionToken: str):
     return response
 
 def deleteCookies():
-    contents = False
-    response = JSONResponse(content=contents)
+    contents = {"message": "登出成功"}
+    response = JSONResponse(content=contents, headers={"Content-Type": "application/json; charset=utf-8"})
     response.delete_cookie(key="sessionToken")
     return response
-
 
 def findTokenFromCookies(sessionToken: str = Cookie("None")):
     if not sessionToken:

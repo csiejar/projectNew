@@ -76,8 +76,7 @@ async def getUserInfoByToken(userToken: str):
 
 @router.post("/logout")
 async def logout():
-    deleteCookies()
-    return JSONResponse(content={"message": "登出成功"}, status_code=200 , headers={"Content-Type": "application/json; charset=utf-8"})
+    return deleteCookies()
 @router.get("/getAllQuestions")
 async def getAllQuestions():
     try:
