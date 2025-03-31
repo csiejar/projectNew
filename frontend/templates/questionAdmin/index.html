@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>題庫管理平台</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div>
+        <h1>題庫管理平台</h1>
+        <h2>問題列表</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>問題ID</th>
+                    <th>問題內容</th>
+                    <th>選項A</th>
+                    <th>選項B</th>
+                    <th>選項C</th>
+                    <th>選項D</th>
+                    <th>正確答案</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="questionList">
+                <!-- 問題列表將在這裡動態生成 -->
+            </tbody>
+        </table>
+
+        <h2>新增問題</h2>
+        <form id="addQuestionForm">
+            <label for="questionContent">題目:</label><br>
+            <input type="text" id="questionContent" name="questionContent" placeholder="若題目含有特殊符號請上傳照片"><br>
+            <input type="file" id="questionImage" name="questionImage" accept="image/*"><br>
+            <button type="button" id="deleteImg" style="display: none;">移除已上傳圖片</button><br>
+            <img id="imgPreview" src="" alt="Image Preview" style="display:none; max-width: 200px; max-height: 200px;"><br>
+
+            <label for="optionA">選項A:</label><br>
+            <input type="text" class="optionInput" id="optionA" name="optionA" placeholder="若題目為圖片則此格留空"><br>
+
+            <label for="optionB">選項B:</label><br>
+            <input type="text" class="optionInput" id="optionB" name="optionB" placeholder="若題目為圖片則此格留空"><br>
+
+            <label for="optionC">選項C:</label><br>
+            <input type="text" class="optionInput" id="optionC" name="optionC" placeholder="若題目為圖片則此格留空"><br>
+
+            <label for="optionD">選項D:</label><br>
+            <input type="text" class="optionInput" id="optionD" name="optionD" placeholder="若題目為圖片則此格留空"><br>
+
+            <label for="correctAnswer">正確答案:</label><br>
+            <input type="radio" id="AnsOptionA" name="correctAnswer" value="A">
+            <label for="optionA">A</label><br>
+            <input type="radio" id="AnsOptionB" name="correctAnswer" value="B">
+            <label for="optionB">B</label><br>
+            <input type="radio" id="AnsOptionC" name="correctAnswer" value="C">
+            <label for="optionC">C</label><br>
+            <input type="radio" id="AnsOptionD" name="correctAnswer" value="D">
+            <label for="optionD">D</label><br>
+            
+            <button type="submit" id="submit">新增問題</button>
+        </form>
+
+        <!-- JavaScript 代碼 -->
+        <script src="scripts.js"></script>
+</body>
+</html>
