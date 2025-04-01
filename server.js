@@ -47,30 +47,61 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-document.addEventListener("DOMContentLoaded", function () {
-  const logoutButton = document.getElementById("logoutBtn");
-  if (logoutButton) {
-      logoutButton.addEventListener("click", function () {
-          fetch('/api/logout', { method: 'POST' })
-              .then(response => response.json())
-              .then(result => {
-                  if (result.message === "登出成功") {
-                      console.log("用戶已登出");
-                      
-                      // 清除所有 cookies
-                      document.cookie.split(";").forEach(function(c) {
-                          document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date(0).toUTCString() + ";path=/");
-                      });
-
-                      // 強制跳轉到首頁或登入頁面
-                      window.location.href = "/";
-                  }
-              })
-              .catch(error => console.error('Error during logout:', error));
-      });
+function handleCredentialResponse(response) {
+    fetch('/api/googleLogin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ credential: response.credential })
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.message === "登入成功") {
+          // 直接更新前端狀態，避免刷新頁面
+          updateUI(data.userData);
+        }
+      })
+      .catch(error => console.error('登入失敗:', error));
   }
-});
-
+  
+  // 更新 UI 的函數
+  function updateUI(userData) {
+    const loginButton = document.getElementById("loginBtn");
+    const logoutButton = document.getElementById("logoutBtn");
+    
+    loginButton.style.display = "none";
+    logoutButton.style.display = "block";
+    console.log("即時用戶資料:", userData);
+  }
+  
+  // 處理Google登入
+app.post('/api/googleLogin', async (req, res) => {
+    try {
+      const ticket = await client.verifyIdToken({ idToken: req.body.credential });
+      const payload = ticket.getPayload();
+  
+      // 儲存用戶資料到資料庫（若需）
+      const user = await User.findOrCreate({ 
+        where: { email: payload.email },
+        defaults: { name: payload.name, avatar: payload.picture }
+      });
+  
+      // 返回完整用戶資料
+      res.json({ 
+        message: "登入成功", 
+        userData: { name: user.name, email: user.email } 
+      });
+    } catch (error) {
+      res.status(401).json({ message: "登入失敗", error });
+    }
+  });
+  
+  
+  // 檢查用戶狀態
+  app.get('/api/authUser', (req, res) => {
+    const session = req.cookies.userSession;
+    res.json({ message: session ? "已登入" : "未登入" });
+  });
+  
 
 // 啟動伺服器
 app.listen(port, () => {
