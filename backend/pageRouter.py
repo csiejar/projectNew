@@ -8,3 +8,6 @@ templates = Jinja2Templates(directory="./frontend/templates")
 async def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
+@router.get("/questionAdmin") # 問題管理頁面
+async def questionAdmin(request: Request):
+    return templates.TemplateResponse("questionAdmin/index.html", {"request": request})
