@@ -51,27 +51,29 @@ document.getElementById("questionImage").addEventListener("change", function(eve
 }
 );
 
-fetch("/api/question/getAllQuestions", {
-    method: "GET",
-    headers: {
-        "Content-Type": "application/json"
-    }
-})
-.then(response => {
-    if (!response.ok) {
-        throw new Error("Network response was not ok");
-    }
-    return response.json();
-})
-.then(data => {
-    console.log("所有題目:", data);
-    const questionList = document.getElementById("questionList");
-    data.forEach(question => {
-        const li = document.createElement("li");
-        li.textContent = question.question;
-        questionList.appendChild(li);
+document.addEventListener("DOMContentLoaded", function() {
+    fetch("/api/getAllQuestions", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log("所有題目:", data);
+        const questionList = document.getElementById("questionList");
+        data.forEach(question => {
+            const li = document.createElement("li");
+            li.textContent = question.question;
+            questionList.appendChild(li);
+        });
+    })
+    .catch(error => {
+        console.error("Fetch error:", error);
     });
 })
-.catch(error => {
-    console.error("Fetch error:", error);
-});

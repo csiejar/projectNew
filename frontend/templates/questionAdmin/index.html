@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>題庫管理平台</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{{ url_for('static', path='questionAdmin/style.css') }}">
 </head>
 <body>
     <div>
@@ -14,10 +14,13 @@
             <thead>
                 <tr>
                     <th>問題內容</th>
+                    <th>單元</th>
                     <th>選項A</th>
                     <th>選項B</th>
                     <th>選項C</th>
                     <th>選項D</th>
+                    <th>圖片</th>
+                    <th>來源</th>
                     <th>正確答案</th>
                     <th>操作</th>
                 </tr>
@@ -60,7 +63,7 @@
             <button type="submit" id="submit">新增問題</button>
         </form>
 
-        <!-- JavaScript 代碼 -->
-        <script src="scripts.js"></script>
+        
 </body>
+<script src="{{ url_for('static', path='questionAdmin/script.js') }}"></script>
 </html>
