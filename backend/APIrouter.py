@@ -9,6 +9,7 @@ from google.oauth2 import id_token
 from google.auth.transport import requests
 load_dotenv()
 from cookies import *
+from typing import Optional
 
 
 router = APIRouter()
@@ -112,3 +113,63 @@ async def getCommentsByQuestionID(questionID: int):
         return JSONResponse(content=comments, status_code=200)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+class EditQuestionRequest(BaseModel):
+    questionID: int  # 這個是必要的，因為要識別要修改哪一題
+    topicID: Optional[int] = None
+    question: Optional[str] = None
+    optionA: Optional[str] = None
+    optionB: Optional[str] = None
+    optionC: Optional[str] = None
+    optionD: Optional[str] = None
+    answer: Optional[str] = None
+    image: Optional[str] = None
+    source: Optional[str] = None
+
+@router.post("/editQuestion")
+async def editQuestion(request: EditQuestionRequest):
+    update_data = {k: v for k, v in request.model_dump().items() if v is not None}
+    try:
+        dbMain.editQuestion(**update_data)
+        return {"message": "編輯問題成功"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+class DeleteQuestionRequest(BaseModel):
+    questionID: int
+@router.post("/deleteQuestion")
+async def deleteQuestion(request: DeleteQuestionRequest):
+    try:
+        dbMain.deleteQuestion(request.questionID)
+        return {"message": "刪除問題成功"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+class addQuestionRequest(BaseModel):
+    topicID: int
+    question: str
+    optionA: str
+    optionB: str
+    optionC: str
+    optionD: str
+    answer: str
+    image: Optional[str] = ""
+    source: Optional[str] = ""
+@router.post("/addQuestion")
+async def addQuestion(request: addQuestionRequest):
+    try:
+        dbMain.addQuestion(
+            topicID=request.topicID,
+            question=request.question,
+            optionA=request.optionA,
+            optionB=request.optionB,
+            optionC=request.optionC,
+            optionD=request.optionD,
+            answer=request.answer,
+            image=request.image,
+            source=request.source
+        )
+        return {"message": "新增問題成功"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    

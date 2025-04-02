@@ -213,6 +213,33 @@ def checkAnswer(questionID, answer):
     finally:
         session.close()
 
+def addQuestion(topicID: int, question: str, optionA: str, optionB: str, optionC: str, optionD: str, answer: str, image: str, source: str):
+    try:
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        lastQuestionID = session.query(questionsSQL).order_by(questionsSQL.questionID.desc()).first()
+        if lastQuestionID:
+            questionID = lastQuestionID.questionID + 1
+        new_question = questionsSQL(
+            questionID=questionID,
+            topicID=topicID,
+            question=question,
+            optionA=optionA,
+            optionB=optionB,
+            optionC=optionC,
+            optionD=optionD,
+            answer=answer,
+            image=image,
+            source=source
+        )
+        session.add(new_question)
+        session.commit()
+        return True
+    except Exception as e:
+        return f"Error: {str(e)}"
+    finally:
+        session.close()
+
 def getAllComments():
     try:
         Session = sessionmaker(bind=engine)
@@ -271,6 +298,46 @@ def Comment(questionID, userID, comment):
         session.add(new_comment)
         session.commit()
         return True
+    except Exception as e:
+        return f"Error: {str(e)}"
+    finally:
+        session.close()
+
+def editQuestion(questionID: int, topicID: int, question: str, optionA: str, optionB: str, optionC: str, optionD: str, answer: str, image: str, source: str):
+    try:
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        questionToEdit = session.query(questionsSQL).filter_by(questionID=questionID).first()
+        if questionToEdit:
+            questionToEdit.topicID = topicID
+            questionToEdit.question = question
+            questionToEdit.optionA = optionA
+            questionToEdit.optionB = optionB
+            questionToEdit.optionC = optionC
+            questionToEdit.optionD = optionD
+            questionToEdit.answer = answer
+            questionToEdit.image = image
+            questionToEdit.source = source
+            session.commit()
+            return True
+        else:
+            return False
+    except Exception as e:
+        return f"Error: {str(e)}"
+    finally:
+        session.close()
+
+def deleteQuestion(questionID: int):
+    try:
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        questionToDelete = session.query(questionsSQL).filter_by(questionID=questionID).first()
+        if questionToDelete:
+            session.delete(questionToDelete)
+            session.commit()
+            return True
+        else:
+            return False
     except Exception as e:
         return f"Error: {str(e)}"
     finally:
