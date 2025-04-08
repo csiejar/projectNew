@@ -23,6 +23,7 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from backend.APIrouter import router as APIRouter  # For API use
 from backend.pageRouter import router as pageRouter # For page use
+from backend.googleDrive.upload import router as googleDriveRouter # For Google Drive use
 
 app = FastAPI(debug=True)
 
@@ -32,6 +33,7 @@ app.mount("/static", StaticFiles(directory="./frontend/static"), name="static")
 # 註冊 router
 app.include_router(APIRouter, prefix="/api")
 app.include_router(pageRouter)
+app.include_router(googleDriveRouter)
 
 
 # 啟動 FastAPI

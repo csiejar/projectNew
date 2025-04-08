@@ -11,3 +11,7 @@ async def index(request: Request):
 @router.get("/questionAdmin") # 問題管理頁面
 async def questionAdmin(request: Request):
     return templates.TemplateResponse("questionAdmin/index.html", {"request": request})
+
+@router.get("/test") # 問題管理頁面
+async def test(request: Request):
+    return templates.TemplateResponse("test.html", {"request": request})
