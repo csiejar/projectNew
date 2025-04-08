@@ -85,6 +85,9 @@ function handleCredentialResponse(response) {
         body: JSON.stringify({ token: response.credential })
     })
     .then(res => res.json())
-    .then(data => console.log("後端回應:", data))
+    .then(data => {
+        console.log("後端回應:", data);
+        window.location.reload();
+    })
     .catch(err => console.error("驗證錯誤:", err));
 }

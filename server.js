@@ -46,23 +46,6 @@ document.addEventListener("DOMContentLoaded", function () {
   .catch(error => console.error('Error fetching authUser:', error));
 });
 
-
-function handleCredentialResponse(response) {
-    fetch('/api/googleLogin', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ credential: response.credential })
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data.message === "登入成功") {
-          // 直接更新前端狀態，避免刷新頁面
-          updateUI(data.userData);
-        }
-      })
-      .catch(error => console.error('登入失敗:', error));
-  }
-  
   // 更新 UI 的函數
   function updateUI(userData) {
     const loginButton = document.getElementById("loginBtn");
@@ -71,30 +54,7 @@ function handleCredentialResponse(response) {
     loginButton.style.display = "none";
     logoutButton.style.display = "block";
     console.log("即時用戶資料:", userData);
-  }
-  
-  // 處理Google登入
-app.post('/api/googleLogin', async (req, res) => {
-    try {
-      const ticket = await client.verifyIdToken({ idToken: req.body.credential });
-      const payload = ticket.getPayload();
-  
-      // 儲存用戶資料到資料庫（若需）
-      const user = await User.findOrCreate({ 
-        where: { email: payload.email },
-        defaults: { name: payload.name, avatar: payload.picture }
-      });
-  
-      // 返回完整用戶資料
-      res.json({ 
-        message: "登入成功", 
-        userData: { name: user.name, email: user.email } 
-      });
-    } catch (error) {
-      res.status(401).json({ message: "登入失敗", error });
-    }
-  });
-  
+  } 
   
   // 檢查用戶狀態
   app.get('/api/authUser', (req, res) => {

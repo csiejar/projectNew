@@ -211,25 +211,6 @@
           .catch(error => console.error('登出失敗:', error));
       });
     });
-  
-    // Google 登入回調函數
-    function handleCredentialResponse(response) {
-      fetch('/api/googleLogin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ credential: response.credential }),
-        credentials: 'include'
-      })
-        .then(res => res.json())
-        .then(data => {
-          if (data.message === "登入成功") {
-            // 添加 URL 查詢參數並刷新頁面
-            const currentUrl = window.location.href.split('?')[0];
-            window.location.href = `${currentUrl}?refreshed=true`;
-          }
-        })
-        .catch(error => console.error('登入失敗:', error));
-    }
   </script>
   
   
