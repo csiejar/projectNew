@@ -15,5 +15,13 @@ async def upload_file(file: UploadFile = File(...)):
     with open(f"backend/googleDrive/readyForUpload/{file.filename}", "wb") as buffer:
         content = await file.read()
         buffer.write(content)
-
     return {"filename": file.filename}
+
+@router.post("/uploadToDrive")
+async def uploadToDrive(topicID,questionID,imagePath):
+    from backend.googleDrive.drive import uploadQuestionImage
+    try:
+        url = uploadQuestionImage(topicID,questionID,imagePath)
+        return JSONResponse(content={"url": url}, status_code=200)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

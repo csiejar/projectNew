@@ -47,7 +47,13 @@ async function fetchQuestions() {
                 <td>
                     <button class="btn btn-link p-0 edit-btn" onclick="openEditModal(${
                         question.questionID
-                    }, ${question.topicID}, '${question.question}', '${question.optionA}', '${question.optionB}', '${question.optionC}', '${question.optionD}', '${question.answer}', '${question.image}', '${question.source}')">
+                    }, ${question.topicID}, '${question.question}', '${
+                question.optionA
+            }', '${question.optionB}', '${question.optionC}', '${
+                question.optionD
+            }', '${question.answer}', '${question.image}', '${
+                question.source
+            }')">
                         <i class="bi bi-pencil-square"></i>
                     </button>
                     <button class="btn btn-link p-0 delete-btn" onclick="deleteQuestion(${
@@ -193,19 +199,19 @@ function addQuestionForm() {
 
     // 取得單元資料來填充 <select id="addTopicID">
     fetch("/api/getAllTopics")
-        .then(response => response.json())
-        .then(data => {
+        .then((response) => response.json())
+        .then((data) => {
             let topicSelect = document.getElementById("addTopicID");
             topicSelect.innerHTML = ""; // 清空選項
 
-            data.forEach(topic => {
+            data.forEach((topic) => {
                 let option = document.createElement("option");
                 option.value = topic.topicID;
                 option.textContent = topic.title;
                 topicSelect.appendChild(option);
             });
         })
-        .catch(error => console.error("無法載入單元資料", error));
+        .catch((error) => console.error("無法載入單元資料", error));
 }
 
 // 關閉 Modal
@@ -223,36 +229,81 @@ async function saveAdd() {
     let answer = document.getElementById("addAnswer").value;
     let image = document.getElementById("addImage").value;
     let source = document.getElementById("addSource").value;
+    let files = document.getElementById("addFileInput").files;
+    console.log(files);
 
-    try {
-        let response = await fetch("/api/addQuestion", {
+    if (files.length > 0) { //有上傳檔案
+        // 先上傳檔案到伺服器
+        let uploadedFile = files[0];
+        let formData = new FormData();
+        formData.append("file", uploadedFile); // 注意這裡要叫 "file"，和 FastAPI 的參數名稱一致
+
+        fetch("/uploadfile", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                topicID: Number(topicID), // 確保是數字
-                question: question,
-                optionA: optionA,
-                optionB: optionB,
-                optionC: optionC,
-                optionD: optionD,
-                answer: answer,
-                image: image,
-                source: source,
-            }),
-        });
+            body: formData,
+        })
+            .then((response) => {
+                if (response.ok) {
+                    alert("檔案上傳成功！");
+                    //TODO - 上傳到Google Drive 並取得url
+                    
+                    
+                } else {
+                    response.json().then((data) => {
+                        console.error("上傳失敗細節：", data);
+                        alert("檔案上傳失敗！");
+                    });
+                }
+            })
+            .catch((error) => console.error("檔案上傳失敗:", error));
+    } else { //沒有上傳檔案 完成
+        try {
+            let response = await fetch("/api/addQuestion", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    topicID: Number(topicID), // 確保是數字
+                    question: question,
+                    optionA: optionA,
+                    optionB: optionB,
+                    optionC: optionC,
+                    optionD: optionD,
+                    answer: answer,
+                    image: image,
+                    source: source,
+                }),
+            });
 
-        console.log(response); // 這次 response 是 Response 物件，而不是 Promise
-
-        if (response.ok) {
-            alert("新增成功！");
-            closeAddModal(); // 關閉 Modal
-            fetchQuestions(); // 重新載入題目列表
-        } else {
-            let errorText = await response.text(); // ❗ 這裡也要 `await`
-            alert("新增失敗！錯誤：" + errorText);
+            if (response.ok) {
+                alert("新增成功！");
+                closeAddModal(); // 關閉 Modal
+                fetchQuestions(); // 重新載入題目列表
+            } else {
+                let errorText = await response.text(); // ❗ 這裡也要 `await`
+                alert("新增失敗！錯誤：" + errorText);
+            }
+        } catch (error) {
+            console.error("發生錯誤：", error);
+            alert("新增失敗！請檢查網路或伺服器狀態。");
         }
-    } catch (error) {
-        console.error("發生錯誤：", error);
-        alert("新增失敗！請檢查網路或伺服器狀態。");
     }
 }
+
+let uploadedFile = null; // 用來儲存選取的檔案
+
+// 當按下「上傳檔案」按鈕
+document
+    .getElementById("addQuestionByUploadingFile")
+    .addEventListener("click", function () {
+        document.getElementById("addFileInput").click();
+    });
+
+// 當使用者選擇檔案
+document
+    .getElementById("addFileInput")
+    .addEventListener("change", function (event) {
+        uploadedFile = event.target.files[0];
+        if (uploadedFile) {
+            alert("已選擇檔案：" + uploadedFile.name);
+        }
+    });
