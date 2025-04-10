@@ -1,5 +1,7 @@
 from fastapi import APIRouter, File, UploadFile, HTTPException
 from fastapi.responses import JSONResponse
+from generator import generateTempFileName
+from pydantic import BaseModel
 router = APIRouter()
 
 MAX_FILE_SIZE = 10 * 1024 * 1024  # 10 MB 限制
@@ -17,11 +19,16 @@ async def upload_file(file: UploadFile = File(...)):
         buffer.write(content)
     return {"filename": file.filename}
 
+class UploadRequest(BaseModel):
+    topicID: int
+    fileName: str
 @router.post("/uploadToDrive")
-async def uploadToDrive(topicID,questionID,imagePath):
+async def uploadToDrive(request: UploadRequest):
+    questionID = generateTempFileName()
+    imagePath = f"backend/googleDrive/readyForUpload/{request.fileName}"
     from backend.googleDrive.drive import uploadQuestionImage
     try:
-        url = uploadQuestionImage(topicID,questionID,imagePath)
-        return JSONResponse(content={"url": url}, status_code=200)
+        url = uploadQuestionImage(request.topicID,questionID,imagePath)
+        return JSONResponse(content={"url": url, "tempName":questionID}, status_code=200)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

@@ -37,7 +37,7 @@ def get_folders_in_folder(folder_id=parent_folder_id):
 
 
 def uploadQuestionImage(topicID,questionID,imagePath):
-    folder_id = get_folders_in_folder()[topicID]
+    folder_id = get_folders_in_folder()[str(topicID)]
     file_metadata = {'name': str(questionID), 'parents': [folder_id]}
     media = MediaFileUpload(imagePath, resumable=True)
     file = drive_service.files().create(body=file_metadata, media_body=media, fields='id').execute()
@@ -70,3 +70,18 @@ def createFolder(topicID):
     }
     file = drive_service.files().create(body=file_metadata, fields='id').execute()
     return file.get('id')
+
+def rename(topicID,originalName, changedName):
+    folder_id = get_folders_in_folder()[topicID]
+    results = drive_service.files().list(
+        q=f"'{folder_id}' in parents and name='{originalName}'",
+        fields="files(id)"
+    ).execute()
+    files = results.get('files', [])
+    if len(files) > 0:
+        file_id = files[0]['id']
+        file_metadata = {'name': changedName}
+        drive_service.files().update(fileId=file_id, body=file_metadata).execute()
+        return True
+    else:
+        return False

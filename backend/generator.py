@@ -9,3 +9,6 @@ recoveryCode = str([generateRecoveryCode() for _ in range(8)])
 
 def generateSessionToken():
     return "session-"+str(uuid4())
+
+def generateTempFileName():
+    return str(uuid4())+".jpg"

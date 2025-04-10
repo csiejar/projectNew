@@ -232,7 +232,8 @@ async function saveAdd() {
     let files = document.getElementById("addFileInput").files;
     console.log(files);
 
-    if (files.length > 0) { //有上傳檔案
+    if (files.length > 0) {
+        //有上傳檔案
         // 先上傳檔案到伺服器
         let uploadedFile = files[0];
         let formData = new FormData();
@@ -245,9 +246,65 @@ async function saveAdd() {
             .then((response) => {
                 if (response.ok) {
                     alert("檔案上傳成功！");
-                    //TODO - 上傳到Google Drive 並取得url
-                    
-                    
+                    // 上傳成功後，將檔案資訊傳給 Google Drive
+
+                    return fetch("/uploadToDrive", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            topicID: Number(topicID), // 確保是數字
+                            fileName: uploadedFile.name, // 這裡是上傳的檔案名稱
+                        }),
+                    })
+                        .then((response) => {
+                            if (response.ok) {
+                                alert("檔案上傳到 Google Drive 成功！");
+                                response.json().then((data) => {
+                                    url = data.url; // 更新 image 變數為 Google Drive 的檔案 URL
+                                    // TODO 新增題目並上傳到資料庫
+                                    return fetch("/api/addQuestion", {
+                                        method: "POST",
+                                        headers: {
+                                            "Content-Type": "application/json",
+                                        },
+                                        body: JSON.stringify({
+                                            topicID: Number(topicID), // 確保是數字
+                                            question: "詳如照片",
+                                            optionA: "詳如照片",
+                                            optionB: "詳如照片",
+                                            optionC: "詳如照片",
+                                            optionD: "詳如照片",
+                                            answer: answer,
+                                            image: url, // 使用 Google Drive 的檔案 URL
+                                            source: source,
+                                        }),
+                                    })
+                                        .then((response) => {
+                                            if (response.ok) {
+                                                alert("新增成功！");
+                                                closeAddModal(); // 關閉 Modal
+                                                fetchQuestions(); // 重新載入題目列表
+                                            } else {
+                                                alert("新增失敗！");
+                                            }
+                                        })
+                                        .catch((error) =>
+                                            console.error(
+                                                "新增題目失敗:",
+                                                error
+                                            )
+                                        );
+                                });
+                            } else {
+                                alert("檔案上傳到 Google Drive 失敗！");
+                            }
+                        })
+                        .catch((error) =>
+                            console.error(
+                                "檔案上傳到 Google Drive 失敗:",
+                                error
+                            )
+                        );
                 } else {
                     response.json().then((data) => {
                         console.error("上傳失敗細節：", data);
@@ -256,7 +313,8 @@ async function saveAdd() {
                 }
             })
             .catch((error) => console.error("檔案上傳失敗:", error));
-    } else { //沒有上傳檔案 完成
+    } else {
+        //沒有上傳檔案 完成
         try {
             let response = await fetch("/api/addQuestion", {
                 method: "POST",
