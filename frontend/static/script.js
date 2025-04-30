@@ -6,6 +6,11 @@
         document.getElementById("loginModal").style.display = "none";
     });
 
+// SideBar目的地設定
+document.getElementById("questionBankSideBar").addEventListener("click", function () {
+    window.location.href = "/questionAdmin";
+}
+);
 
 document.addEventListener("DOMContentLoaded", function () {
     const modal = document.getElementById("loginModal");
@@ -91,3 +96,4 @@ function handleCredentialResponse(response) {
     })
     .catch(err => console.error("驗證錯誤:", err));
 }
+
