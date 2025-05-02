@@ -1,17 +1,209 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>檔案上傳測試</title>
+    <title>帳戶彈出卡片</title>
+    <style>
+        body {
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* 開啟彈窗按鈕 */
+        .open-btn {
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 20px;
+            background-color: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* 彈出背景遮罩 */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* 彈出卡片 */
+        .popup-card {
+            background: white;
+            border-radius: 30px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+            animation: popIn 0.3s ease;
+        }
+
+        /* 關閉按鈕 */
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+        }
+
+        .name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .email {
+            font-size: 16px;
+            color: #777;
+            margin-bottom: 25px;
+        }
+
+        .button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            margin: 10px 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .button:hover {
+            background-color: #555;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* 動畫效果 */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes popIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+            }
+        }
+
+        .fade-out {
+            animation: fadeOut 0.3s ease;
+        }
+    </style>
 </head>
+
 <body>
-    <h1>檔案上傳測試</h1>
-    <form action="uploadfile/" method="post" enctype="multipart/form-data">
-        <label for="file">選擇檔案：</label>
-        <input type="file" id="file" name="file" accept="image/*, .pdf, .txt">
-        <br><br>
-        <button type="submit">上傳檔案</button>
-    </form>
+
+    <!-- 開啟按鈕 -->
+    <button class="open-btn" onclick="openPopup()">顯示帳戶卡片</button>
+
+    <!-- 彈出視窗區塊 -->
+    <div class="overlay" id="popupOverlay" onclick="overlayClick(event)">
+        <div class="popup-card">
+            <button class="close-btn" onclick="closePopup()">✕</button>
+            <img src="https://cdn.nba.com/headshots/nba/latest/1040x760/977.png" alt="頭像" class="avatar" />
+            <div class="name">Marvin McKinney</div>
+            <div class="email">marvin789@gmail.com</div>
+            <button class="button" id="manageAccount">管理帳戶</button>
+            <div class="button-group">
+                <button class="button" id="newAccount">新增帳戶</button>
+                <button class="button" id="logout">登出帳戶</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS 控制顯示 -->
+    <script>
+        function openPopup() {
+            document.getElementById('popupOverlay').style.display = 'flex';
+        }
+
+        function closePopup() {
+            const overlay = document.getElementById('popupOverlay');
+            overlay.classList.add('fade-out');
+
+            // 等動畫結束後隱藏視窗
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                overlay.classList.remove('fade-out');
+            }, 300); // 這裡要跟動畫時間一致
+        }
+        document.getElementById('manageAccount').addEventListener('click', function () {
+            alert('管理帳戶按鈕被點擊了！');
+        });
+        document.getElementById('newAccount').addEventListener('click', function () {
+            alert('新增帳戶按鈕被點擊了！');
+        });
+        document.getElementById('logout').addEventListener('click', function () {
+            alert('登出帳戶按鈕被點擊了！');
+        });
+        // 監聽 ESC 鍵關閉彈窗
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                closePopup();
+            }
+        });
+        function overlayClick(event) {
+            // 確保點擊的不是 popup-card 內部
+            if (event.target.id === 'popupOverlay') {
+                closePopup();
+            }
+            }
+    </script>
+
 </body>
+
 </html>

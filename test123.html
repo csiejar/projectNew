@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Google Login with Custom Button</title>
+  <meta name="google-signin-client_id" content="你的-client-id.apps.googleusercontent.com">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+  <div id="gSignInWrapper">
+    <span class="label">Sign in with:</span>
+    <div id="customBtn" class="customGPlusSignIn">
+      <span class="icon"></span>
+      <span class="buttonText">Login</span>
+    </div>
+  </div>
+  <div id="name"></div>
+
+  <script>
+    let tokenClient;
+
+    function handleCredentialResponse(response) {
+      // 發送 token 到後端驗證
+      fetch('/api/googleLogin', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token: response.credential })
+      })
+      .then(res => res.json())
+      .then(data => {
+          console.log("後端回應:", data);
+          window.location.reload(); // 登入成功重新整理頁面
+      })
+      .catch(err => console.error("驗證錯誤:", err));
+    }
+
+    window.onload = () => {
+      tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: '1071265157577-7bcbr8qejtvtbmnchgs06ohr9ke46v97.apps.googleusercontent.com',
+        scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email openid',
+        callback: (tokenResponse) => {
+          if (tokenResponse.error) {
+            console.error('登入錯誤：', tokenResponse);
+            alert("登入失敗");
+            return;
+          }
+
+          // 拿 access token 去換 ID token (credential) — 用 Google Identity Services 重新要一份 ID token
+          google.accounts.id.initialize({
+            client_id: '1071265157577-7bcbr8qejtvtbmnchgs06ohr9ke46v97.apps.googleusercontent.com',
+            callback: handleCredentialResponse
+          });
+
+          google.accounts.id.prompt(); // 手動觸發以拿 ID token
+        }
+      });
+
+      document.getElementById("customBtn").addEventListener("click", () => {
+        tokenClient.requestAccessToken();
+      });
+    };
+  </script>
+
+  <style>
+    #customBtn {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 0px;
+        gap: 8px;
+        font-size: 14px;
+        width: 120px;
+        height: 70px;
+        background: #000000;
+        color: white;
+        border: 1px solid #000000;
+        border-radius: 100px;
+        flex: none;
+        order: 1;
+        flex-grow: 0;
+        z-index: 1;
+    }
+
+    #customBtn span.buttonText {
+        color: white;
+        padding: 0;
+    }
+
+    #customBtn:hover {
+        cursor: pointer;
+        opacity: 0.8;
+    }
+  </style>
+</body>
+</html>

@@ -342,3 +342,28 @@ def deleteQuestion(questionID: int):
         return f"Error: {str(e)}"
     finally:
         session.close()
+
+def getQuestionByID(questionID: int):
+    try:
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        question = session.query(questionsSQL).filter_by(questionID=questionID).first()
+        if question:
+            return {
+                "questionID": question.questionID,
+                "topicID": question.topicID,
+                "question": question.question,
+                "optionA": question.optionA,
+                "optionB": question.optionB,
+                "optionC": question.optionC,
+                "optionD": question.optionD,
+                "answer": question.answer,
+                "image": question.image,
+                "source": question.source,
+            }
+        else:
+            return None
+    except Exception as e:
+        return f"Error: {str(e)}"
+    finally:
+        session.close()

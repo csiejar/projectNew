@@ -52,6 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
         modal.style.display = "block";
     });
 
+
     // 點擊關閉按鈕
     document.getElementById("loginModalCloseBtn").addEventListener("click", function () {
         modal.style.display = "none";
@@ -96,4 +97,5 @@ function handleCredentialResponse(response) {
     })
     .catch(err => console.error("驗證錯誤:", err));
 }
+
 

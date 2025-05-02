@@ -175,3 +175,29 @@
 }
 
 
+.loginOutBtn button {
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    gap: 8px;
+    font-size: 14px;
+    width: 120px;
+    height: 70px;
+    left: 0px;
+    top: 177px;
+
+    /* M3/black */
+    background: #000000;
+    color: white;
+    border: 1px solid #000000;
+    border-radius: 100px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    z-index: 1;
+}
