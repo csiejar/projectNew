@@ -242,7 +242,7 @@ def addQuestion(topicID: int, question: str, optionA: str, optionB: str, optionC
     finally:
         session.close()
 
-def getAllComments():
+def getSixComments():
     try:
         Session = sessionmaker(bind=engine)
         session = Session()
@@ -261,6 +261,7 @@ def getAllComments():
             }
             for comment in comments
         ]
+        comments = generator.generateRamdomSixComments(comments)
         return comments
     except Exception as e:
         return f"Error: {str(e)}"

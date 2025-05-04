@@ -99,10 +99,10 @@ async def submitComment(questionID: int, comment: str, userToken: str = Depends(
     else:
         raise HTTPException(status_code=401, detail="Unauthorized")
     
-@router.get("/getAllComments")
-async def getAllComments():
+@router.get("/getSixComments")
+async def getSixComments():
     try:
-        comments = dbMain.getAllComments()
+        comments = dbMain.getSixComments()
         return JSONResponse(content=comments, status_code=200, headers={"Content-Type": "application/json; charset=utf-8"})
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
