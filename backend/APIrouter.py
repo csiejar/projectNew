@@ -172,15 +172,3 @@ async def addQuestion(request: addQuestionRequest):
         return {"message": "新增問題成功"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
-
-
-@router.get("/getQuestionByID")
-async def getQuestionByID(questionID: int):
-    try:
-        question = dbMain.getQuestionByID(questionID)
-        if not question:
-            return JSONResponse(content={"message": "問題不存在"}, status_code=404)
-        return JSONResponse(content=question, status_code=200)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))

@@ -245,13 +245,15 @@ def getAllComments():
         Session = sessionmaker(bind=engine)
         session = Session()
         comments = session.query(commentsSQL).all()
+        user = session.query(UsersSQL).all()
         # 將資料轉換為字典格式
         comments = [
             {
-                "commentID": comment.commentID,
-                "questionID": comment.questionID,
                 "userID": comment.userID,
                 "comment": comment.comment,
+                "userName": next((u.name for u in user if u.userID == comment.userID), None),
+                "questionID": comment.questionID
+                # "userImg"
             }
             for comment in comments
         ]
