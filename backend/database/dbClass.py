@@ -15,6 +15,7 @@ class UsersSQL(Base):
     sessionToken = Column(String(255))
     recoveryCode = Column(String(255))
     sex = Column(Integer)
+    userImg = Column(String(255))
 
 # 首頁下方大主題資料表
 class topicsSQL(Base):

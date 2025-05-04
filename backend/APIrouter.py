@@ -46,6 +46,7 @@ async def googleLogin(request: GoogleLoginRequest):
         user_id = id_info["sub"]  # Google User ID
         email = id_info["email"]
         name = id_info["name"]
+        userImg = id_info["picture"]
         # # 檢查使用者是否已存在於資料庫
         isUserExisted, originalSessionToken = dbMain.checkUserExist(user_id)
         if isUserExisted:
@@ -54,7 +55,7 @@ async def googleLogin(request: GoogleLoginRequest):
             return setTokenToCookies(sessionToken)
         else:
             # 使用者不存在，新增使用者
-            newuser = dbMain.createUser(user_id, name, email)
+            newuser = dbMain.createUser(user_id, name, email, userImg)
             return setTokenToCookies(newuser["sessionToken"])
     except Exception as e:
         raise HTTPException(status_code=400, detail="Invalid Google token")

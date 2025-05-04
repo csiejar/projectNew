@@ -43,6 +43,7 @@ def getAllUsers():
                 "email": user.email,
                 "sessionToken": user.sessionToken,
                 "recoveryCode": user.recoveryCode,
+                "userImg": user.userImg,
             }
             for user in users
         ]
@@ -77,7 +78,7 @@ def getAllTopics():
         session.close()
 
 # 建立使用者
-def createUser(googleID, name, email):
+def createUser(googleID, name, email,userImg):
     try:
         Session = sessionmaker(bind=engine)
         session = Session()
@@ -88,7 +89,8 @@ def createUser(googleID, name, email):
             email=email,
             sessionToken=generator.sessionToken,
             recoveryCode=generator.recoveryCode,
-            sex=0 # 不願透露-0 男-1 女-2
+            sex=0, # 不願透露-0 男-1 女-2
+            userImg=userImg
         )
         session.add(new_user)
         session.commit()
@@ -254,8 +256,8 @@ def getAllComments():
                 "comment": comment.comment,
                 "userName": next((u.name for u in user if u.userID == comment.userID), None),
                 "questionID": comment.questionID,
-                "question": next((q.question for q in question if q.questionID == comment.questionID), None)
-                # "userImg"
+                "question": next((q.question for q in question if q.questionID == comment.questionID), None),
+                "userImg": next((u.userImg for u in user if u.userID == comment.userID), None),
             }
             for comment in comments
         ]
