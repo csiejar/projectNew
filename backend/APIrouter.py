@@ -69,7 +69,7 @@ async def authUser(userToken: str = Depends(findTokenFromCookies)):
         raise HTTPException(status_code=401, detail="Unauthorized")
 
 @router.get("/getUserInfoByToken")
-async def getUserInfoByToken(userToken: str):
+async def getUserInfoByToken(userToken: str = Depends(findTokenFromCookies)):
     if userToken and (userToken != "None"):
         userData = dbMain.getUserDataByToken(userToken)
         return JSONResponse(content=userData, status_code=200, headers={"Content-Type": "application/json; charset=utf-8"})
@@ -91,7 +91,7 @@ async def getAllQuestions():
 async def submitComment(questionID: int, comment: str, userToken: str = Depends(findTokenFromCookies)):
     if userToken and (userToken != "None"):
         try:
-            userID = dbMain.getUserInfoByToken(userToken)["userID"]
+            userID = dbMain.getUserDataByToken(userToken)["userID"]
             dbMain.Comment(questionID,userID ,comment)
             return JSONResponse(content={"message": "留言成功"}, status_code=200)
         except Exception as e:
