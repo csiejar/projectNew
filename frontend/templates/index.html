@@ -74,8 +74,28 @@
   </div>
     <script>
       document.getElementById('buttonLogin').addEventListener('click', function() {
-        const loginModal = document.getElementById('loginModal');
-        loginModal.style.display = 'block';
+        fetch('/api/authUser', { method: 'GET', credentials: 'include' })
+        .then(res => res.json())
+        .then(data => {
+          if (data.message === "已登入") {
+            document.getElementById("userAvatar").src = data.userData.userImg || "../static/img/default-avatar.png";
+            document.getElementById("userName").textContent = data.userData.name;
+            document.getElementById("userEmail").textContent = data.userData.email;
+            document.getElementById("g_id_onload").style.display = "none";
+            document.getElementById("loginBtn").style.display = "none";
+            userInfoOverlay.style.display = "flex";
+          }
+          else {
+            document.getElementById("userAvatar").src = "../static/img/default-avatar.png";
+            document.getElementById("userName").textContent = "您尚未登入";
+            document.getElementById("userEmail").textContent = "登入後即顯示";
+            document.getElementById("manageAccountBtn").style.display = "none";
+            document.getElementById("addAccountBtn").style.display = "none";
+            document.getElementById("logoutFromCard").style.display = "none";
+            userInfoOverlay.style.display = "flex";
+          }
+        })
+        .catch(err => console.error("取得使用者資訊失敗:", err));
       });
     </script>
   </div>
@@ -200,16 +220,9 @@
 
   <!-- 登入彈出視窗（可拖動） -->
   <div id="loginModal" class="modal">
-    <div class="modal-header">
-      <span class="close" id="loginModalCloseBtn">&times;</span>
-      <h2>登入</h2>
-    </div>
     <div class="modal-content">
       <!-- Google 產生的登入按鈕 -->
-      <div id="g_id_onload" data-client_id="1071265157577-7bcbr8qejtvtbmnchgs06ohr9ke46v97.apps.googleusercontent.com"
-        data-callback="handleCredentialResponse" data-auto_select="true">
-      </div>
-      <div id="loginBtn" class="g_id_signin" data-type="standard"></div>
+      
   
       <!-- 登出按鈕 -->
       <button id="logoutBtn" class="logout-button" style="display: none;">登出</button>
@@ -286,16 +299,20 @@
   <script src="../static/script.js"></script>
 
   <!-- 放在 body 的最下方，footer 之前 -->
-<div id="userInfoCard" class="card shadow" style="position: absolute; top: 80px; right: 20px; width: 260px; display: none; z-index: 10000;">
-  <div class="card-body text-center">
-    <img id="userAvatar" src="" class="rounded-circle mb-3" width="80" height="80" alt="User Image">
-    <h5 id="userName">使用者姓名</h5>
-    <p id="userEmail" class="text-muted">使用者 Gmail</p>
-    
-    <div class="d-grid gap-2 mt-3">
-      <button class="btn btn-outline-secondary btn-sm" id="manageAccountBtn">管理帳戶</button>
-      <button class="btn btn-outline-primary btn-sm" id="addAccountBtn">新增帳戶</button>
-      <button class="btn btn-outline-danger btn-sm" id="logoutFromCard">登出</button>
+<div class="overlay" id="userInfoOverlay" style="display: none;">
+  <div class="popup-card">
+    <button class="close-btn" id="closeUserCard">✕</button>
+    <img id="userAvatar" src="" alt="使用者頭像" class="avatar">
+    <div class="name" id="userName">使用者姓名</div>
+    <div class="email" id="userEmail">使用者 Gmail</div>
+    <div id="g_id_onload" data-client_id="1071265157577-7bcbr8qejtvtbmnchgs06ohr9ke46v97.apps.googleusercontent.com"
+        data-callback="handleCredentialResponse" data-auto_select="true">
+      </div>
+      <div id="loginBtn" class="g_id_signin" data-type="standard"></div>
+    <button class="button" id="manageAccountBtn">管理帳戶</button>
+    <div class="button-group">
+      <button class="button" id="addAccountBtn">新增帳戶</button>
+      <button class="button" id="logoutFromCard">登出帳戶</button>
     </div>
   </div>
 </div>
@@ -307,39 +324,79 @@
     const logoutButtonMainPage = document.getElementById("buttonLogout");
     const loginButtonMainPage = document.getElementById("buttonLogin");
     const userBtn = document.getElementById("userBtn");
-    const userInfoCard = document.getElementById("userInfoCard");
+    const userInfoOverlay = document.getElementById("userInfoOverlay");
+    const closeUserCard = document.getElementById("closeUserCard");
 
     logoutButton.addEventListener("click", logout);
     logoutButtonMainPage.addEventListener("click", logout);
 
     userBtn.addEventListener("click", function () {
-      if (userInfoCard.style.display === "none") {
-        fetch('/api/authUser', { method: 'GET', credentials: 'include' })
-          .then(res => res.json())
-          .then(data => {
-            if (data.message === "已登入") {
-              document.getElementById("userAvatar").src = data.userData.userImg || "default.png";
-              document.getElementById("userName").textContent = data.userData.name;
-              document.getElementById("userEmail").textContent = data.userData.email;
-              userInfoCard.style.display = "block";
-            }
-          })
-          .catch(err => console.error("取得使用者資訊失敗:", err));
-      } else {
-        userInfoCard.style.display = "none";
+      fetch('/api/authUser', { method: 'GET', credentials: 'include' })
+        .then(res => res.json())
+        .then(data => {
+          if (data.message === "已登入") {
+            document.getElementById("userAvatar").src = data.userData.userImg || "../static/img/default-avatar.png";
+            document.getElementById("userName").textContent = data.userData.name;
+            document.getElementById("userEmail").textContent = data.userData.email;
+            document.getElementById("g_id_onload").style.display = "none";
+            document.getElementById("loginBtn").style.display = "none";
+            userInfoOverlay.style.display = "flex";
+          }
+          else {
+            document.getElementById("userAvatar").src = "../static/img/default-avatar.png";
+            document.getElementById("userName").textContent = "您尚未登入";
+            document.getElementById("userEmail").textContent = "登入後即顯示";
+            document.getElementById("manageAccountBtn").style.display = "none";
+            document.getElementById("addAccountBtn").style.display = "none";
+            document.getElementById("logoutFromCard").style.display = "none";
+            userInfoOverlay.style.display = "flex";
+          }
+        })
+        .catch(err => console.error("取得使用者資訊失敗:", err));
+    });
+
+    // 關閉卡片按鈕
+    closeUserCard.addEventListener("click", function() {
+      userInfoOverlay.classList.add('fade-out');
+      setTimeout(() => {
+        userInfoOverlay.style.display = 'none';
+        userInfoOverlay.classList.remove('fade-out');
+      }, 300);
+    });
+
+    // 點擊遮罩關閉
+    userInfoOverlay.addEventListener("click", function(event) {
+      if (event.target === userInfoOverlay) {
+        userInfoOverlay.classList.add('fade-out');
+        setTimeout(() => {
+          userInfoOverlay.style.display = 'none';
+          userInfoOverlay.classList.remove('fade-out');
+        }, 300);
       }
     });
 
+    // 登出按鈕
     document.getElementById("logoutFromCard").addEventListener("click", logout);
 
-    // 新增帳戶事件處理（可導向或彈窗）
+    // 新增帳戶事件處理
     document.getElementById("addAccountBtn").addEventListener("click", function () {
-      window.location.href = "/addAccount"; // ← 請改為你實際的新增帳戶頁面路徑
+      window.location.href = "/addAccount";
     });
 
     // 管理帳戶事件處理
     document.getElementById("manageAccountBtn").addEventListener("click", function () {
-      window.location.href = "/manageAccount"; // ← 請改為你實際的帳戶管理頁面路徑
+      window.location.href = "/manageAccount";
+    });
+
+    // ESC 鍵關閉彈窗
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape' && userInfoOverlay.style.display === 'flex') {
+        userInfoOverlay.classList.add('fade-out');
+        setTimeout(() => {
+          userInfoOverlay.style.display = 'none';
+          userInfoOverlay.classList.remove('fade-out');
+        }, 300);
+      }
     });
 
     const urlParams = new URLSearchParams(window.location.search);

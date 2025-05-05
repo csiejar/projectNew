@@ -93,68 +93,6 @@
     display: none;
 }
 
-/* 登入彈窗樣式 */
-#loginModal {
-    display: none; /* 預設隱藏 */
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 300px;
-    padding: 20px;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 9999; /* 確保在所有元素之上 */
-}
-
-#loginModal .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-}
-
-#loginModal .modal-header h2 {
-    margin: 0;
-    font-size: 18px;
-}
-
-#loginModal .modal-content {
-    margin-top: 15px;
-}
-
-#loginModal input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-}
-
-#loginModal button {
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-#loginModal button:hover {
-    background-color: #0056b3;
-}
-
-/* 關閉按鈕樣式 */
-#loginModal .close {
-    font-size: 24px;
-    cursor: pointer;
-}
-
 /* 主內容區域 */
 .main-content {
     margin-left: 250px; /* 讓內容區域不被 Sidebar 擋住 */
@@ -200,4 +138,132 @@
     order: 1;
     flex-grow: 0;
     z-index: 1;
+}
+
+/* 使用者資訊卡片樣式 */
+/* 彈出背景遮罩 */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    display: none;
+    z-index: 10000;
+}
+
+.popup-card {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 250px;
+    height: 250px;
+    background: white;
+    border-radius: 20px;
+    padding: 16px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    animation: popIn 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    box-sizing: border-box;
+}
+
+/* 關閉按鈕 */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    font-size: 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* 頭像 */
+.avatar {
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 8px;
+}
+
+/* 名字 */
+.name {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+/* Email */
+.email {
+    font-size: 12px;
+    color: #777;
+    margin-bottom: 10px;
+}
+
+/* 按鈕 */
+.button {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: #555;
+}
+
+/* 按鈕群組 */
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+/* 動畫效果 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes popIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+.fade-out {
+    animation: fadeOut 0.3s ease;
 }
