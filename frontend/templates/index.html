@@ -284,6 +284,107 @@
   </div>
 
   <script src="../static/script.js"></script>
+
+  <!-- 放在 body 的最下方，footer 之前 -->
+<div id="userInfoCard" class="card shadow" style="position: absolute; top: 80px; right: 20px; width: 260px; display: none; z-index: 10000;">
+  <div class="card-body text-center">
+    <img id="userAvatar" src="" class="rounded-circle mb-3" width="80" height="80" alt="User Image">
+    <h5 id="userName">使用者姓名</h5>
+    <p id="userEmail" class="text-muted">使用者 Gmail</p>
+    
+    <div class="d-grid gap-2 mt-3">
+      <button class="btn btn-outline-secondary btn-sm" id="manageAccountBtn">管理帳戶</button>
+      <button class="btn btn-outline-primary btn-sm" id="addAccountBtn">新增帳戶</button>
+      <button class="btn btn-outline-danger btn-sm" id="logoutFromCard">登出</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const loginButton = document.getElementById("loginBtn");
+    const logoutButton = document.getElementById("logoutBtn");
+    const logoutButtonMainPage = document.getElementById("buttonLogout");
+    const loginButtonMainPage = document.getElementById("buttonLogin");
+    const userBtn = document.getElementById("userBtn");
+    const userInfoCard = document.getElementById("userInfoCard");
+
+    logoutButton.addEventListener("click", logout);
+    logoutButtonMainPage.addEventListener("click", logout);
+
+    userBtn.addEventListener("click", function () {
+      if (userInfoCard.style.display === "none") {
+        fetch('/api/authUser', { method: 'GET', credentials: 'include' })
+          .then(res => res.json())
+          .then(data => {
+            if (data.message === "已登入") {
+              document.getElementById("userAvatar").src = data.userData.userImg || "default.png";
+              document.getElementById("userName").textContent = data.userData.name;
+              document.getElementById("userEmail").textContent = data.userData.email;
+              userInfoCard.style.display = "block";
+            }
+          })
+          .catch(err => console.error("取得使用者資訊失敗:", err));
+      } else {
+        userInfoCard.style.display = "none";
+      }
+    });
+
+    document.getElementById("logoutFromCard").addEventListener("click", logout);
+
+    // 新增帳戶事件處理（可導向或彈窗）
+    document.getElementById("addAccountBtn").addEventListener("click", function () {
+      window.location.href = "/addAccount"; // ← 請改為你實際的新增帳戶頁面路徑
+    });
+
+    // 管理帳戶事件處理
+    document.getElementById("manageAccountBtn").addEventListener("click", function () {
+      window.location.href = "/manageAccount"; // ← 請改為你實際的帳戶管理頁面路徑
+    });
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const refreshed = urlParams.get('refreshed');
+
+    if (refreshed === 'true') {
+      checkAuthStatus();
+    } else {
+      checkAuthStatus();
+    }
+
+    function checkAuthStatus() {
+      fetch('/api/authUser', { method: 'GET', credentials: 'include' })
+        .then(response => response.json())
+        .then(data => {
+          if (data.message === "已登入") {
+            loginButton.style.display = "none";
+            logoutButton.style.display = "block";
+            loginButtonMainPage.style.display = "none";
+            logoutButtonMainPage.style.display = "flex";
+            console.log("用戶資料:", data.userData);
+          } else {
+            loginButton.style.display = "block";
+            logoutButton.style.display = "none";
+            loginButtonMainPage.style.display = "flex";
+            logoutButtonMainPage.style.display = "none";
+            console.log("用戶未登入");
+          }
+        })
+        .catch(error => console.error('Error fetching authUser:', error));
+    }
+
+    function logout() {
+      fetch('/api/logout', { method: 'POST', credentials: 'include' })
+        .then(response => response.json())
+        .then(result => {
+          if (result.message === "登出成功") {
+            window.location.reload();
+          }
+        })
+        .catch(error => console.error('登出失敗:', error));
+    }
+  });
+</script>
+
 </body>
 
 </html>
