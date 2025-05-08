@@ -356,3 +356,40 @@ def getQuestionByID(questionID: int):
         return f"Error: {str(e)}"
     finally:
         session.close()
+
+def getAllPermission():
+    try:
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        permission = session.query(permissionSQL).all()
+        # 將資料轉換為字典格式
+        permission = [
+            {
+                "permissionID": permission.permissionID,
+                "permissionDetails": permission.permissionDetails,
+                "allowLink": permission.allowLink,
+                "permissionUser": permission.permissionUser
+            }
+            for permission in permission
+        ]
+        return permission
+    except Exception as e:
+        return f"Error: {str(e)}"
+    finally:
+        session.close()
+
+def getUserPermission(userID):
+    permissionList = []
+    for i in getAllPermission():
+        if userID in i['permissionUser']:
+            permissionList.append(i['permissionID'])
+    return permissionList
+
+def isUserAllowToAccessLink(userID, link):
+    permissionList = getUserPermission(userID)
+    for i in permissionList:
+        permission = getAllPermission()
+        for j in permission:
+            if i == j['permissionID'] and link in j['allowLink']:
+                return True
+    return False

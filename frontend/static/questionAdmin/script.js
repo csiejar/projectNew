@@ -83,10 +83,12 @@ function deleteQuestion(questionID) {
                     alert("刪除成功！");
                     fetchQuestions();
                 } else {
-                    alert("刪除失敗！");
+                    let errorText = response.statusText;
+                    alert("刪除失敗！錯誤：" + errorText);
                 }
             })
             .catch((error) => console.error("刪除問題失敗:", error));
+            
     }
 }
 
@@ -168,7 +170,7 @@ async function saveEdit() {
         closeModal();
         fetchQuestions();
     } else {
-        let errorText = await response.text();
+        let errorText = await response.statusText;
         alert("編輯失敗！錯誤：" + errorText);
     }
 }
@@ -177,7 +179,7 @@ function init() {
     // 初始化時載入題目
     fetchTopics();
 }
-window.onload = init;
+// window.onload = init;
 
 function addQuestionForm() {
     // 取得 Modal
@@ -365,3 +367,51 @@ document
             alert("已選擇檔案：" + uploadedFile.name);
         }
     });
+
+document.addEventListener("DOMContentLoaded", function () {
+    // 檢查 URL 是否包含刷新標記
+    const urlParams = new URLSearchParams(window.location.search);
+    const refreshed = urlParams.get("refreshed");
+
+    if (refreshed === "true") {
+        console.log("已刷新過頁面，執行檢查登入狀態");
+        checkAuthStatus(); // 檢查登入狀態
+    } else {
+        checkAuthStatus(); // 初始化檢查登入狀態
+    }
+
+    // 統一檢查登入狀態的函數
+    function checkAuthStatus() {
+        fetch("/api/authUser", { method: "GET", credentials: "include" })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.message === "已登入") {
+                    document.getElementById("nameDisplay").textContent += data.userData.name; // 顯示使用者名稱
+                    // 確認是否有權限 編輯題庫
+                    fetch("/api/isPermitted?link=questionAdmin", {
+                        method: "GET",
+                        headers: { "Content-Type": "application/json" },
+                        credentials: "include",
+                    })
+                        .then((response) => response.json())
+                        .then((data) => {
+                            if (data.message === "有權限") {
+                                // 有權限，載入題目
+                                init();
+                            } else {
+                                // 沒有權限，顯示錯誤訊息
+                                alert("您沒有編輯題庫的權限！");
+                                window.location.href = "/"; // 導回首頁
+                            }
+                        })
+                        .catch((error) =>
+                            console.error("檢查權限失敗:", error)
+                        );
+                } else {
+                    alert("請先登入！");
+                    window.location.href = "/"; // 導回首頁
+                }
+            })
+            .catch((error) => console.error("Error fetching authUser:", error));
+    }
+});

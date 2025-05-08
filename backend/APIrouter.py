@@ -128,23 +128,46 @@ class EditQuestionRequest(BaseModel):
     source: Optional[str] = None
 
 @router.post("/editQuestion")
-async def editQuestion(request: EditQuestionRequest):
-    update_data = {k: v for k, v in request.model_dump().items() if v is not None}
-    try:
-        dbMain.editQuestion(**update_data)
-        return {"message": "編輯問題成功"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+async def editQuestion(request: EditQuestionRequest, userToken: str = Depends(findTokenFromCookies)):
+    if userToken and (userToken != "None"):
+        try:
+            userID = dbMain.getUserDataByToken(userToken)["userID"]
+            if dbMain.isUserAllowToAccessLink(userID, "editQuestion"):
+                update_data = {k: v for k, v in request.model_dump().items() if v is not None}
+                try:
+                    dbMain.editQuestion(**update_data)
+                    return {"message": "編輯問題成功"}
+                except Exception as e:
+                    raise HTTPException(status_code=500, detail=str(e))
+            else:
+                return JSONResponse(content={"message": "無權限"}, status_code=403)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+    else:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+        
     
 class DeleteQuestionRequest(BaseModel):
     questionID: int
 @router.post("/deleteQuestion")
-async def deleteQuestion(request: DeleteQuestionRequest):
-    try:
-        dbMain.deleteQuestion(request.questionID)
-        return {"message": "刪除問題成功"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+async def deleteQuestion(request: DeleteQuestionRequest, userToken: str = Depends(findTokenFromCookies)):
+    if userToken and (userToken != "None"):
+        try:
+            userID = dbMain.getUserDataByToken(userToken)["userID"]
+            if dbMain.isUserAllowToAccessLink(userID, "deleteQuestion"):
+                try:
+                    dbMain.deleteQuestion(request.questionID)
+                    return {"message": "刪除問題成功"}
+                except Exception as e:
+                    raise HTTPException(status_code=500, detail=str(e))
+            else:
+                return JSONResponse(content={"message": "無權限"}, status_code=403)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+    else:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    
     
 class addQuestionRequest(BaseModel):
     topicID: int
@@ -157,19 +180,40 @@ class addQuestionRequest(BaseModel):
     image: Optional[str] = ""
     source: Optional[str] = ""
 @router.post("/addQuestion")
-async def addQuestion(request: addQuestionRequest):
-    try:
-        dbMain.addQuestion(
-            topicID=request.topicID,
-            question=request.question,
-            optionA=request.optionA,
-            optionB=request.optionB,
-            optionC=request.optionC,
-            optionD=request.optionD,
-            answer=request.answer,
-            image=request.image,
-            source=request.source
-        )
-        return {"message": "新增問題成功"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+async def addQuestion(request: addQuestionRequest, userToken: str = Depends(findTokenFromCookies)):
+    if userToken and (userToken != "None"):
+        try:
+            userID = dbMain.getUserDataByToken(userToken)["userID"]
+            if dbMain.isUserAllowToAccessLink(userID, "addQuestion"):
+                try:
+                    dbMain.addQuestion(
+                        topicID=request.topicID,
+                        question=request.question,
+                        optionA=request.optionA,
+                        optionB=request.optionB,
+                        optionC=request.optionC,
+                        optionD=request.optionD,
+                        answer=request.answer,
+                        image=request.image,
+                        source=request.source
+                    )
+                    return {"message": "新增問題成功"}
+                except Exception as e:
+                    raise HTTPException(status_code=500, detail=str(e))
+            else:
+                return JSONResponse(content={"message": "無權限"}, status_code=403)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+@router.get("/isPermitted")
+async def isPermitted(link: str, userToken: str = Depends(findTokenFromCookies)):
+    if userToken and (userToken != "None"):
+        try:
+            userID = dbMain.getUserDataByToken(userToken)["userID"]
+            if dbMain.isUserAllowToAccessLink(userID, link):
+                return JSONResponse(content={"message": "有權限"}, status_code=200)
+            else:
+                return JSONResponse(content={"message": "無權限"}, status_code=403)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+    else:
+        raise HTTPException(status_code=401, detail="Unauthorized")

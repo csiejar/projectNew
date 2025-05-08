@@ -47,3 +47,11 @@ class commentsSQL(Base):
     questionID = Column(Integer)
     userID = Column(String(255))
     comment = Column(Text)
+
+# 權限設定資料表
+class permissionSQL(Base):
+    __tablename__ = 'permission'
+    permissionID = Column(Integer, primary_key=True)
+    permissionDetails = Column(String(100))
+    permissionUser = Column(String(100))
+    allowLink = Column(String(100))
