@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>題庫系統</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}">
+  <script src="{{ url_for('static', path='/script.js') }}"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+    rel="stylesheet">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar collapsed" id="sidebar">
+    <div class="sidebar-logo">
+      <img src="../static/img/mark.png" alt="Logo">
+    </div>
+    <ul>
+      <li id="mainPageSideBar"><i class="bi bi-house"></i><span class="text">首頁</span></li>
+      <li id="questionBankSideBar"><i class="bi bi-book"></i><span class="text">題庫</span></li>
+      <li id="demoTestSideBar"><i class="bi bi-pencil"></i><span class="text">模擬測驗</span></li>
+      <li id="WrongQuestionBookSideBar"><i class="bi bi-journal-x"></i><span class="text">錯題本</span></li>
+    </ul>
+  </div>
+  <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+
+  <!-- Header -->
+  <header class="d-flex align-items-center justify-content-between p-3 bg-white text-dark">
+    <button class="btn text-dark" id="menuBtn">☰</button>
+    <img src="../static/img/logo.png" alt="Logo" style="height: 50px;" onclick="location.href='/'">
+    <div>
+      <button class="btn btn-outline-dark" id="google-translate">
+        <i class="bi bi-globe"></i>
+      </button>
+      <div id="google_translate_element"
+        style="display: none; position: absolute; top: 80px; right: 0px; z-index: 10000;"></div>
+      <script type="text/javascript">
+        document.getElementById('google_translate_element').style.display = 'none';
+        function googleTranslateElementInit() {
+          new google.translate.TranslateElement({
+            pageLanguage: 'zh-TW',
+            includedLanguages: 'en,zh-CN,zh-TW',
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+          }, 'google_translate_element');
+        }
+        document.getElementById('google-translate').addEventListener('click', function () {
+          const translateElement = document.getElementById('google_translate_element');
+          translateElement.style.display = translateElement.style.display === 'none' ? 'block' : 'none';
+        });
+      </script>
+      <script type="text/javascript"
+        src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+      <button class="btn btn-outline-dark" id="userBtn">
+        <i class="bi bi-person-circle"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- 主內容區域 -->
+  <div class="main-content" style="margin-left: 250px; padding: 20px;">
+    <h1 class="fw-bold mb-4">電子學題庫系統</h1>
+    <p class="fs-5 mt-4" style="color: #444;">本網站提供各式題庫，提供個人化的電子學練習及模擬試題</p>
+    
+  </div>
+</body>
+</html>
+
+  <!-- 引入 Bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- 登入彈出視窗（可拖動） -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <!-- Google 產生的登入按鈕 -->
+      
+  
+      <!-- 登出按鈕 -->
+      <button id="logoutBtn" class="logout-button" style="display: none;">登出</button>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+      // 檢查 URL 是否包含刷新標記
+      const urlParams = new URLSearchParams(window.location.search);
+      const refreshed = urlParams.get('refreshed');
+  
+      if (refreshed === 'true') {
+        console.log("已刷新過頁面，執行檢查登入狀態");
+        checkAuthStatus(); // 檢查登入狀態
+      } else {
+        checkAuthStatus(); // 初始化檢查登入狀態
+      }
+  
+      // 統一檢查登入狀態的函數
+      function checkAuthStatus() {
+        fetch('/api/authUser', { method: 'GET', credentials: 'include' })
+          .then(response => response.json())
+          .then(data => {
+            if (data.message === "已登入") {
+              console.log("用戶資料:", data.userData);
+            } else {;
+              console.log("用戶未登入");
+            }
+          })
+          .catch(error => console.error('Error fetching authUser:', error));
+      }
+  
+      function logout() {
+        fetch('/api/logout', { method: 'POST', credentials: 'include' })
+          .then(response => response.json())
+          .then(result => {
+            if (result.message === "登出成功") {
+              window.location.reload(); // 刷新頁面
+            }
+          })
+          .catch(error => console.error('登出失敗:', error));
+      }
+    });
+  </script>
+  
+  
+
+  <!-- Footer -->
+  <div id="footer">
+    <p>© 2025 Elec Forge 版權所有</p>
+  </div>
+
+  <script src="../static/script.js"></script>
+
+  <!-- 放在 body 的最下方，footer 之前 -->
+<div class="overlay" id="userInfoOverlay" style="display: none;">
+  <div class="popup-card">
+    <button class="close-btn" id="closeUserCard">✕</button>
+    <img id="userAvatar" src="" alt="使用者頭像" class="avatar">
+    <div class="name" id="userName">使用者姓名</div>
+    <div class="email" id="userEmail">使用者 Gmail</div>
+    <div id="g_id_onload" data-client_id="1071265157577-7bcbr8qejtvtbmnchgs06ohr9ke46v97.apps.googleusercontent.com"
+        data-callback="handleCredentialResponse" data-auto_select="true">
+      </div>
+      <div id="loginBtn" class="g_id_signin" data-type="standard"></div>
+    <button class="button" id="manageAccountBtn">管理帳戶</button>
+    <div class="button-group">
+      <button class="button" id="addAccountBtn">新增帳戶</button>
+      <button class="button" id="logoutFromCard">登出帳戶</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const userBtn = document.getElementById("userBtn");
+    const userInfoOverlay = document.getElementById("userInfoOverlay");
+    const closeUserCard = document.getElementById("closeUserCard");
+
+    userBtn.addEventListener("click", function () {
+      fetch('/api/authUser', { method: 'GET', credentials: 'include' })
+        .then(res => res.json())
+        .then(data => {
+          if (data.message === "已登入") {
+            document.getElementById("userAvatar").src = data.userData.userImg || "../static/img/default-avatar.png";
+            document.getElementById("userName").textContent = data.userData.name;
+            document.getElementById("userEmail").textContent = data.userData.email;
+            document.getElementById("g_id_onload").style.display = "none";
+            document.getElementById("loginBtn").style.display = "none";
+            userInfoOverlay.style.display = "flex";
+          }
+          else {
+            document.getElementById("userAvatar").src = "../static/img/default-avatar.png";
+            document.getElementById("userName").textContent = "您尚未登入";
+            document.getElementById("userEmail").textContent = "登入後即顯示";
+            document.getElementById("manageAccountBtn").style.display = "none";
+            document.getElementById("addAccountBtn").style.display = "none";
+            document.getElementById("logoutFromCard").style.display = "none";
+            userInfoOverlay.style.display = "flex";
+          }
+        })
+        .catch(err => console.error("取得使用者資訊失敗:", err));
+    });
+
+    // 關閉卡片按鈕
+    closeUserCard.addEventListener("click", function() {
+      userInfoOverlay.classList.add('fade-out');
+      setTimeout(() => {
+        userInfoOverlay.style.display = 'none';
+        userInfoOverlay.classList.remove('fade-out');
+      }, 300);
+    });
+
+    // 點擊遮罩關閉
+    userInfoOverlay.addEventListener("click", function(event) {
+      if (event.target === userInfoOverlay) {
+        userInfoOverlay.classList.add('fade-out');
+        setTimeout(() => {
+          userInfoOverlay.style.display = 'none';
+          userInfoOverlay.classList.remove('fade-out');
+        }, 300);
+      }
+    });
+
+    // 登出按鈕
+    document.getElementById("logoutFromCard").addEventListener("click", logout);
+
+    // 新增帳戶事件處理
+    document.getElementById("addAccountBtn").addEventListener("click", function () {
+      window.location.href = "/addAccount";
+    });
+
+    // 管理帳戶事件處理
+    document.getElementById("manageAccountBtn").addEventListener("click", function () {
+      window.location.href = "/manageAccount";
+    });
+
+    // ESC 鍵關閉彈窗
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape' && userInfoOverlay.style.display === 'flex') {
+        userInfoOverlay.classList.add('fade-out');
+        setTimeout(() => {
+          userInfoOverlay.style.display = 'none';
+          userInfoOverlay.classList.remove('fade-out');
+        }, 300);
+      }
+    });
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const refreshed = urlParams.get('refreshed');
+
+    if (refreshed === 'true') {
+      checkAuthStatus();
+    } else {
+      checkAuthStatus();
+    }
+
+    function checkAuthStatus() {
+      fetch('/api/authUser', { method: 'GET', credentials: 'include' })
+        .then(response => response.json())
+        .then(data => {
+          if (data.message === "已登入") {
+            loginButton.style.display = "none";
+            logoutButton.style.display = "block";
+            loginButtonMainPage.style.display = "none";
+            logoutButtonMainPage.style.display = "flex";
+            console.log("用戶資料:", data.userData);
+          } else {
+            loginButton.style.display = "block";
+            logoutButton.style.display = "none";
+            loginButtonMainPage.style.display = "flex";
+            logoutButtonMainPage.style.display = "none";
+            console.log("用戶未登入");
+          }
+        })
+        .catch(error => console.error('Error fetching authUser:', error));
+    }
+
+    function logout() {
+      fetch('/api/logout', { method: 'POST', credentials: 'include' })
+        .then(response => response.json())
+        .then(result => {
+          if (result.message === "登出成功") {
+            window.location.reload();
+          }
+        })
+        .catch(error => console.error('登出失敗:', error));
+    }
+  });
+</script>
+
+</body>
+
+</html>
