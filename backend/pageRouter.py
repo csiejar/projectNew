@@ -12,6 +12,6 @@ async def index(request: Request):
 async def questionAdmin(request: Request):
     return templates.TemplateResponse("questionAdmin/index.html", {"request": request})
 
-@router.get("/question/{ID}") # 問題編輯頁面
-async def questionEdit(request: Request, ID: int):
-    return templates.TemplateResponse("question/index.html", {"request": request, "ID": ID})
+@router.get("/question") # 問題編輯頁面
+async def questionEdit(request: Request):
+    return templates.TemplateResponse("question/index.html", {"request": request})

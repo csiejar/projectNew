@@ -1,0 +1,38 @@
+/* 選項按鈕 */
+.option-btn {
+  background-color: #f2de8c;  /* 淡黃色 */
+  color: #000;                /* 黑色文字 */
+  border: none;               /* 無邊框 */
+  border-radius: 16px;        /* 圓角 */
+  padding: 12px 24px;
+  font-size: 1.5rem;          /* 大字體 */
+  font-weight: bold;          /* 粗體 */
+  width: 100%;                /* 填滿區塊 */
+  text-align: left;           /* 文字靠左 */
+  transition: transform 0.2s ease;
+}
+.option-btn:hover {
+  transform: scale(1.03);     /* 微放大動畫 */
+  cursor: pointer;
+}
+
+
+/* 上/下一題按鈕 */
+.nav-btn {
+  background-color: #000;
+  color: #fff;
+  border: none;
+  border-radius: 16px;
+  padding: 12px 24px;
+  font-size: 1.2rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+.nav-btn:hover {
+  background-color: #333;
+  cursor: pointer;
+}
+.container button{
+background-color: #f2de8c;
+
+}
