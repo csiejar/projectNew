@@ -15,3 +15,7 @@ async def questionAdmin(request: Request):
 @router.get("/question") # 問題編輯頁面
 async def questionEdit(request: Request):
     return templates.TemplateResponse("question/index.html", {"request": request})
+
+@router.get("/permissionAdmin") # 權限管理頁面
+async def permissionAdmin(request: Request):
+    return templates.TemplateResponse("permissionAdmin/index.html", {"request": request})

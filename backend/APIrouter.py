@@ -217,3 +217,48 @@ async def isPermitted(link: str, userToken: str = Depends(findTokenFromCookies))
             raise HTTPException(status_code=500, detail=str(e))
     else:
         raise HTTPException(status_code=401, detail="Unauthorized")
+    
+@router.get("/getAllPermissions")
+async def getAllPermissions():
+    try:
+        permissions = dbMain.getAllPermissionDetails()
+        return JSONResponse(content=permissions, status_code=200)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+
+@router.get("/getAllUsersIDAndName")
+async def getAllUsersIDAndName():
+    try:
+        users = dbMain.getAllUsersIDAndName()
+        return JSONResponse(content=users, status_code=200)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+class addPermissionRequest(BaseModel):
+    userID: str
+    permissionID: int
+@router.post("/addPermission")
+async def addPermission(request: addPermissionRequest, userToken: str = Depends(findTokenFromCookies)):
+    permissionID = request.permissionID
+    userID = request.userID
+    if userToken and (userToken != "None"):
+        try:
+            operatorUserID = dbMain.getUserDataByToken(userToken)["userID"]
+            if dbMain.isUserAllowToAccessLink(operatorUserID, "addPermission"):
+                try:
+                    requestData = dbMain.addUserToPermission(permissionID, userID)
+                    if requestData == "用戶已有權限":
+                        return JSONResponse(content={"message": "用戶已有權限"}, status_code=200)
+                    if requestData:
+                        return JSONResponse(content={"message": "新增權限成功"}, status_code=200)
+                    else:
+                        return JSONResponse(content={"message": "新增權限失敗"}, status_code=500)
+                except Exception as e:
+                    raise HTTPException(status_code=500, detail=str(e))
+            else:
+                return JSONResponse(content={"message": "無權限"}, status_code=403)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+    else:
+        raise HTTPException(status_code=401, detail="Unauthorized")

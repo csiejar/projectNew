@@ -1,10 +1,10 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from uuid import uuid4
 from .dbClass import *
 # from dbClass import *
 from fastapi import HTTPException
 import generator
+import ast
 
 # 設定資料庫連接
 DATABASE_URL = "mysql+pymysql://hank:hankbeststudent@10.147.17.41/hank"
@@ -393,3 +393,78 @@ def isUserAllowToAccessLink(userID, link):
             if i == j['permissionID'] and link in j['allowLink']:
                 return True
     return False
+
+def getUserNameByID(userID):
+    try:
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        user = session.query(UsersSQL).filter_by(userID=userID).first()
+        if user:
+            return user.name
+        else:
+            return "unknown"
+    except Exception as e:
+        return f"Error: {str(e)}"
+    finally:
+        session.close()
+
+def getAllPermissionDetails():
+    try:
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        permission = session.query(permissionSQL).all()
+        # 將資料轉換為字典格式
+        permission = [
+            {
+                "permissionID": permission.permissionID,
+                "permissionDetails": permission.permissionDetails,
+                "allowLink": ast.literal_eval(permission.allowLink),
+                "permissionUser": ast.literal_eval(permission.permissionUser),
+                "permissionUserName": [getUserNameByID(userID) for userID in ast.literal_eval(permission.permissionUser)]
+            }
+            for permission in permission
+        ]
+        return permission
+    except Exception as e:
+        return f"Error: {str(e)}"
+    finally:
+        session.close()
+
+def getAllUsersIDAndName():
+    try:
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        users = session.query(UsersSQL).all()
+        # 將資料轉換為字典格式
+        users = [
+            {
+                "userID": user.userID,
+                "userName": user.name,
+            }
+            for user in users
+        ]
+        return users
+    except Exception as e:
+        return f"Error: {str(e)}"
+    finally:
+        session.close()
+
+def addUserToPermission(permissionID, userID):
+    try:
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        permission = session.query(permissionSQL).filter_by(permissionID=permissionID).first()
+        if permission:
+            if userID in ast.literal_eval(permission.permissionUser):
+                return "用戶已有權限"
+            # 將 permissionUser 轉換為列表，並添加新的 userID
+            permission.permissionUser = str(ast.literal_eval(permission.permissionUser) + [userID])
+            session.commit()
+            return True
+        else:
+            return False
+    except Exception as e:
+        return f"Error: {str(e)}"
+    finally:
+        session.close()
+
