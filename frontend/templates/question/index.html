@@ -7,8 +7,8 @@
   <title>題庫系統</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}">
-  <script src="{{ url_for('static', path='/script.js') }}"></script>
+  <link rel="stylesheet" href="{{ url_for('static', path='question/styles.css') }}">
+  <script src="{{ url_for('static', path='/question/script.js') }}"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -18,7 +18,8 @@
   <style>
     canvas {
       border: 1px solid black;
-      touch-action: none; /* 禁止預設滾動/縮放手勢 */
+      touch-action: none;
+      /* 禁止預設滾動/縮放手勢 */
       background-color: #e0e0e0;
     }
   </style>
@@ -72,55 +73,66 @@
   </header>
 
   <!-- 主內容區域 -->
-  <div class="main-content" style="margin-left: 250px; padding: 20px;">
+  <div class="main-content" style="margin-left: 175px; padding: 20px;">
     <h1 class="fw-bold mb-4">統測題庫</h1>
   </div>
 
-    <!-- 選項區域 -->
-<!-- 選項按鈕區 -->
-<!-- 選項按鈕區 -->
-<div class="container mb-0">
-  <div class="row justify-content-between" style="margin-top: 40px;">
-    <!-- 左側 -->
-    <div class="col-12 col-md-4 d-flex flex-column align-items-end gap-4">
-      <button type="button" class="btn btn-warning text-black fw-bold fs-2 rounded-4 px-5 py-3"
-        style="width: 260px; text-align: left;">A.</button>
-      <button type="button" class="btn btn-warning text-black fw-bold fs-2 rounded-4 px-5 py-3"
-        style="width: 260px; text-align: left;">C.</button>
-    </div>
-    <!-- 右側 -->
-    <div class="col-12 col-md-4 d-flex flex-column align-items-start gap-4">
-      <button type="button" class="btn btn-warning text-black fw-bold fs-2 rounded-4 px-5 py-3"
-        style="width: 260px; text-align: left;">B.</button>
-      <button type="button" class="btn btn-warning text-black fw-bold fs-2 rounded-4 px-5 py-3"
-        style="width: 260px; text-align: left;">D.</button>
+  <!-- 選項區域 -->
+  <!-- 選項按鈕區 -->
+  <!-- 選項按鈕區 -->
+  <div class="container mb-0">
+    <div class="options">
+      <div class="row justify-content-between" style="margin-top: 40px;">
+        <!-- 左側 -->
+        <div class="col-12 col-md-4 d-flex flex-column align-items-end gap-4">
+          <button type="button" id="optionA" class="btn text-black fw-bold fs-2 rounded-4 px-5 py-3"
+            style="width: 260px; text-align: left;">A.</button>
+          <button type="button" id="optionB" class="btn text-black fw-bold fs-2 rounded-4 px-5 py-3"
+            style="width: 260px; text-align: left;">C.</button>
+        </div>
+        <!-- 右側 -->
+        <div class="col-12 col-md-4 d-flex flex-column align-items-start gap-4">
+          <button type="button" id="optionC" class="btn text-black fw-bold fs-2 rounded-4 px-5 py-3"
+            style="width: 260px; text-align: left;">B.</button>
+          <button type="button" id="optionD" class="btn text-black fw-bold fs-2 rounded-4 px-5 py-3"
+            style="width: 260px; text-align: left;">D.</button>
+        </div>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- 上一題／下一題 -->
-<div class="container" style="margin-top: 180px;">
-  <div class="row">
-    <div class="col-12 col-md-4 d-flex justify-content-end">
-      <button class="btn btn-dark rounded-4 px-5 py-3 fs-4" style="width: 260px;">上一題</button>
-    </div>
-    <div class="col-12 col-md-4"></div>
-    <div class="col-12 col-md-4 d-flex justify-content-start">
-      <button class="btn btn-dark rounded-4 px-5 py-3 fs-4" style="width: 260px;">下一題</button>
+  <!-- 上一題／下一題 -->
+  <div class="container" style="margin-top: 180px;">
+    <div class="backNext">
+      <div class="row">
+        <div class="col-12 col-md-4 d-flex justify-content-end">
+          <button class="btn rounded-4 px-5 py-3 fs-4" style="width: 260px;">上一題</button>
+        </div>
+        <div class="col-12 col-md-4"></div>
+        <div class="col-12 col-md-4 d-flex justify-content-start">
+          <button class="btn rounded-4 px-5 py-3 fs-4" style="width: 260px;">下一題</button>
+        </div>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="container mt-5">
-  <div class="d-flex flex-column align-items-center position-relative" style="width: 100%; max-width: 1200px; margin: 0 auto;">
-    <div class="w-100 d-flex justify-content-end" style="position: absolute; top: 0; right: 0; z-index: 2;">
-      <button id="resetCanvasBtn" class="btn btn-outline-secondary mt-2 me-2">
-        <i class="bi bi-arrow-counterclockwise"></i> 重設畫板
-      </button>
-    </div>
-    <canvas id="drawingCanvas" width="1200" height="1200" style="background-color: #e0e0e0;"></canvas>
+  <div class="container mt-5">
+    <div class="d-flex flex-column align-items-center position-relative"
+     style="width: 100%; max-width: 1200px; margin: 0 auto;">
+
+  <!-- 包 canvas 的容器，加上 position: relative -->
+  <div style="position: relative;">
+    <!-- Canvas 畫布 -->
+    <canvas id="drawingCanvas" width="1000" height="1200" style="background-color: #e0e0e0;"></canvas>
+
+    <!-- 重設按鈕，絕對定位在 canvas 容器內部的右上角 -->
+    <button id="resetCanvasBtn" class="btn btn-outline-secondary"
+            style="position: absolute; top: 10px; right: 10px; z-index: 10;">
+      <i class="bi bi-arrow-counterclockwise"></i> 重設畫板
+    </button>
   </div>
 </div>
+  </div>
 
 
   <script>
@@ -182,78 +194,80 @@
     canvas.addEventListener("touchcancel", stopDrawing, { passive: false });
 
     document.getElementById("resetCanvasBtn").addEventListener("click", function () {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-  });
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    });
   </script>
 
 </body>
+
 </html>
-  <!-- 引入 Bootstrap -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- 引入 Bootstrap -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-  <!-- 登入彈出視窗（可拖動） -->
-  <div id="loginModal" class="modal">
-    <div class="modal-content">
-      <!-- Google 產生的登入按鈕 -->
-      
-  
-      <!-- 登出按鈕 -->
-      <button id="logoutBtn" class="logout-button" style="display: none;">登出</button>
-    </div>
+<!-- 登入彈出視窗（可拖動） -->
+<div id="loginModal" class="modal">
+  <div class="modal-content">
+    <!-- Google 產生的登入按鈕 -->
+
+
+    <!-- 登出按鈕 -->
+    <button id="logoutBtn" class="logout-button" style="display: none;">登出</button>
   </div>
+</div>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
 
-      // 檢查 URL 是否包含刷新標記
-      const urlParams = new URLSearchParams(window.location.search);
-      const refreshed = urlParams.get('refreshed');
-  
-      if (refreshed === 'true') {
-        console.log("已刷新過頁面，執行檢查登入狀態");
-        checkAuthStatus(); // 檢查登入狀態
-      } else {
-        checkAuthStatus(); // 初始化檢查登入狀態
-      }
-  
-      // 統一檢查登入狀態的函數
-      function checkAuthStatus() {
-        fetch('/api/authUser', { method: 'GET', credentials: 'include' })
-          .then(response => response.json())
-          .then(data => {
-            if (data.message === "已登入") {
-              console.log("用戶資料:", data.userData);
-            } else {;
-              console.log("用戶未登入");
-            }
-          })
-          .catch(error => console.error('Error fetching authUser:', error));
-      }
-  
-      function logout() {
-        fetch('/api/logout', { method: 'POST', credentials: 'include' })
-          .then(response => response.json())
-          .then(result => {
-            if (result.message === "登出成功") {
-              window.location.reload(); // 刷新頁面
-            }
-          })
-          .catch(error => console.error('登出失敗:', error));
-      }
-    });
-  </script>
-  
-  
+    // 檢查 URL 是否包含刷新標記
+    const urlParams = new URLSearchParams(window.location.search);
+    const refreshed = urlParams.get('refreshed');
 
-  <!-- Footer -->
-  <div id="footer">
-    <p>© 2025 Elec Forge 版權所有</p>
-  </div>
+    if (refreshed === 'true') {
+      console.log("已刷新過頁面，執行檢查登入狀態");
+      checkAuthStatus(); // 檢查登入狀態
+    } else {
+      checkAuthStatus(); // 初始化檢查登入狀態
+    }
 
-  <script src="../static/script.js"></script>
+    // 統一檢查登入狀態的函數
+    function checkAuthStatus() {
+      fetch('/api/authUser', { method: 'GET', credentials: 'include' })
+        .then(response => response.json())
+        .then(data => {
+          if (data.message === "已登入") {
+            console.log("用戶資料:", data.userData);
+          } else {
+            ;
+            console.log("用戶未登入");
+          }
+        })
+        .catch(error => console.error('Error fetching authUser:', error));
+    }
 
-  <!-- 放在 body 的最下方，footer 之前 -->
+    function logout() {
+      fetch('/api/logout', { method: 'POST', credentials: 'include' })
+        .then(response => response.json())
+        .then(result => {
+          if (result.message === "登出成功") {
+            window.location.reload(); // 刷新頁面
+          }
+        })
+        .catch(error => console.error('登出失敗:', error));
+    }
+  });
+</script>
+
+
+
+<!-- Footer -->
+<div id="footer">
+  <p>© 2025 Elec Forge 版權所有</p>
+</div>
+
+<script src="../static/script.js"></script>
+
+<!-- 放在 body 的最下方，footer 之前 -->
 <div class="overlay" id="userInfoOverlay" style="display: none;">
   <div class="popup-card">
     <button class="close-btn" id="closeUserCard">✕</button>
@@ -261,9 +275,9 @@
     <div class="name" id="userName">使用者姓名</div>
     <div class="email" id="userEmail">使用者 Gmail</div>
     <div id="g_id_onload" data-client_id="1071265157577-7bcbr8qejtvtbmnchgs06ohr9ke46v97.apps.googleusercontent.com"
-        data-callback="handleCredentialResponse" data-auto_select="true">
-      </div>
-      <div id="loginBtn" class="g_id_signin" data-type="standard"></div>
+      data-callback="handleCredentialResponse" data-auto_select="true">
+    </div>
+    <div id="loginBtn" class="g_id_signin" data-type="standard"></div>
     <button class="button" id="manageAccountBtn">管理帳戶</button>
     <div class="button-group">
       <button class="button" id="addAccountBtn">新增帳戶</button>
@@ -304,7 +318,7 @@
     });
 
     // 關閉卡片按鈕
-    closeUserCard.addEventListener("click", function() {
+    closeUserCard.addEventListener("click", function () {
       userInfoOverlay.classList.add('fade-out');
       setTimeout(() => {
         userInfoOverlay.style.display = 'none';
@@ -313,7 +327,7 @@
     });
 
     // 點擊遮罩關閉
-    userInfoOverlay.addEventListener("click", function(event) {
+    userInfoOverlay.addEventListener("click", function (event) {
       if (event.target === userInfoOverlay) {
         userInfoOverlay.classList.add('fade-out');
         setTimeout(() => {
@@ -337,7 +351,7 @@
     });
 
     // ESC 鍵關閉彈窗
-    document.addEventListener('keydown', function(event) {
+    document.addEventListener('keydown', function (event) {
       if (event.key === 'Escape' && userInfoOverlay.style.display === 'flex') {
         userInfoOverlay.classList.add('fade-out');
         setTimeout(() => {

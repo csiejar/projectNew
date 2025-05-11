@@ -45,4 +45,3 @@ function handleCredentialResponse(response) {
     .catch(err => console.error("驗證錯誤:", err));
 }
 
-
