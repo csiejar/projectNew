@@ -37,9 +37,30 @@ function onsubmitCheck() {
         alert("還有題目還沒回答");
         // TODO 開啟頁面讓用戶重新回答未回答問題
     } else {
-        alert("提交成功！");
-        // 可以接續提交邏輯
-        // TODO 送到後端？
+        fetch('/api/submitAnswer', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "usersAnswer": usersAnswer
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message === "提交答案成功") {
+                alert("提交成功！");
+                window.location.href = "/";
+            }
+            else {
+                alert("提交失敗，請稍後再試！");
+            }
+            // 處理回應
+        })
+        .catch(error => {
+            console.error('Error submitting answers:', error);
+            alert("提交失敗，請稍後再試！");
+        });
     }
 }
 
@@ -140,7 +161,22 @@ function loadUserAnswer() {
     }
 }
 
+function checkAuthStatus() {
+    fetch("/api/authUser", { method: "GET", credentials: "include" })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.message === "已登入") {
+                
+            } else {
+                alert("請先登入！");
+                window.location.href = "/"; // 導回首頁
+            }
+        })
+        .catch((error) => console.error("Error fetching authUser:", error));
+}
+
 document.addEventListener("DOMContentLoaded", function () {
+    checkAuthStatus(); // 檢查登入狀態
     getQuestions();
     document.getElementById("optionA").addEventListener("click", function () {
         selectOption(this);
