@@ -25,6 +25,10 @@ function getUsersAnswer() {
     usersAnswer[questions[currentIndex].questionID] = document.querySelector(".selected") ? document.querySelector(".selected").textContent.charAt(0) : null;
 }
 
+function showIncompleteAlert() {
+    alert("您尚未完成所有題目，請繼續作答！");
+}
+
 function onsubmitCheck() {
     getUsersAnswer(); // 記錄當前題目
     console.log(usersAnswer);
