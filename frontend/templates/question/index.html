@@ -7,8 +7,8 @@
   <title>題庫系統</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="{{ url_for('static', path='question/styles.css') }}">
-  <script src="{{ url_for('static', path='question/script.js') }}"></script>
+  <link rel="stylesheet" href="{{ url_for('static', path='/question/styles.css') }}">
+  <script src="{{ url_for('static', path='/question/script.js') }}"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -74,11 +74,10 @@
 
   <!-- 主內容區域 -->
   <div class="main-content" style="margin-left: 175px; padding: 20px;">
-    <h1 class="fw-bold mb-4">統測題庫</h1>
+    <h1 class="fw-bold mb-4"><p class="question-count">第 0 題 / 共 0 題</p></h1>
     <div class="question-container">
       <p class="question-text">題目獲取中</p>
       <p id="questionID" style="display: none;"></p>
-      <p class="question-count">第 0 題 / 共 0 題</p>
       <div class="question-image">
         <img src="" alt="Question Image" class="img-fluid" style="display: none;">
       </div>
@@ -118,6 +117,8 @@
         <div class="col-12 col-md-4"></div>
         <div class="col-12 col-md-4 d-flex justify-content-start">
           <button class="btn rounded-4 px-5 py-3 fs-4" style="width: 260px;" id="nextBtn">下一題</button>
+          <button class="btn rounded-4 px-5 py-3 fs-4" style="width: 260px; display: none; background: rgb(118, 227, 122);"
+            id="submitBtn">提交</button>
         </div>
       </div>
     </div>

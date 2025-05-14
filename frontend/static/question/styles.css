@@ -265,3 +265,12 @@ color: #ffffff;
 .fade-out {
   animation: fadeOut 0.3s ease;
 }
+
+#submitBtn:hover{
+  background-color: rgb(94, 239, 101) !important;
+}
+
+#submitBtn.disabled{
+  background-color: rgb(80, 162, 84) !important;
+  cursor: not-allowed;
+}

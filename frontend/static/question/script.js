@@ -21,7 +21,26 @@ let usersAnswer = {}; // 使用者答案
 
 function getUsersAnswer() {
     usersAnswer[questions[currentIndex].questionID] = document.querySelector(".selected") ? document.querySelector(".selected").textContent.charAt(0) : null;
+}
+
+function onsubmitCheck() {
     console.log(usersAnswer);
+    let hasNull = false;
+
+    Object.entries(usersAnswer).forEach(([questionID, answer]) => {
+        if (answer === null) {
+            hasNull = true;
+        }
+    });
+
+    if (hasNull) {
+        alert("還有題目還沒回答");
+        // TODO 開啟頁面讓用戶重新回答未回答問題
+    } else {
+        alert("提交成功！");
+        // 可以接續提交邏輯
+        // TODO 送到後端？
+    }
 }
 
 function displayQuestion(index) {
@@ -71,7 +90,15 @@ function displayQuestion(index) {
 
     // 控制按鈕啟用狀態
     prevBtn.disabled = currentIndex === 0;
-    nextBtn.disabled = currentIndex === questions.length - 1;
+    if (currentIndex < questions.length - 1){
+        document.getElementById("submitBtn").style.display = "none";
+        nextBtn.style.display = "block";
+    }
+    if (currentIndex === questions.length - 1){
+        document.getElementById("submitBtn").style.display = "block";
+        nextBtn.style.display = "none";
+    }
+
 }
 
 function getQuestions() {
@@ -145,4 +172,8 @@ document.addEventListener("DOMContentLoaded", function () {
         loadUserAnswer();
     });
 
+    document.getElementById("submitBtn").addEventListener("click", () => {
+        getUsersAnswer()
+        onsubmitCheck()
+    })
   });
