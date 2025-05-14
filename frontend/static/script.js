@@ -1,6 +1,6 @@
 // SideBar目的地設定
 document.getElementById("questionBankSideBar").addEventListener("click", function () {
-    window.location.href = "/questionAdmin";
+    window.location.href = "/question";
 });
 
 document.addEventListener("DOMContentLoaded", function () {

@@ -5,6 +5,8 @@ from .dbClass import *
 from fastapi import HTTPException
 import generator
 import ast
+import random
+
 
 # 設定資料庫連接
 DATABASE_URL = "mysql+pymysql://hank:hankbeststudent@10.147.17.41/hank"
@@ -468,3 +470,29 @@ def addUserToPermission(permissionID, userID):
     finally:
         session.close()
 
+def getQuestionsForQuestionPage(): # 取得所有題目（無答案）
+    try:
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        questions = session.query(questionsSQL).all()
+        random.shuffle(questions)
+        # 將資料轉換為字典格式
+        questions = [
+            {
+                "questionID": question.questionID,
+                "topicID": question.topicID,
+                "question": question.question,
+                "optionA": question.optionA,
+                "optionB": question.optionB,
+                "optionC": question.optionC,
+                "optionD": question.optionD,
+                "image": question.image,
+                "source": question.source,
+            }
+            for question in questions
+        ]
+        return questions
+    except Exception as e:
+        return f"Error: {str(e)}"
+    finally:
+        session.close()

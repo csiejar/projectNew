@@ -75,6 +75,13 @@
   <!-- 主內容區域 -->
   <div class="main-content" style="margin-left: 175px; padding: 20px;">
     <h1 class="fw-bold mb-4">統測題庫</h1>
+    <div class="question-container">
+      <p class="question-text">題目獲取中</p>
+      <p id="questionID" style="display: none;"></p>
+      <p class="question-count">第 0 題 / 共 0 題</p>
+      <div class="question-image">
+        <img src="" alt="Question Image" class="img-fluid" style="display: none;">
+      </div>
   </div>
 
   <!-- 選項區域 -->
@@ -106,11 +113,11 @@
     <div class="backNext">
       <div class="row">
         <div class="col-12 col-md-4 d-flex justify-content-end">
-          <button class="btn rounded-4 px-5 py-3 fs-4" style="width: 260px;">上一題</button>
+          <button class="btn rounded-4 px-5 py-3 fs-4" style="width: 260px;" id="prevBtn">上一題</button>
         </div>
         <div class="col-12 col-md-4"></div>
         <div class="col-12 col-md-4 d-flex justify-content-start">
-          <button class="btn rounded-4 px-5 py-3 fs-4" style="width: 260px;">下一題</button>
+          <button class="btn rounded-4 px-5 py-3 fs-4" style="width: 260px;" id="nextBtn">下一題</button>
         </div>
       </div>
     </div>
