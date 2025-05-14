@@ -1,3 +1,5 @@
+let incompleteQuestionIndices = []; // 用來記錄尚未回答的題號索引
+let incompleteIndexPointer = 0;     // 當前瀏覽到第幾個未完成題目
 function selectOption(option) {
     if (option.classList.contains("selected")) {
         // If the option is already selected, deselect it
@@ -24,24 +26,55 @@ function getUsersAnswer() {
 }
 
 function onsubmitCheck() {
+    getUsersAnswer(); // 記錄當前題目
     console.log(usersAnswer);
-    let hasNull = false;
 
-    Object.entries(usersAnswer).forEach(([questionID, answer]) => {
-        if (answer === null) {
-            hasNull = true;
+    incompleteQuestionIndices = [];
+    incompleteIndexPointer = 0;
+
+    for (let i = 0; i < questions.length; i++) {
+        const qID = questions[i].questionID;
+        const answer = usersAnswer[qID];
+        if (answer === null || answer === undefined) {
+            incompleteQuestionIndices.push(i);
         }
-    });
+    }
 
-    if (hasNull) {
-        alert("還有題目還沒回答");
-        // TODO 開啟頁面讓用戶重新回答未回答問題
+    if (incompleteQuestionIndices.length > 0) {
+        displayQuestion(incompleteQuestionIndices[0]);
+        loadUserAnswer();
+        showIncompleteAlert();
     } else {
         alert("提交成功！");
-        // 可以接續提交邏輯
-        // TODO 送到後端？
+        // TODO: 送出答案
     }
 }
+
+function showIncompleteAlert() {
+    // 如果已經有 alert，就不重複插入
+    if (document.getElementById("incompleteAlert")) return;
+
+    const alertDiv = document.createElement("div");
+    alertDiv.id = "incompleteAlert";
+    alertDiv.className = "alert alert-warning alert-dismissible fade show";
+    alertDiv.role = "alert";
+    alertDiv.style.position = "fixed";
+    alertDiv.style.top = "20px";
+    alertDiv.style.right = "20px";
+    alertDiv.style.zIndex = "1050";
+    alertDiv.style.boxShadow = "0 0 10px rgba(0,0,0,0.15)";
+    alertDiv.innerHTML = `
+        <strong>提醒：</strong> 您尚未完成所有題目。
+        <button type="button" class="btn-close" aria-label="Close"></button>
+    `;
+
+    alertDiv.querySelector(".btn-close").addEventListener("click", function () {
+        alertDiv.remove();
+    });
+
+    document.body.appendChild(alertDiv);
+}
+
 
 function displayQuestion(index) {
     const questionText = document.querySelector(".question-text");
@@ -159,18 +192,50 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     // 綁定按鈕事件
     document.getElementById("prevBtn").addEventListener("click", () => {
-        getUsersAnswer();
-        unselectAllOptions();
+    getUsersAnswer();
+    unselectAllOptions();
+
+    if (incompleteQuestionIndices.length > 0) {
+        if (incompleteIndexPointer > 0) {
+            incompleteIndexPointer--;
+            displayQuestion(incompleteQuestionIndices[incompleteIndexPointer]);
+            loadUserAnswer();
+        } else {
+            // 回到正常流程前一題
+            incompleteQuestionIndices = [];
+            displayQuestion(currentIndex - 1);
+            loadUserAnswer();
+        }
+    } else {
         displayQuestion(currentIndex - 1);
         loadUserAnswer();
-    });
+    }
+});
 
-    document.getElementById("nextBtn").addEventListener("click", () => {
-        getUsersAnswer();
-        unselectAllOptions();
+
+  document.getElementById("nextBtn").addEventListener("click", () => {
+    getUsersAnswer();
+    unselectAllOptions();
+
+    if (incompleteQuestionIndices.length > 0) {
+        // 若有未完成題目，依照 incompleteIndexPointer 逐一跳題
+        incompleteIndexPointer++;
+        if (incompleteIndexPointer < incompleteQuestionIndices.length) {
+            const nextUnansweredIndex = incompleteQuestionIndices[incompleteIndexPointer];
+            displayQuestion(nextUnansweredIndex);
+            loadUserAnswer();
+        } else {
+            // 若已看完未答題，再恢復正常 next 行為
+            incompleteQuestionIndices = []; // 清空，恢復正常流程
+            displayQuestion(currentIndex + 1);
+            loadUserAnswer();
+        }
+    } else {
         displayQuestion(currentIndex + 1);
         loadUserAnswer();
-    });
+    }
+});
+
 
     document.getElementById("submitBtn").addEventListener("click", () => {
         getUsersAnswer()

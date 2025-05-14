@@ -3,6 +3,11 @@ document.getElementById("questionBankSideBar").addEventListener("click", functio
     window.location.href = "/question";
 });
 
+  document.getElementById("mainPageSideBar").addEventListener("click", function () {
+    window.location.href = "/";
+});
+
+
 document.addEventListener("DOMContentLoaded", function () {
     const menuBtn = document.getElementById("menuBtn");
     const sidebar = document.getElementById("sidebar");
