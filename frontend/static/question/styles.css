@@ -229,6 +229,31 @@ color: #ffffff;
   color: #777;
   margin-bottom: 10px;
 }
+
+/* 按鈕 */
+.button {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: #555;
+}
+
+/* 按鈕群組 */
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
 /* 動畫效果 */
 @keyframes fadeIn {
   from {
@@ -271,6 +296,6 @@ color: #ffffff;
 }
 
 #submitBtn.disabled{
-  background-color: rgb(80, 162, 84) !important;
+  background-color: rgb(94, 239, 101) !important;
   cursor: not-allowed;
 }

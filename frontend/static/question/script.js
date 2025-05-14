@@ -45,36 +45,32 @@ function onsubmitCheck() {
         loadUserAnswer();
         showIncompleteAlert();
     } else {
-        alert("提交成功！");
-        // TODO: 送出答案
+        fetch('/api/submitAnswer', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "usersAnswer": usersAnswer
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message === "提交答案成功") {
+                alert("提交成功！");
+                window.location.href = "/";
+            }
+            else {
+                alert("提交失敗，請稍後再試！");
+            }
+            // 處理回應
+        })
+        .catch(error => {
+            console.error('Error submitting answers:', error);
+            alert("提交失敗，請稍後再試！");
+        });
     }
 }
-
-function showIncompleteAlert() {
-    // 如果已經有 alert，就不重複插入
-    if (document.getElementById("incompleteAlert")) return;
-
-    const alertDiv = document.createElement("div");
-    alertDiv.id = "incompleteAlert";
-    alertDiv.className = "alert alert-warning alert-dismissible fade show";
-    alertDiv.role = "alert";
-    alertDiv.style.position = "fixed";
-    alertDiv.style.top = "20px";
-    alertDiv.style.right = "20px";
-    alertDiv.style.zIndex = "1050";
-    alertDiv.style.boxShadow = "0 0 10px rgba(0,0,0,0.15)";
-    alertDiv.innerHTML = `
-        <strong>提醒：</strong> 您尚未完成所有題目。
-        <button type="button" class="btn-close" aria-label="Close"></button>
-    `;
-
-    alertDiv.querySelector(".btn-close").addEventListener("click", function () {
-        alertDiv.remove();
-    });
-
-    document.body.appendChild(alertDiv);
-}
-
 
 function displayQuestion(index) {
     const questionText = document.querySelector(".question-text");
@@ -173,7 +169,22 @@ function loadUserAnswer() {
     }
 }
 
+function checkAuthStatus() {
+    fetch("/api/authUser", { method: "GET", credentials: "include" })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.message === "已登入") {
+                
+            } else {
+                alert("請先登入！");
+                window.location.href = "/"; // 導回首頁
+            }
+        })
+        .catch((error) => console.error("Error fetching authUser:", error));
+}
+
 document.addEventListener("DOMContentLoaded", function () {
+    checkAuthStatus(); // 檢查登入狀態
     getQuestions();
     document.getElementById("optionA").addEventListener("click", function () {
         selectOption(this);
