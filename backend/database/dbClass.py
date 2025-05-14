@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text
+from sqlalchemy import Column, Integer, String, Text, DateTime, JSON
 from sqlalchemy.ext.declarative import declarative_base
 import sys,os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -55,3 +55,10 @@ class permissionSQL(Base):
     permissionDetails = Column(String(100))
     permissionUser = Column(String(100))
     allowLink = Column(String(100))
+
+class answerRecordsSQL(Base):
+    __tablename__ = 'answer_records'
+    recordID = Column(Integer, primary_key=True)
+    userID = Column(String(255))
+    answers = Column(JSON)
+    timestamp = Column(DateTime)

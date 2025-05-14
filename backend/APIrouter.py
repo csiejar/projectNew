@@ -271,3 +271,17 @@ async def getQuestionsForQuestionPage():
         return JSONResponse(content=questions, status_code=200)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+class submitAnswerRequest(BaseModel):
+    usersAnswer: dict
+@router.post("/submitAnswer")
+async def submitAnswer(request: submitAnswerRequest, userToken: str = Depends(findTokenFromCookies)):
+    if userToken and (userToken != "None"):
+        try:
+            userID = dbMain.getUserDataByToken(userToken)["userID"]
+            dbMain.uploadUsersAnswer(userID, request.usersAnswer)
+            return JSONResponse(content={"message": "提交答案成功"}, status_code=200)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+    else:
+        raise HTTPException(status_code=401, detail="Unauthorized")

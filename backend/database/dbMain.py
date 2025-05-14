@@ -1,11 +1,12 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from .dbClass import *
-# from dbClass import *
+# from .dbClass import *
+from dbClass import *
 from fastapi import HTTPException
 import generator
 import ast
 import random
+import datetime
 
 
 # 設定資料庫連接
@@ -189,9 +190,9 @@ def checkAnswer(questionID, answer):
         question = session.query(questionsSQL).filter_by(questionID=questionID).first()
         if question:
             if question.answer == answer:
-                return True
+                return "True"
             else:
-                return False
+                return question.answer
         else:
             return False
     except Exception as e:
@@ -492,6 +493,39 @@ def getQuestionsForQuestionPage(): # 取得所有題目（無答案）
             for question in questions
         ]
         return questions
+    except Exception as e:
+        return f"Error: {str(e)}"
+    finally:
+        session.close()
+
+
+def submitQuestionAnswer(userID, usersAnswer:dict):
+    returnData = []
+    wrongAnswer = {}
+    for i in usersAnswer.keys():
+        if checkAnswer(i, usersAnswer[i]) != "True":
+            wrongAnswer[i] = checkAnswer(i, usersAnswer[i])
+    returnData = [usersAnswer, wrongAnswer]
+    return returnData
+
+def uploadUsersAnswer(userID, usersAnswer:dict):
+    usersAnswer = submitQuestionAnswer(userID, usersAnswer)
+    try:
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        recordID = 0
+        lastUploadID = session.query(answerRecordsSQL).order_by(answerRecordsSQL.recordID.desc()).first()
+        if lastUploadID:
+            recordID = lastUploadID.recordID + 1
+        new_upload = answerRecordsSQL(
+            recordID=recordID,
+            userID=userID,
+            answers=str(usersAnswer),
+            timestamp=datetime.datetime.now()
+        )
+        session.add(new_upload)
+        session.commit()
+        return True
     except Exception as e:
         return f"Error: {str(e)}"
     finally:
