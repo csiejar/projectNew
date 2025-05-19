@@ -525,7 +525,27 @@ def uploadUsersAnswer(userID, usersAnswer:dict):
         )
         session.add(new_upload)
         session.commit()
-        return usersAnswer
+        return recordID
+    except Exception as e:
+        return f"Error: {str(e)}"
+    finally:
+        session.close()
+
+def getAnswerRecord(recordID):
+    try:
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        record = session.query(answerRecordsSQL).filter_by(recordID=recordID).first()
+        if record:
+            return {
+                "recordID": record.recordID,
+                "userID": record.userID,
+                "originalAnswers": ast.literal_eval(record.answers)[0],
+                "checkedAnswers": ast.literal_eval(record.answers)[1],
+                "timestamp": str(record.timestamp)
+            }
+        else:
+            return None
     except Exception as e:
         return f"Error: {str(e)}"
     finally:

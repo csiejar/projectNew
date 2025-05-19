@@ -279,9 +279,21 @@ async def submitAnswer(request: submitAnswerRequest, userToken: str = Depends(fi
     if userToken and (userToken != "None"):
         try:
             userID = dbMain.getUserDataByToken(userToken)["userID"]
-            userAnswerWithCheckedAns =  dbMain.uploadUsersAnswer(userID, request.usersAnswer)
-            return JSONResponse(content={"message": "提交答案成功", "userAnswerWithCheckedAns": userAnswerWithCheckedAns[1]}, status_code=200)
+            recordID =  dbMain.uploadUsersAnswer(userID, request.usersAnswer)
+            return JSONResponse(content={"message": "提交答案成功", "recordID": recordID}, status_code=200)
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
     else:
         raise HTTPException(status_code=401, detail="Unauthorized")
+    
+@router.get("/getAnswerRecord/{recordID}")
+async def getAnswerRecord(recordID):
+    try:
+        record = dbMain.getAnswerRecord(recordID)
+        if record:
+            return JSONResponse(content=record, status_code=200)
+        else:
+            raise HTTPException(status_code=404, detail="Record not found")
+    except Exception as e:
+        if isinstance(e, HTTPException):
+            raise e

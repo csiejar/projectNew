@@ -61,7 +61,7 @@ function onsubmitCheck() {
         .then(response => response.json())
         .then(data => {
             if (data.message === "提交答案成功") {
-                alert("提交成功！ 你錯誤的題目為 "+ JSON.stringify(data.userAnswerWithCheckedAns));
+                alert("提交成功！ 你答題紀錄ID為 "+ JSON.stringify(data.recordID));
                 window.location.href = "/";
             }
             else {
