@@ -61,7 +61,7 @@ function onsubmitCheck() {
         .then(response => response.json())
         .then(data => {
             if (data.message === "提交答案成功") {
-                alert("提交成功！");
+                alert("提交成功！ 你錯誤的題目為 "+ JSON.stringify(data.userAnswerWithCheckedAns));
                 window.location.href = "/";
             }
             else {
@@ -178,7 +178,7 @@ function checkAuthStatus() {
         .then((response) => response.json())
         .then((data) => {
             if (data.message === "已登入") {
-                
+                getQuestions();
             } else {
                 alert("請先登入！");
                 window.location.href = "/"; // 導回首頁
@@ -189,7 +189,6 @@ function checkAuthStatus() {
 
 document.addEventListener("DOMContentLoaded", function () {
     checkAuthStatus(); // 檢查登入狀態
-    getQuestions();
     document.getElementById("optionA").addEventListener("click", function () {
         selectOption(this);
     });

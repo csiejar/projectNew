@@ -499,7 +499,7 @@ def getQuestionsForQuestionPage(): # 取得所有題目（無答案）
         session.close()
 
 
-def submitQuestionAnswer(userID, usersAnswer:dict):
+def submitQuestionAnswer(usersAnswer:dict):
     returnData = []
     wrongAnswer = {}
     for i in usersAnswer.keys():
@@ -509,7 +509,7 @@ def submitQuestionAnswer(userID, usersAnswer:dict):
     return returnData
 
 def uploadUsersAnswer(userID, usersAnswer:dict):
-    usersAnswer = submitQuestionAnswer(userID, usersAnswer)
+    usersAnswer = submitQuestionAnswer(usersAnswer)
     try:
         Session = sessionmaker(bind=engine)
         session = Session()
@@ -525,7 +525,7 @@ def uploadUsersAnswer(userID, usersAnswer:dict):
         )
         session.add(new_upload)
         session.commit()
-        return True
+        return usersAnswer
     except Exception as e:
         return f"Error: {str(e)}"
     finally:

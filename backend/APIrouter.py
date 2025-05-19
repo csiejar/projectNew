@@ -279,8 +279,8 @@ async def submitAnswer(request: submitAnswerRequest, userToken: str = Depends(fi
     if userToken and (userToken != "None"):
         try:
             userID = dbMain.getUserDataByToken(userToken)["userID"]
-            dbMain.uploadUsersAnswer(userID, request.usersAnswer)
-            return JSONResponse(content={"message": "提交答案成功"}, status_code=200)
+            userAnswerWithCheckedAns =  dbMain.uploadUsersAnswer(userID, request.usersAnswer)
+            return JSONResponse(content={"message": "提交答案成功", "userAnswerWithCheckedAns": userAnswerWithCheckedAns[1]}, status_code=200)
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
     else:
