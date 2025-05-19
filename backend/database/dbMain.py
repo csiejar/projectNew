@@ -550,3 +550,33 @@ def getAnswerRecord(recordID):
         return f"Error: {str(e)}"
     finally:
         session.close()
+
+def getQuestionsForAnswerRecord(recordID):
+    try:
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        record = session.query(answerRecordsSQL).filter_by(recordID=recordID).first()
+        returnData = []
+        if record:
+            answeredQuestionNumber = ast.literal_eval(record.answers)[0].keys()
+            for i in answeredQuestionNumber:
+                question = session.query(questionsSQL).filter_by(questionID=i).first()
+                if question:
+                        returnData.append({
+                            "questionID": question.questionID,
+                            "topicID": question.topicID,
+                            "question": question.question,
+                            "optionA": question.optionA,
+                            "optionB": question.optionB,
+                            "optionC": question.optionC,
+                            "optionD": question.optionD,
+                            "image": question.image,
+                            "source": question.source,
+                            })
+            return returnData
+        else:
+            return None
+    except Exception as e:
+        return f"Error: {str(e)}"
+    finally:
+        session.close()

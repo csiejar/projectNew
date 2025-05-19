@@ -267,7 +267,7 @@ async def addPermission(request: addPermissionRequest, userToken: str = Depends(
 @router.get("/getQuestionsForQuestionPage")
 async def getQuestionsForQuestionPage():
     try:
-        questions = dbMain.getQuestionsForQuestionPage()
+        questions = dbMain.getQuestionsForQuestionPage()[0:3]
         return JSONResponse(content=questions, status_code=200)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -291,9 +291,22 @@ async def getAnswerRecord(recordID):
     try:
         record = dbMain.getAnswerRecord(recordID)
         if record:
-            return JSONResponse(content=record, status_code=200)
+            return JSONResponse(content={"message":"success","record":record}, status_code=200)
         else:
             raise HTTPException(status_code=404, detail="Record not found")
+    except Exception as e:
+        if isinstance(e, HTTPException):
+            raise e
+        
+
+@router.get("/getQuestionsForAnswerRecord/{recordID}")
+async def getQuestionsForAnswerRecord(recordID):
+    try:
+        questions = dbMain.getQuestionsForAnswerRecord(recordID)
+        if questions:
+            return JSONResponse(content={"message":"success","questions":questions}, status_code=200)
+        else:
+            raise HTTPException(status_code=404, detail="Questions not found for this record")
     except Exception as e:
         if isinstance(e, HTTPException):
             raise e

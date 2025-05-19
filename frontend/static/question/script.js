@@ -61,8 +61,8 @@ function onsubmitCheck() {
         .then(response => response.json())
         .then(data => {
             if (data.message === "提交答案成功") {
-                alert("提交成功！ 你答題紀錄ID為 "+ JSON.stringify(data.recordID));
-                window.location.href = "/";
+                alert("提交成功！");
+                window.location.href = "/answerRecord/" + data.recordID; // 導向答題紀錄頁面
             }
             else {
                 alert("提交失敗，請稍後再試！");

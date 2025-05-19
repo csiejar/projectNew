@@ -7,25 +7,17 @@
   <title>題庫系統</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="{{ url_for('static', path='/question/styles.css') }}">
-  <script src="{{ url_for('static', path='/question/script.js') }}"></script>
+  <link rel="stylesheet" href="{{ url_for('static', path='/answerRecord/styles.css') }}">
+  <script src="{{ url_for('static', path='/answerRecord/script.js') }}"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
     rel="stylesheet">
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <style>
-    canvas {
-      border: 1px solid black;
-      touch-action: none;
-      /* 禁止預設滾動/縮放手勢 */
-      background-color: #e0e0e0;
-    }
-  </style>
 </head>
 
-<body>
+<body data-question-id="{{ questionID }}">
   <!-- Sidebar -->
   <div class="sidebar collapsed" id="sidebar">
     <div class="sidebar-logo">
@@ -96,16 +88,16 @@
       <div class="row justify-content-between" style="margin-top: 40px;">
         <!-- 左側 -->
         <div class="col-12 col-md-4 d-flex flex-column align-items-end gap-4">
-          <button type="button" id="optionA" class="btn text-black fw-bold fs-2 rounded-4 px-5 py-3"
+          <button type="button" id="optionA" class="btn text-black fw-bold fs-2 rounded-4 px-5 py-3" disabled
             style="width: 260px; text-align: left;">A.</button>
-          <button type="button" id="optionC" class="btn text-black fw-bold fs-2 rounded-4 px-5 py-3"
+          <button type="button" id="optionC" class="btn text-black fw-bold fs-2 rounded-4 px-5 py-3" disabled
             style="width: 260px; text-align: left;">C.</button>
         </div>
         <!-- 右側 -->
         <div class="col-12 col-md-4 d-flex flex-column align-items-start gap-4">
-          <button type="button" id="optionB" class="btn text-black fw-bold fs-2 rounded-4 px-5 py-3"
+          <button type="button" id="optionB" class="btn text-black fw-bold fs-2 rounded-4 px-5 py-3" disabled
             style="width: 260px; text-align: left;">B.</button>
-          <button type="button" id="optionD" class="btn text-black fw-bold fs-2 rounded-4 px-5 py-3"
+          <button type="button" id="optionD" class="btn text-black fw-bold fs-2 rounded-4 px-5 py-3" disabled
             style="width: 260px; text-align: left;">D.</button>
         </div>
       </div>
@@ -122,8 +114,6 @@
         <div class="col-12 col-md-4"></div>
         <div class="col-12 col-md-4 d-flex justify-content-start">
           <button class="btn rounded-4 px-5 py-3 fs-4" style="width: 260px;" id="nextBtn">下一題</button>
-          <button class="btn rounded-4 px-5 py-3 fs-4" style="width: 260px; display: none; background: rgb(118, 227, 122);"
-            id="submitBtn">提交</button>
         </div>
       </div>
     </div>
@@ -133,83 +123,8 @@
     <div class="d-flex flex-column align-items-center position-relative"
      style="width: 100%; max-width: 1200px; margin: 0 auto;">
 
-  <!-- 包 canvas 的容器，加上 position: relative -->
-  <div style="position: relative;">
-    <!-- Canvas 畫布 -->
-    <canvas id="drawingCanvas" width="1000" height="1200" style="background-color: #e0e0e0;"></canvas>
-
-    <!-- 重設按鈕，絕對定位在 canvas 容器內部的右上角 -->
-    <button id="resetCanvasBtn" class="btn btn-outline-secondary"
-            style="position: absolute; top: 10px; right: 10px; z-index: 10;">
-      <i class="bi bi-arrow-counterclockwise"></i> 重設畫板
-    </button>
-  </div>
 </div>
   </div>
-
-
-  <script>
-    const canvas = document.getElementById("drawingCanvas");
-    const ctx = canvas.getContext("2d");
-
-    let drawing = false;
-
-    // 取得目前位置（滑鼠或觸控）
-    function getPos(e) {
-      if (e.touches) {
-        const rect = canvas.getBoundingClientRect();
-        return {
-          x: e.touches[0].clientX - rect.left,
-          y: e.touches[0].clientY - rect.top
-        };
-      } else {
-        return {
-          x: e.offsetX,
-          y: e.offsetY
-        };
-      }
-    }
-
-    // 開始畫畫
-    function startDrawing(e) {
-      drawing = true;
-      const pos = getPos(e);
-      ctx.beginPath();
-      ctx.moveTo(pos.x, pos.y);
-      e.preventDefault(); // 避免手機畫面滾動
-    }
-
-    // 畫畫中
-    function draw(e) {
-      if (!drawing) return;
-      const pos = getPos(e);
-      ctx.lineTo(pos.x, pos.y);
-      ctx.stroke();
-      e.preventDefault();
-    }
-
-    // 結束畫畫
-    function stopDrawing(e) {
-      drawing = false;
-      e.preventDefault();
-    }
-
-    // 滑鼠事件
-    canvas.addEventListener("mousedown", startDrawing);
-    canvas.addEventListener("mousemove", draw);
-    canvas.addEventListener("mouseup", stopDrawing);
-    canvas.addEventListener("mouseleave", stopDrawing);
-
-    // 觸控事件
-    canvas.addEventListener("touchstart", startDrawing, { passive: false });
-    canvas.addEventListener("touchmove", draw, { passive: false });
-    canvas.addEventListener("touchend", stopDrawing, { passive: false });
-    canvas.addEventListener("touchcancel", stopDrawing, { passive: false });
-
-    document.getElementById("resetCanvasBtn").addEventListener("click", function () {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-    });
-  </script>
 
 </body>
 

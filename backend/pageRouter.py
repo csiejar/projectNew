@@ -19,3 +19,7 @@ async def questionEdit(request: Request):
 @router.get("/permissionAdmin") # 權限管理頁面
 async def permissionAdmin(request: Request):
     return templates.TemplateResponse("permissionAdmin/index.html", {"request": request})
+
+@router.get("/answerRecord/{questionID}")  # 回答紀錄頁面
+async def answerRecord(request: Request, questionID: int):
+    return templates.TemplateResponse("answerRecord/index.html", {"request": request, "questionID": questionID})
