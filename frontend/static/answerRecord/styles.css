@@ -17,12 +17,12 @@
 }
 
 .option-correct {
-    background-color: #44ff00 !important; /* 綠色 */
+    background-color: rgb(78, 255, 78) !important; /* 綠色 */
     color: white;
 }
 
 .option-wrong {
-    background-color: #ff0000 !important; /* 紅色 */
+    background-color: rgb(255, 78, 78) !important; /* 紅色 */
     color: white;
 }
 

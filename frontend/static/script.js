@@ -6,6 +6,9 @@ document.getElementById("questionBankSideBar").addEventListener("click", functio
   document.getElementById("mainPageSideBar").addEventListener("click", function () {
     window.location.href = "/";
 });
+document.getElementById("WrongQuestionBookSideBar").addEventListener("click", function () {
+    window.location.href = "/userAnswerRecord";
+});
 
 
 document.addEventListener("DOMContentLoaded", function () {

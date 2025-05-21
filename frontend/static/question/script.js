@@ -51,6 +51,7 @@ function onsubmitCheck() {
         loadUserAnswer();
         showIncompleteAlert();
     } else {
+        document.getElementById("submitBtn").disabled = true; // 禁用提交按鈕
         fetch('/api/submitAnswer', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

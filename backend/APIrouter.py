@@ -267,7 +267,7 @@ async def addPermission(request: addPermissionRequest, userToken: str = Depends(
 @router.get("/getQuestionsForQuestionPage")
 async def getQuestionsForQuestionPage():
     try:
-        questions = dbMain.getQuestionsForQuestionPage()
+        questions = dbMain.getQuestionsForQuestionPage()[0:10]
         return JSONResponse(content=questions, status_code=200)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

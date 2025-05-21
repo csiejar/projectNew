@@ -23,3 +23,7 @@ async def permissionAdmin(request: Request):
 @router.get("/answerRecord/{questionID}")  # 回答紀錄頁面
 async def answerRecord(request: Request, questionID: int):
     return templates.TemplateResponse("answerRecord/index.html", {"request": request, "questionID": questionID})
+
+@router.get("/userAnswerRecord")  # 回答紀錄頁面
+async def userAnswerRecord(request: Request):
+    return templates.TemplateResponse("userAnswerRecord/index.html", {"request": request})

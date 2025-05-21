@@ -590,11 +590,31 @@ def getUserAnswerRecord(userID):
         records = [
             {
                 "recordID": record.recordID,
-                "timestamp": str(record.timestamp)
+                "timestamp": str(record.timestamp),
+                "correctAnswersCount": len(ast.literal_eval(record.answers)[0]) - len(ast.literal_eval(record.answers)[1]),
+                "totalAnswersCount": len(ast.literal_eval(record.answers)[0])
             }
             for record in records
         ]
+        records.reverse()
         return records
+    except Exception as e:
+        return f"Error: {str(e)}"
+    finally:
+        session.close()
+
+def isUsersRecord(userID,recordID):
+    try:
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        record = session.query(answerRecordsSQL).filter_by(recordID=recordID).first()
+        if record:
+            if record.userID == userID:
+                return True
+            else:
+                return False
+        else:
+            return False
     except Exception as e:
         return f"Error: {str(e)}"
     finally:

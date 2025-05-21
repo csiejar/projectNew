@@ -103,8 +103,6 @@ document.addEventListener("DOMContentLoaded", function () {
             if (data.message === "success") {
                 originalAnswers = data.record["originalAnswers"];
                 checkedAnswers = data.record["checkedAnswers"];
-                console.log("原始答案:", originalAnswers);
-                console.log("錯誤題目:", checkedAnswers);
             } else {
                 alert("無法獲取答題紀錄，請稍後再試！");
             }
