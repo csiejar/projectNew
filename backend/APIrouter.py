@@ -310,3 +310,15 @@ async def getQuestionsForAnswerRecord(recordID):
     except Exception as e:
         if isinstance(e, HTTPException):
             raise e
+        
+@router.get("/getUserAnswerRecord")
+async def getUserAnswerRecord(userToken: str = Depends(findTokenFromCookies)):
+    if userToken and (userToken != "None"):
+        try:
+            userID = dbMain.getUserDataByToken(userToken)["userID"]
+            records = dbMain.getUserAnswerRecord(userID)
+            return JSONResponse(content={"message":"success","records":records}, status_code=200)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+    else:
+        raise HTTPException(status_code=401, detail="Unauthorized")

@@ -580,3 +580,22 @@ def getQuestionsForAnswerRecord(recordID):
         return f"Error: {str(e)}"
     finally:
         session.close()
+
+def getUserAnswerRecord(userID):
+    try:
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        records = session.query(answerRecordsSQL).filter_by(userID=userID).all()
+        # 將資料轉換為字典格式
+        records = [
+            {
+                "recordID": record.recordID,
+                "timestamp": str(record.timestamp)
+            }
+            for record in records
+        ]
+        return records
+    except Exception as e:
+        return f"Error: {str(e)}"
+    finally:
+        session.close()
