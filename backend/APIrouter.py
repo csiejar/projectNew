@@ -322,3 +322,15 @@ async def getUserAnswerRecord(userToken: str = Depends(findTokenFromCookies)):
             raise HTTPException(status_code=500, detail=str(e))
     else:
         raise HTTPException(status_code=401, detail="Unauthorized")
+    
+@router.get("/getUserTopicsCorrectRate") # 取得使用者各單元答題正確率
+async def getUserTopicsCorrectRate(userToken: str = Depends(findTokenFromCookies)):
+    if userToken and (userToken != "None"):
+        try:
+            userID = dbMain.getUserDataByToken(userToken)["userID"]
+            topics_correct_rate = dbMain.getUserTopicsCorrectRate(userID)
+            return JSONResponse(content={"message":"success","topics_correct_rate":topics_correct_rate}, status_code=200)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+    else:
+        raise HTTPException(status_code=401, detail="Unauthorized")
