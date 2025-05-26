@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>答對率統計圖表</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    progress {
+      width: 100%;
+      height: 20px;
+      margin-bottom: 20px;
+    }
+    #chart-container {
+      max-width: 1000px;
+      margin: auto;
+    }
+  </style>
+</head>
+<body>
+  <div id="chart-container">
+    <progress id="loading" value="0" max="100"></progress>
+    <canvas id="myChart"></canvas>
+  </div>
+
+  <script>
+    const progressBar = document.getElementById('loading');
+    const ctx = document.getElementById('myChart').getContext('2d');
+
+    // 模擬進度條
+    let progress = 0;
+    const interval = setInterval(() => {
+      if (progress < 90) {
+        progress += 10;
+        progressBar.value = progress;
+      } else {
+        clearInterval(interval);
+      }
+    }, 100);
+
+    fetch('/api/getUserTopicsCorrectRate', { method: 'GET', credentials: 'include' })
+      .then(response => {
+        console.log(response);
+        if (!response.ok) throw new Error('無法取得資料');
+                if (response.ok){
+alert ('ok')
+                };
+        return response.json();
+      })
+      // .then(data => {
+      //   // 假設資料格式為 [{topic_id: 26, correct_rate: 7.69}, ...]
+      //   const labels = data.map(item => item.topic_id);
+      //   const correctRates = data.map(item => parseFloat(item.correct_rate));
+
+      //   progressBar.value = 100;
+      //   setTimeout(() => progressBar.style.display = 'none', 300);
+
+      //   new Chart(ctx, {
+      //     type: 'bar',
+      //     data: {
+      //       labels: labels,
+      //       datasets: [{
+      //         label: '答對率 (%)',
+      //         data: correctRates,
+      //         backgroundColor: 'rgba(75, 192, 192, 0.6)',
+      //         borderColor: 'rgba(75, 192, 192, 1)',
+      //         borderWidth: 1,
+      //       }]
+      //     },
+      //     options: {
+      //       responsive: true,
+      //       scales: {
+      //         y: {
+      //           beginAtZero: true,
+      //           max: 100,
+      //           title: {
+      //             display: true,
+      //             text: '百分比 (%)'
+      //           }
+      //         },
+      //         x: {
+      //           title: {
+      //             display: true,
+      //             text: '題號'
+      //           }
+      //         }
+      //       },
+      //       plugins: {
+      //         tooltip: {
+      //           callbacks: {
+      //             label: ctx => ctx.raw + '%'
+      //           }
+      //         }
+      //       }
+      //     }
+      //   });
+      // })
+      // .catch(error => {
+      //   progressBar.style.display = 'none';
+      //   alert('載入圖表失敗：' + error.message);
+      //   console.error(error);
+      // });
+  </script>
+</body>
+</html>

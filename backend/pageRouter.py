@@ -27,3 +27,7 @@ async def answerRecord(request: Request, questionID: int):
 @router.get("/userAnswerRecord")  # 回答紀錄頁面
 async def userAnswerRecord(request: Request):
     return templates.TemplateResponse("userAnswerRecord/index.html", {"request": request})
+
+@router.get("/correctRate")  # 回答紀錄頁面
+async def correctRate(request: Request):
+    return templates.TemplateResponse("correctRate/index.html", {"request": request})
