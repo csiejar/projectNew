@@ -648,6 +648,34 @@ def getQuestionsTopicID(questionID):
     finally:
         session.close()
 
+def writeUserTopicStats(userID, uploadData):
+    try:
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        user = session.query(UsersSQL).filter_by(userID=userID).first()
+        if user:
+            user.topic_stats = str(uploadData)
+            session.commit()
+            return True
+        else:
+            return False
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def getUserTopicStats(userID):
+    try:
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        user = session.query(UsersSQL).filter_by(userID=userID).first()
+        if user:
+            return ast.literal_eval(user.topic_stats)
+        else:
+            return None
+    except Exception as e:
+        return f"Error: {str(e)}"
+    finally:
+        session.close()
+
 def getUserTopicsCorrectRate(userID):
     try:
         Session = sessionmaker(bind=engine)
@@ -658,57 +686,144 @@ def getUserTopicsCorrectRate(userID):
         topicCorrectQuestionsCount = {}
         topicAnsweredQuestionsCount = {}
         questionIDAndTopicID = {}
+        lastRecordID = 0
+        pastRecords = (session.query(UsersSQL).filter_by(userID=userID).first()).topic_stats
+        if pastRecords:
+            pastRecords = ast.literal_eval(pastRecords)
+            lastRecordID = pastRecords[3] # 取得上次答對率算到哪了
         newestRecordID = 0
         if userRecords:
             newestRecordID = userRecords[0]['recordID']
-        
-        for topic in topics:
-            topicID = topic.topicID
-            totalQuestions = session.query(questionsSQL).filter_by(topicID=topicID).all()
-            questionIDs = []
-            for i in totalQuestions:
-                if i.questionID not in questionIDs:
-                    questionIDs.append(i.questionID)
-            topicWithQuestionID[topicID] = questionIDs # 每個單元的題目ID列表
 
-        for record in userRecords:
-            usersAnswer = getUsersAnswer(record['recordID'])
-            questionIDs = list(usersAnswer[0].keys())
-            for questionID in questionIDs:
-                topicID = getQuestionsTopicID(questionID)
-                if topicID not in questionIDAndTopicID:
-                    questionIDAndTopicID[questionID] = topicID
-            correctQuestionsID = []
-            for answers in usersAnswer[0].keys():
-                if answers not in usersAnswer[1].keys():
-                    correctQuestionsID.append(answers)
-            wrongQuestionsID = []
-            for i in usersAnswer[1].keys():
-                wrongQuestionsID.append(i)
-            totalQuestionsID = list(usersAnswer[0].keys())
-        
-            for i in totalQuestionsID:
-                topicID = questionIDAndTopicID[i]
-                if topicID not in topicAnsweredQuestionsCount:
-                    topicAnsweredQuestionsCount[topicID] = 0
-                topicAnsweredQuestionsCount[topicID] += 1
-            for i in correctQuestionsID:
-                topicID = questionIDAndTopicID[i]
+        if lastRecordID == newestRecordID:
+            return pastRecords
+            
+        if lastRecordID == 0:
+            for topic in topics:
+                topicID = topic.topicID
+                totalQuestions = session.query(questionsSQL).filter_by(topicID=topicID).all()
+                questionIDs = []
+                for i in totalQuestions:
+                    if i.questionID not in questionIDs:
+                        questionIDs.append(i.questionID)
+                topicWithQuestionID[topicID] = questionIDs # 每個單元的題目ID列表
+
+            for record in userRecords:
+                usersAnswer = getUsersAnswer(record['recordID'])
+                questionIDs = list(usersAnswer[0].keys())
+                for questionID in questionIDs:
+                    topicID = getQuestionsTopicID(questionID)
+                    if topicID not in questionIDAndTopicID:
+                        questionIDAndTopicID[questionID] = topicID
+                correctQuestionsID = []
+                for answers in usersAnswer[0].keys():
+                    if answers not in usersAnswer[1].keys():
+                        correctQuestionsID.append(answers)
+                wrongQuestionsID = []
+                for i in usersAnswer[1].keys():
+                    wrongQuestionsID.append(i)
+                totalQuestionsID = list(usersAnswer[0].keys())
+            
+                for i in totalQuestionsID:
+                    topicID = questionIDAndTopicID[i]
+                    if topicID not in topicAnsweredQuestionsCount:
+                        topicAnsweredQuestionsCount[topicID] = 0
+                    topicAnsweredQuestionsCount[topicID] += 1
+                for i in correctQuestionsID:
+                    topicID = questionIDAndTopicID[i]
+                    if topicID not in topicCorrectQuestionsCount:
+                        topicCorrectQuestionsCount[topicID] = 0
+                    topicCorrectQuestionsCount[topicID] += 1
+            userTopicsCorrectRate = {}
+            for topicID in topicWithQuestionID.keys():
                 if topicID not in topicCorrectQuestionsCount:
                     topicCorrectQuestionsCount[topicID] = 0
-                topicCorrectQuestionsCount[topicID] += 1
-        userTopicsCorrectRate = {}
-        for topicID in topicWithQuestionID.keys():
-            if topicID not in topicCorrectQuestionsCount:
-                topicCorrectQuestionsCount[topicID] = 0
-            if topicID not in topicAnsweredQuestionsCount:
-                topicAnsweredQuestionsCount[topicID] = 0
-            if topicAnsweredQuestionsCount[topicID] == 0:
-                userTopicsCorrectRate[topicID] = 0
-            else:
-                userTopicsCorrectRate[topicID] = round((topicCorrectQuestionsCount[topicID] / topicAnsweredQuestionsCount[topicID]) * 100,2)
-        return [userTopicsCorrectRate, topicCorrectQuestionsCount, topicAnsweredQuestionsCount, newestRecordID]
+                if topicID not in topicAnsweredQuestionsCount:
+                    topicAnsweredQuestionsCount[topicID] = 0
+                if topicAnsweredQuestionsCount[topicID] == 0:
+                    userTopicsCorrectRate[topicID] = 0
+                else:
+                    userTopicsCorrectRate[topicID] = round((topicCorrectQuestionsCount[topicID] / topicAnsweredQuestionsCount[topicID]) * 100,2)
+
+            writeUserTopicStats(userID, [userTopicsCorrectRate, topicCorrectQuestionsCount, topicAnsweredQuestionsCount, newestRecordID])
+            return [userTopicsCorrectRate, topicCorrectQuestionsCount, topicAnsweredQuestionsCount, newestRecordID]
+        if lastRecordID != 0 and lastRecordID < newestRecordID:
+            for topic in topics:
+                topicID = topic.topicID
+                totalQuestions = session.query(questionsSQL).filter_by(topicID=topicID).all()
+                questionIDs = []
+                for i in totalQuestions:
+                    if i.questionID not in questionIDs:
+                        questionIDs.append(i.questionID)
+                topicWithQuestionID[topicID] = questionIDs
+            for record in userRecords:
+                if record['recordID'] <= lastRecordID:
+                    continue
+                usersAnswer = getUsersAnswer(record['recordID'])
+                questionIDs = list(usersAnswer[0].keys())
+                for questionID in questionIDs:
+                    topicID = getQuestionsTopicID(questionID)
+                    if topicID not in questionIDAndTopicID:
+                        questionIDAndTopicID[questionID] = topicID
+                correctQuestionsID = []
+                for answers in usersAnswer[0].keys():
+                    if answers not in usersAnswer[1].keys():
+                        correctQuestionsID.append(answers)
+                wrongQuestionsID = []
+                for i in usersAnswer[1].keys():
+                    wrongQuestionsID.append(i)
+                totalQuestionsID = list(usersAnswer[0].keys())
+            
+                for i in totalQuestionsID:
+                    topicID = questionIDAndTopicID[i]
+                    if topicID not in topicAnsweredQuestionsCount:
+                        topicAnsweredQuestionsCount[topicID] = 0
+                    topicAnsweredQuestionsCount[topicID] += 1
+                for i in correctQuestionsID:
+                    topicID = questionIDAndTopicID[i]
+                    if topicID not in topicCorrectQuestionsCount:
+                        topicCorrectQuestionsCount[topicID] = 0
+                    topicCorrectQuestionsCount[topicID] += 1
+            userTopicsCorrectRate = {}
+            for topicID in topicWithQuestionID.keys():
+                if topicID not in topicCorrectQuestionsCount:
+                    topicCorrectQuestionsCount[topicID] = 0
+                if topicID not in topicAnsweredQuestionsCount:
+                    topicAnsweredQuestionsCount[topicID] = 0
+                if topicAnsweredQuestionsCount[topicID] == 0:
+                    userTopicsCorrectRate[topicID] = 0
+                else:
+                    userTopicsCorrectRate[topicID] = round((topicCorrectQuestionsCount[topicID] / topicAnsweredQuestionsCount[topicID]) * 100,2)
+            # 原本累積資料（從資料庫撈出來）
+                originalUserTopicsCorrectRate = getUserTopicStats(userID)[0]
+                originalTopicCorrectQuestionsCount = getUserTopicStats(userID)[1]
+                originalTopicAnsweredQuestionsCount = getUserTopicStats(userID)[2]
+
+                # 累加後的新資料
+                mergedCorrectCount = {}
+                mergedAnsweredCount = {}
+                mergedCorrectRate = {}
+
+                for topicID in topicWithQuestionID.keys():
+                    originalCorrect = originalTopicCorrectQuestionsCount.get(topicID, 0)
+                    originalAnswered = originalTopicAnsweredQuestionsCount.get(topicID, 0)
+                    newCorrect = topicCorrectQuestionsCount.get(topicID, 0)
+                    newAnswered = topicAnsweredQuestionsCount.get(topicID, 0)
+
+                    mergedCorrectCount[topicID] = originalCorrect + newCorrect
+                    mergedAnsweredCount[topicID] = originalAnswered + newAnswered
+
+                    if mergedAnsweredCount[topicID] == 0:
+                        mergedCorrectRate[topicID] = 0
+                    else:
+                        mergedCorrectRate[topicID] = round((mergedCorrectCount[topicID] / mergedAnsweredCount[topicID]) * 100, 2)
+
+                # 寫回資料庫
+                writeUserTopicStats(userID, [mergedCorrectRate, mergedCorrectCount, mergedAnsweredCount, newestRecordID])
+                return [mergedCorrectRate, mergedCorrectCount, mergedAnsweredCount, newestRecordID]
     except Exception as e:
         return f"Error: {str(e)}"
     finally:
         session.close()
+
+# print(getUserTopicsCorrectRate("user-8718c962-0bad-4c84-9073-7f2a2812aa12"))  # 測試用戶答題統計功能

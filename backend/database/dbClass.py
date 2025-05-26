@@ -16,6 +16,7 @@ class UsersSQL(Base):
     recoveryCode = Column(String(255))
     sex = Column(Integer)
     userImg = Column(String(255))
+    topic_stats = Column(JSON)  # 儲存使用者對各主題的答題統計
 
 # 首頁下方大主題資料表
 class topicsSQL(Base):
