@@ -45,11 +45,13 @@
       .then(response => {
         console.log(response);
         if (!response.ok) throw new Error('無法取得資料');
-                if (response.ok){
-alert ('ok')
-                };
         return response.json();
       })
+      .then(data => {
+        console.log(data);
+      }
+
+      )
       // .then(data => {
       //   // 假設資料格式為 [{topic_id: 26, correct_rate: 7.69}, ...]
       //   const labels = data.map(item => item.topic_id);
