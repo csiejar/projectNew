@@ -96,11 +96,12 @@ function displayQuestion(index) {
 
     const q = questions[currentIndex];
     document.querySelector(".question-text").textContent = q.question;
-    document.getElementById("questionID").textContent = q.questionID;
-    document.getElementById("optionA").textContent = "A. " + q.optionA;
-    document.getElementById("optionB").textContent = "B. " + q.optionB;
-    document.getElementById("optionC").textContent = "C. " + q.optionC;
-    document.getElementById("optionD").textContent = "D. " + q.optionD;
+
+    document.getElementById("optionText").innerHTML =
+        "A. " + q.optionA + "<br>" +
+        "B. " + q.optionB + "<br>" +
+        "C. " + q.optionC + "<br>" +
+        "D. " + q.optionD;
 
     const img = document.querySelector(".img-fluid");
     if (q.image) {
