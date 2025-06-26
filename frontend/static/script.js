@@ -1,30 +1,11 @@
-// SideBar目的地設定
-document.getElementById("questionBankSideBar").addEventListener("click", function () {
-    window.location.href = "/question";
-});
-
-  document.getElementById("mainPageSideBar").addEventListener("click", function () {
-    window.location.href = "/";
-});
-document.getElementById("WrongQuestionBookSideBar").addEventListener("click", function () {
-    window.location.href = "/userAnswerRecord";
-});
-
-
 document.addEventListener("DOMContentLoaded", function () {
     const menuBtn = document.getElementById("menuBtn");
     const sidebar = document.getElementById("sidebar");
-    const closeSidebar = document.getElementById("closeSidebar");
 
     // 點擊按鈕開啟 Sidebar
     menuBtn.addEventListener("click", function () {
         sidebar.classList.add("show"); // 添加 show 類別
-    });
-
-    // 點擊關閉按鈕隱藏 Sidebar
-    closeSidebar.addEventListener("click", function () {
-        sidebar.classList.remove("show"); // 移除 show 類別
-    });
+    });    
 
     // 點擊側邊欄外部時關閉
     document.addEventListener("click", function (event) {

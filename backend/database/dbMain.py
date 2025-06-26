@@ -826,4 +826,22 @@ def getUserTopicsCorrectRate(userID):
     finally:
         session.close()
 
-# print(getUserTopicsCorrectRate("user-8718c962-0bad-4c84-9073-7f2a2812aa12"))  # 測試用戶答題統計功能
+def getAllTopicsTitleWithID():
+    try:
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        topics = session.query(topicsSQL).all()
+        # 將資料轉換為字典格式
+        topics = [
+            {
+                "topicID": topic.topicID,
+                "title": ''.join(char for char in topic.title if not char.isdigit()).replace('.', '').replace('-','').replace('YΔ','Y-Δ').strip()
+            }
+            for topic in topics
+        ]
+        return topics
+    except Exception as e:
+        return f"Error: {str(e)}"
+    finally:
+        session.close()
+    

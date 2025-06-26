@@ -5,6 +5,16 @@
   <title>答對率統計圖表</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', path='/correctRate/styles.css') }}">
+  <script src="{{ url_for('static', path='/correctRate/script.js') }}"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+    rel="stylesheet">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
     body {
       font-family: 'Noto Sans TC', sans-serif;
@@ -95,6 +105,52 @@
   </style>
 </head>
 <body>
+  <!-- Sidebar -->
+  <div class="sidebar collapsed" id="sidebar">
+    <div class="sidebar-logo">
+      <img src="../static/img/mark.png" alt="Logo">
+    </div>
+    <ul>
+      <li id="mainPageSideBar"><i class="bi bi-house"></i><span class="text">首頁</span></li>
+      <li id="questionBankSideBar"><i class="bi bi-book"></i><span class="text">題庫</span></li>
+      <li id="demoTestSideBar"><i class="bi bi-pencil"></i><span class="text">模擬測驗</span></li>
+      <li id="WrongQuestionBookSideBar"><i class="bi bi-journal-x"></i><span class="text">錯題本</span></li>
+    </ul>
+  </div>
+  <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+
+  <!-- Header -->
+  <header class="d-flex align-items-center justify-content-between p-3 bg-white text-dark">
+    <button class="btn text-dark" id="menuBtn">☰</button>
+    <img src="../static/img/logo.png" alt="Logo" style="height: 50px;" onclick="location.href='/'">
+    <div>
+      <button class="btn btn-outline-dark" id="google-translate">
+        <i class="bi bi-globe"></i>
+      </button>
+      <div id="google_translate_element"
+        style="display: none; position: absolute; top: 80px; right: 0px; z-index: 10000;"></div>
+      <script type="text/javascript">
+        document.getElementById('google_translate_element').style.display = 'none';
+        function googleTranslateElementInit() {
+          new google.translate.TranslateElement({
+            pageLanguage: 'zh-TW',
+            includedLanguages: 'en,zh-CN,zh-TW',
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+          }, 'google_translate_element');
+        }
+        document.getElementById('google-translate').addEventListener('click', function () {
+          const translateElement = document.getElementById('google_translate_element');
+          translateElement.style.display = translateElement.style.display === 'none' ? 'block' : 'none';
+        });
+      </script>
+      <script type="text/javascript"
+        src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+      <button class="btn btn-outline-dark" id="userBtn">
+        <i class="bi bi-person-circle"></i>
+      </button>
+    </div>
+  </header>
+
   <div id="chart-container">
     <h1>使用者各題答對率統計</h1>
 
@@ -106,6 +162,29 @@
     <progress id="loading" value="0" max="100"></progress>
     <canvas id="myChart"></canvas>
   </div>
+  <!-- 放在 body 的最下方，footer 之前 -->
+<div class="overlay" id="userInfoOverlay" style="display: none;">
+  <div class="popup-card">
+    <button class="close-btn" id="closeUserCard">✕</button>
+    <img id="userAvatar" src="" alt="使用者頭像" class="avatar">
+    <div class="name" id="userName">使用者姓名</div>
+    <div class="email" id="userEmail">使用者 Gmail</div>
+    <div id="g_id_onload" data-client_id="1071265157577-7bcbr8qejtvtbmnchgs06ohr9ke46v97.apps.googleusercontent.com"
+      data-callback="handleCredentialResponse" data-auto_select="true">
+    </div>
+    <div id="loginBtn" class="g_id_signin" data-type="standard"></div>
+    <button class="button" id="manageAccountBtn">管理帳戶</button>
+    <div class="button-group">
+      <button class="button" id="addAccountBtn">新增帳戶</button>
+      <button class="button" id="logoutFromCard">登出帳戶</button>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div id="footer">
+  <p>© 2025 Elec Forge 版權所有</p>
+</div>
 
   <script>
     const progressBar = document.getElementById('loading');
@@ -131,10 +210,18 @@
         if (data.message !== "success" || !data.topics_correct_rate || !Array.isArray(data.topics_correct_rate)) {
           throw new Error("API 回傳資料格式錯誤");
         }
+        const topicTitles = data.topicTitles || [];
 
         const rateObj = data.topics_correct_rate[0];
-        const labels = Object.keys(rateObj);
         const correctRates = Object.values(rateObj).map(v => parseFloat(v));
+        
+        // 根據答對率動態設置顏色
+        const backgroundColors = correctRates.map((rate, index) => {
+          return rate >= 50 ? 'rgba(30,61,140,1)' : 'rgba(255,74,74,1)';
+        });
+        const borderColors = correctRates.map(rate => 
+          rate >= 50 ? 'rgba(30,61,140,1)' : 'rgba(255,74,74,1)'
+        );
 
         progressBar.value = 100;
         setTimeout(() => {
@@ -145,12 +232,12 @@
         new Chart(ctx, {
           type: 'bar',
           data: {
-            labels: labels,
+            labels: topicTitles.map(title => title.title || title), // 使用題目標題
             datasets: [{
               label: '答對率 (%)',
               data: correctRates,
-              backgroundColor: 'rgba(34, 197, 94, 0.6)',
-              borderColor: 'rgba(34, 197, 94, 1)',
+              backgroundColor: backgroundColors,
+              borderColor: borderColors,
               borderWidth: 1,
               borderRadius: 5
             }]
@@ -163,7 +250,7 @@
                 max: 100,
                 title: {
                   display: true,
-                  text: '百分比 (%)',
+                  text: '答對率 (%)',
                   font: {
                     size: 16
                   }
@@ -172,7 +259,7 @@
               x: {
                 title: {
                   display: true,
-                  text: '題號',
+                  text: '單元名稱',
                   font: {
                     size: 16
                   }
@@ -180,7 +267,9 @@
                 ticks: {
                   font: {
                     size: 14
-                  }
+                  },
+                  maxRotation: 90,
+                  minRotation: 90
                 }
               }
             },
@@ -191,11 +280,7 @@
                 }
               },
               legend: {
-                labels: {
-                  font: {
-                    size: 16
-                  }
-                }
+                display: false // 隱藏圖例
               }
             }
           }
@@ -207,5 +292,6 @@
         console.error(error);
       });
   </script>
+  <script src="../static/script.js"></script>
 </body>
 </html>

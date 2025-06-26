@@ -329,7 +329,8 @@ async def getUserTopicsCorrectRate(userToken: str = Depends(findTokenFromCookies
         try:
             userID = dbMain.getUserDataByToken(userToken)["userID"]
             topics_correct_rate = dbMain.getUserTopicsCorrectRate(userID)
-            return JSONResponse(content={"message":"success","topics_correct_rate":topics_correct_rate}, status_code=200)
+            topicTitles = dbMain.getAllTopicsTitleWithID()
+            return JSONResponse(content={"message":"success","topics_correct_rate":topics_correct_rate,"topicTitles":topicTitles}, status_code=200)
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
     else:
