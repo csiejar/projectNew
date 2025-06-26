@@ -187,111 +187,115 @@
 </div>
 
   <script>
-    const progressBar = document.getElementById('loading');
-    const ctx = document.getElementById('myChart').getContext('2d');
-    const loadingArea = document.getElementById('loading-area');
+  const progressBar = document.getElementById('loading');
+  const ctx = document.getElementById('myChart').getContext('2d');
+  const loadingArea = document.getElementById('loading-area');
 
-    let progress = 0;
-    const interval = setInterval(() => {
-      if (progress < 90) {
-        progress += 10;
-        progressBar.value = progress;
-      } else {
-        clearInterval(interval);
+  let progress = 0;
+  const interval = setInterval(() => {
+    if (progress < 90) {
+      progress += 10;
+      progressBar.value = progress;
+    } else {
+      clearInterval(interval);
+    }
+  }, 100);
+
+  fetch('/api/getUserTopicsCorrectRate', { method: 'GET', credentials: 'include' })
+    .then(response => {
+      if (!response.ok) throw new Error('無法取得資料');
+      return response.json();
+    })
+    .then(data => {
+      if (data.message !== "success" || !data.topics_correct_rate || !Array.isArray(data.topics_correct_rate)) {
+        throw new Error("API 回傳資料格式錯誤");
       }
-    }, 100);
 
-    fetch('/api/getUserTopicsCorrectRate', { method: 'GET', credentials: 'include' })
-      .then(response => {
-        if (!response.ok) throw new Error('無法取得資料');
-        return response.json();
-      })
-      .then(data => {
-        if (data.message !== "success" || !data.topics_correct_rate || !Array.isArray(data.topics_correct_rate)) {
-          throw new Error("API 回傳資料格式錯誤");
-        }
-        const topicTitles = data.topicTitles || [];
+      const topicTitles = data.topicTitles || [];
+      const rateObj = data.topics_correct_rate[0];
+      const correctRates = Object.values(rateObj).map(v => parseFloat(v));
 
-        const rateObj = data.topics_correct_rate[0];
-        const correctRates = Object.values(rateObj).map(v => parseFloat(v));
-        
-        // 根據答對率動態設置顏色
-        const backgroundColors = correctRates.map((rate, index) => {
-          return rate >= 50 ? 'rgba(30,61,140,1)' : 'rgba(255,74,74,1)';
-        });
-        const borderColors = correctRates.map(rate => 
-          rate >= 50 ? 'rgba(30,61,140,1)' : 'rgba(255,74,74,1)'
-        );
+      const backgroundColors = correctRates.map(rate =>
+        rate >= 50 ? 'rgba(30,61,140,1)' : 'rgba(255,74,74,1)'
+      );
+      const borderColors = correctRates.map(rate =>
+        rate >= 50 ? 'rgba(30,61,140,1)' : 'rgba(255,74,74,1)'
+      );
 
-        progressBar.value = 100;
-        setTimeout(() => {
-          progressBar.style.display = 'none';
-          loadingArea.style.display = 'none';
-        }, 300);
+      progressBar.value = 100;
+      setTimeout(() => {
+        progressBar.style.display = 'none';
+        loadingArea.style.display = 'none';
+      }, 300);
 
-        new Chart(ctx, {
-          type: 'bar',
-          data: {
-            labels: topicTitles.map(title => title.title || title), // 使用題目標題
-            datasets: [{
-              label: '答對率 (%)',
-              data: correctRates,
-              backgroundColor: backgroundColors,
-              borderColor: borderColors,
-              borderWidth: 1,
-              borderRadius: 5
-            }]
-          },
-          options: {
-            responsive: true,
-            scales: {
-              y: {
-                beginAtZero: true,
-                max: 100,
-                title: {
-                  display: true,
-                  text: '答對率 (%)',
-                  font: {
-                    size: 16
-                  }
-                }
-              },
-              x: {
-                title: {
-                  display: true,
-                  text: '單元名稱',
-                  font: {
-                    size: 16
-                  }
-                },
-                ticks: {
-                  font: {
-                    size: 14
-                  },
-                  maxRotation: 90,
-                  minRotation: 90
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: topicTitles.map(title => {
+            const text = title.title || title;
+            return text.split(''); // ✅ 每個字一行，顯示為直排
+          }),
+          datasets: [{
+            label: '答對率 (%)',
+            data: correctRates,
+            backgroundColor: backgroundColors,
+            borderColor: borderColors,
+            borderWidth: 1,
+            borderRadius: 5
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 100,
+              title: {
+                display: true,
+                text: '答對率 (%)',
+                font: {
+                  size: 16
                 }
               }
             },
-            plugins: {
-              tooltip: {
-                callbacks: {
-                  label: ctx => ctx.raw + '%'
+            x: {
+              title: {
+                display: true,
+                text: '單元名稱',
+                font: {
+                  size: 16
                 }
               },
-              legend: {
-                display: false // 隱藏圖例
+              ticks: {
+                font: {
+                  size: 14
+                },
+                maxRotation: 0,
+                minRotation: 0
               }
             }
+          },
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: ctx => ctx.raw + '%'
+              }
+            },
+            legend: {
+              display: false
+            }
           }
-        });
-      })
-      .catch(error => {
-        progressBar.style.display = 'none';
-        loadingArea.innerHTML = `<span style="color: red;">載入圖表失敗：${error.message}</span>`;
-        console.error(error);
+        }
       });
-  </script>
+    })
+    .catch(error => {
+      progressBar.style.display = 'none';
+      loadingArea.innerHTML = `<span style="color: red;">載入圖表失敗：${error.message}</span>`;
+      console.error(error);
+    });
+</script>
+
+
   <script src="../static/script.js"></script>
 </body>
 </html>
