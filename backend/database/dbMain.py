@@ -885,7 +885,8 @@ def getTopicsForQuestionSelector():
                 "topicID": topic.topicID,
                 "paragraph": topic.title.split(" ")[0].split("-")[0],  # 擷取段落名（如有空白或 dash）
                 "title": ''.join(char for char in topic.title if not char.isdigit()) \
-                            .replace('.', '').replace('-', '').replace('YΔ', 'Y-Δ').strip()
+                            .replace('.', '').replace('-', '').replace('YΔ', 'Y-Δ').strip(),
+                "quesitonCount": session.query(questionsSQL).filter_by(topicID=topic.topicID).count(),
             }
             for topic in topics
         ]
@@ -894,3 +895,4 @@ def getTopicsForQuestionSelector():
         return {"error": str(e)}
     finally:
         session.close()
+
