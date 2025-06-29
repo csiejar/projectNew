@@ -845,3 +845,52 @@ def getAllTopicsTitleWithID():
     finally:
         session.close()
     
+def getSelectedQuestion(topicIDs:list, questionCount:int):
+    try:
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        questions = session.query(questionsSQL).filter(questionsSQL.topicID.in_(topicIDs)).all()
+        if len(questions) < questionCount:
+            return "Error: 選擇的題目數量超過可用題目數量"
+        selectedQuestions = random.sample(questions, questionCount)
+        # 將資料轉換為字典格式
+        selectedQuestions = [
+            {
+                "questionID": question.questionID,
+                "topicID": question.topicID,
+                "question": question.question,
+                "optionA": question.optionA,
+                "optionB": question.optionB,
+                "optionC": question.optionC,
+                "optionD": question.optionD,
+                "image": question.image,
+                "source": question.source,
+            }
+            for question in selectedQuestions
+        ]
+        return selectedQuestions
+    except Exception as e:
+        return f"Error: {str(e)}"
+    finally:
+        session.close()
+
+def getTopicsForQuestionSelector():
+    try:
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        topics = session.query(topicsSQL).all()
+        # 將資料轉換為字典格式
+        topics = [
+            {
+                "topicID": topic.topicID,
+                "paragraph": topic.title.split(" ")[0].split("-")[0],  # 擷取段落名（如有空白或 dash）
+                "title": ''.join(char for char in topic.title if not char.isdigit()) \
+                            .replace('.', '').replace('-', '').replace('YΔ', 'Y-Δ').strip()
+            }
+            for topic in topics
+        ]
+        return topics
+    except Exception as e:
+        return {"error": str(e)}
+    finally:
+        session.close()

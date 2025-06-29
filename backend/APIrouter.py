@@ -335,3 +335,25 @@ async def getUserTopicsCorrectRate(userToken: str = Depends(findTokenFromCookies
             raise HTTPException(status_code=500, detail=str(e))
     else:
         raise HTTPException(status_code=401, detail="Unauthorized")
+
+@router.get("/getSelectedQuestion") # 依照使用者選擇的單元取得問題
+async def getSelectedQuestion(topicIDs: list, questionCount: int):
+    try:
+        if not topicIDs or not questionCount:
+            raise HTTPException(status_code=400, detail="請提供有效的單元ID和問題數量")
+        questions = dbMain.getSelectedQuestion(topicIDs, questionCount)
+        if not questions:
+            raise HTTPException(status_code=404, detail="沒有找到符合條件的問題")
+        return JSONResponse(content={"message":"success","questions":questions}, status_code=200)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@router.get("/getTopicsForQuestionSelector")
+async def getTopicsForQuestionSelector():
+    try:
+        topics = dbMain.getTopicsForQuestionSelector()
+        if not topics:
+            raise HTTPException(status_code=404, detail="沒有找到任何單元")
+        return JSONResponse(content={"message":"success","topics":topics}, status_code=200)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
