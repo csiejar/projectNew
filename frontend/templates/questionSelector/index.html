@@ -115,6 +115,7 @@
   <div class="quiz-container">
     <div>
       <div class="title">題目選擇:</div>
+      <p id="available-question-count" class="text-muted">可出題總數：0 題</p>
       <div class="button-grid" id="question-count-group">
         <button class="quiz-btn" data-value="25">25題</button>
         <button class="quiz-btn" data-value="50">50題</button>
@@ -122,53 +123,126 @@
         <button class="quiz-btn" data-value="100">100題</button>
       </div>
     </div>
-    <div class="chapter-box">
-      <div class="title">第一章:</div>
-      <div class="button-grid" id="chapter-group">
-        <button class="quiz-btn" data-unit="電的特性">電的特性</button>
-        <button class="quiz-btn" data-unit="單位">單位</button>
-        <button class="quiz-btn" data-unit="能量">能量</button>
-        <button class="quiz-btn" data-unit="電荷">電荷</button>
-        <button class="quiz-btn" data-unit="電壓">電壓</button>
-        <button class="quiz-btn" data-unit="電流">電流</button>
-        <button class="quiz-btn" data-unit="功率與效率">功率與效率</button>
-      </div>
-    </div>
+    <div id="chapter-container"></div>
     <div class="text-center">
       <button class="start-btn" onclick="startQuiz()">開始測驗</button>
     </div>
   </div>
 
-  <script>
-    document.querySelectorAll('#question-count-group .quiz-btn').forEach(btn => {
+<script>
+    let availableQuestionCount = 0;
+    const countButtons = document.querySelectorAll('#question-count-group .quiz-btn');
+    countButtons.forEach(btn => {
       btn.addEventListener('click', () => {
-        document.querySelectorAll('#question-count-group .quiz-btn').forEach(b => b.classList.remove('selected'));
+        if (btn.disabled) return;
+        countButtons.forEach(b => b.classList.remove('selected'));
         btn.classList.add('selected');
       });
     });
 
-    document.querySelectorAll('#chapter-group .quiz-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        btn.classList.toggle('selected');
+    fetch('/api/getTopicsForQuestionSelector')
+      .then(res => res.json())
+      .then(data => {
+        if (data.message === 'success') {
+          const chapters = {};
+          let totalQuestions = 0;
+
+          data.topics.forEach(topic => {
+            if (!chapters[topic.paragraph]) chapters[topic.paragraph] = [];
+            chapters[topic.paragraph].push(topic);
+            if (topic.quesitonCount) totalQuestions += topic.quesitonCount;
+          });
+
+          availableQuestionCount = totalQuestions;
+          updateCountButtonsAvailability(totalQuestions);
+          document.getElementById('available-question-count').textContent = `可出題總數：${totalQuestions} 題`;
+
+          const container = document.getElementById('chapter-container');
+          Object.keys(chapters)
+            .sort((a, b) => parseInt(a) - parseInt(b))
+            .forEach(paragraph => {
+              const box = document.createElement('div');
+              box.className = 'chapter-box';
+              const title = document.createElement('div');
+              title.className = 'title';
+              title.textContent = `第${paragraph}章`;
+              const grid = document.createElement('div');
+              grid.className = 'button-grid';
+              chapters[paragraph].forEach(topic => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-btn';
+                btn.dataset.topicid = topic.topicID;
+                btn.textContent = topic.title;
+                btn.addEventListener('click', () => {
+                  btn.classList.toggle('selected');
+                  recalculateAvailableQuestions();
+                });
+                grid.appendChild(btn);
+              });
+              box.appendChild(title);
+              box.appendChild(grid);
+              container.appendChild(box);
+            });
+        }
       });
-    });
+
+    function recalculateAvailableQuestions() {
+      let selectedIDs = Array.from(document.querySelectorAll('[data-topicid].selected')).map(btn => btn.dataset.topicid);
+      fetch('/api/getTopicsForQuestionSelector')
+        .then(res => res.json())
+        .then(data => {
+          let count = 0;
+          data.topics.forEach(t => {
+            if (selectedIDs.includes(t.topicID.toString()) && t.quesitonCount) {
+              count += t.quesitonCount;
+            }
+          });
+          updateCountButtonsAvailability(count);
+          document.getElementById('available-question-count').textContent = `可出題總數：${count} 題`;
+        });
+    }
+
+    function updateCountButtonsAvailability(count) {
+      let maxAvailable = 0;
+      countButtons.forEach(btn => {
+        const value = parseInt(btn.dataset.value);
+        if (value > count) {
+          btn.disabled = true;
+          btn.classList.add('disabled');
+        } else {
+          btn.disabled = false;
+          btn.classList.remove('disabled');
+          if (value > maxAvailable) maxAvailable = value;
+        }
+      });
+
+      const selected = document.querySelector('#question-count-group .quiz-btn.selected');
+      if (!selected || parseInt(selected.dataset.value) > count) {
+        countButtons.forEach(btn => btn.classList.remove('selected'));
+        const fallback = document.querySelector(`#question-count-group .quiz-btn[data-value="${maxAvailable}"]`);
+        if (fallback) fallback.classList.add('selected');
+      }
+    }
 
     function startQuiz() {
       const selectedCountBtn = document.querySelector('#question-count-group .selected');
-      const selectedUnits = Array.from(document.querySelectorAll('#chapter-group .selected')).map(btn => btn.dataset.unit);
+      const selectedTopicIDs = Array.from(document.querySelectorAll('[data-topicid].selected')).map(btn => btn.dataset.topicid);
 
       if (!selectedCountBtn) {
         alert("請選擇題目數量");
         return;
       }
-      if (selectedUnits.length === 0) {
+      if (selectedTopicIDs.length === 0) {
         alert("請選擇至少一個單元");
         return;
       }
       const questionCount = selectedCountBtn.dataset.value;
-      alert(`你選擇了 ${questionCount} 題，單元包含：${selectedUnits.join('、')}`);
+      alert(`開始測驗
+選擇題數：${questionCount}
+選擇單元 ID：${selectedTopicIDs.join(', ')}`);
     }
-  </script>
+</script>
+
 
 
 <!-- Footer -->
