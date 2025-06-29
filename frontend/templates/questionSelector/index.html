@@ -131,6 +131,7 @@
 
 <script>
     let availableQuestionCount = 0;
+    let allTopicsData = []; // 儲存所有主題資料
     const countButtons = document.querySelectorAll('#question-count-group .quiz-btn');
     countButtons.forEach(btn => {
       btn.addEventListener('click', () => {
@@ -144,6 +145,7 @@
       .then(res => res.json())
       .then(data => {
         if (data.message === 'success') {
+          allTopicsData = data.topics; // 儲存所有主題資料
           const chapters = {};
           let totalQuestions = 0;
 
@@ -154,8 +156,8 @@
           });
 
           availableQuestionCount = totalQuestions;
-          updateCountButtonsAvailability(totalQuestions);
-          document.getElementById('available-question-count').textContent = `可出題總數：${totalQuestions} 題`;
+          updateCountButtonsAvailability(0); // 初始設為 0，因為還沒選擇單元
+          document.getElementById('available-question-count').textContent = `可出題總數：0 題`; // 初始顯示 0
 
           const container = document.getElementById('chapter-container');
           Object.keys(chapters)
@@ -188,18 +190,17 @@
 
     function recalculateAvailableQuestions() {
       let selectedIDs = Array.from(document.querySelectorAll('[data-topicid].selected')).map(btn => btn.dataset.topicid);
-      fetch('/api/getTopicsForQuestionSelector')
-        .then(res => res.json())
-        .then(data => {
-          let count = 0;
-          data.topics.forEach(t => {
-            if (selectedIDs.includes(t.topicID.toString()) && t.quesitonCount) {
-              count += t.quesitonCount;
-            }
-          });
-          updateCountButtonsAvailability(count);
-          document.getElementById('available-question-count').textContent = `可出題總數：${count} 題`;
-        });
+      
+      // 直接從儲存的資料計算，不重新呼叫 API
+      let count = 0;
+      allTopicsData.forEach(topic => {
+        if (selectedIDs.includes(topic.topicID.toString()) && topic.quesitonCount) {
+          count += topic.quesitonCount;
+        }
+      });
+      
+      updateCountButtonsAvailability(count);
+      document.getElementById('available-question-count').textContent = `可出題總數：${count} 題`;
     }
 
     function updateCountButtonsAvailability(count) {
@@ -236,10 +237,28 @@
         alert("請選擇至少一個單元");
         return;
       }
-      const questionCount = selectedCountBtn.dataset.value;
-      alert(`開始測驗
-選擇題數：${questionCount}
-選擇單元 ID：${selectedTopicIDs.join(', ')}`);
+      
+      const questionCount = parseInt(selectedCountBtn.dataset.value);
+      const topicIDs = selectedTopicIDs.map(id => parseInt(id)); // 轉換成整數陣列
+      
+      // 準備 URL 參數
+      const params = new URLSearchParams();
+      params.append('topicIDs', JSON.stringify(topicIDs)); // 使用 JSON.stringify 轉換為字串 "[26, 27]"
+      params.append('questionCount', questionCount);
+      
+      // 呼叫 API
+      fetch(`/api/getSelectedQuestion?${params.toString()}`, {
+        method: 'GET',
+        credentials: 'include'
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log("API 回傳內容:", data);
+        // 這裡可以加入後續處理邏輯
+      })
+      .catch(error => {
+        console.error("API 呼叫失敗:", error);
+      });
     }
 </script>
 

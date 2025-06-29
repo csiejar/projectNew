@@ -337,7 +337,10 @@ async def getUserTopicsCorrectRate(userToken: str = Depends(findTokenFromCookies
         raise HTTPException(status_code=401, detail="Unauthorized")
 
 @router.get("/getSelectedQuestion") # 依照使用者選擇的單元取得問題
-async def getSelectedQuestion(topicIDs: list, questionCount: int):
+async def getSelectedQuestion(topicIDs: str, questionCount: int):
+    # 將 topicIDs 轉換為列表
+    topicIDs = topicIDs.strip("[]").split(",") if topicIDs else []
+
     try:
         if not topicIDs or not questionCount:
             raise HTTPException(status_code=400, detail="請提供有效的單元ID和問題數量")
