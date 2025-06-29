@@ -31,3 +31,7 @@ async def userAnswerRecord(request: Request):
 @router.get("/correctRate")  # 回答紀錄頁面
 async def correctRate(request: Request):
     return templates.TemplateResponse("correctRate/index.html", {"request": request})
+
+@router.get("/questionSelector")  # 使用者選擇問題頁面
+async def questionSelector(request: Request):
+    return templates.TemplateResponse("questionSelector/index.html", {"request": request})

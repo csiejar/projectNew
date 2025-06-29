@@ -1,3 +1,15 @@
+// SideBar目的地設定Add commentMore actions
+document.getElementById("questionBankSideBar").addEventListener("click", function () {
+    window.location.href = "/question";
+});
+
+  document.getElementById("mainPageSideBar").addEventListener("click", function () {
+    window.location.href = "/";
+});
+document.getElementById("WrongQuestionBookSideBar").addEventListener("click", function () {
+    window.location.href = "/userAnswerRecord";
+});
+
 document.addEventListener("DOMContentLoaded", function () {
     const menuBtn = document.getElementById("menuBtn");
     const sidebar = document.getElementById("sidebar");
