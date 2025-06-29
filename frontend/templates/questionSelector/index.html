@@ -11,10 +11,59 @@
   <script src="{{ url_for('static', path='/questionSelector/script.js') }}"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
   <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <style>
+    .quiz-container {
+      max-width: 900px;
+      margin: 40px auto;
+      font-family: 'Inter', sans-serif;
+      padding: 0 20px;
+    }
+    .title {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .button-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 10px;
+    }
+    .quiz-btn {
+      background-color: black;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .quiz-btn:hover {
+      background-color: #333;
+    }
+    .quiz-btn.selected {
+      background-color: #007BFF;
+    }
+    .chapter-box {
+      background-color: #f5f5f5;
+      border-radius: 12px;
+      padding: 30px;
+      margin-top: 30px;
+    }
+    .start-btn {
+      margin-top: 40px;
+      background-color: #28a745;
+      color: white;
+      font-size: 20px;
+      padding: 14px 36px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
 </head>
 
 <body>
@@ -40,8 +89,7 @@
       <button class="btn btn-outline-dark" id="google-translate">
         <i class="bi bi-globe"></i>
       </button>
-      <div id="google_translate_element"
-        style="display: none; position: absolute; top: 80px; right: 0px; z-index: 10000;"></div>
+      <div id="google_translate_element" style="display: none; position: absolute; top: 80px; right: 0px; z-index: 10000;"></div>
       <script type="text/javascript">
         document.getElementById('google_translate_element').style.display = 'none';
         function googleTranslateElementInit() {
@@ -56,74 +104,71 @@
           translateElement.style.display = translateElement.style.display === 'none' ? 'block' : 'none';
         });
       </script>
-      <script type="text/javascript"
-        src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+      <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
       <button class="btn btn-outline-dark" id="userBtn">
         <i class="bi bi-person-circle"></i>
       </button>
     </div>
   </header>
-    
-</body>
 
-</html>
-<!-- 引入 Bootstrap -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- 登入彈出視窗（可拖動） -->
-<div id="loginModal" class="modal">
-  <div class="modal-content">
-    <!-- Google 產生的登入按鈕 -->
-
-
-    <!-- 登出按鈕 -->
-    <button id="logoutBtn" class="logout-button" style="display: none;">登出</button>
+  <!-- 題目選擇區塊 -->
+  <div class="quiz-container">
+    <div>
+      <div class="title">題目選擇:</div>
+      <div class="button-grid" id="question-count-group">
+        <button class="quiz-btn" data-value="25">25題</button>
+        <button class="quiz-btn" data-value="50">50題</button>
+        <button class="quiz-btn" data-value="75">75題</button>
+        <button class="quiz-btn" data-value="100">100題</button>
+      </div>
+    </div>
+    <div class="chapter-box">
+      <div class="title">第一章:</div>
+      <div class="button-grid" id="chapter-group">
+        <button class="quiz-btn" data-unit="電的特性">電的特性</button>
+        <button class="quiz-btn" data-unit="單位">單位</button>
+        <button class="quiz-btn" data-unit="能量">能量</button>
+        <button class="quiz-btn" data-unit="電荷">電荷</button>
+        <button class="quiz-btn" data-unit="電壓">電壓</button>
+        <button class="quiz-btn" data-unit="電流">電流</button>
+        <button class="quiz-btn" data-unit="功率與效率">功率與效率</button>
+      </div>
+    </div>
+    <div class="text-center">
+      <button class="start-btn" onclick="startQuiz()">開始測驗</button>
+    </div>
   </div>
-</div>
 
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
+  <script>
+    document.querySelectorAll('#question-count-group .quiz-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#question-count-group .quiz-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+      });
+    });
 
-    // 檢查 URL 是否包含刷新標記
-    const urlParams = new URLSearchParams(window.location.search);
-    const refreshed = urlParams.get('refreshed');
+    document.querySelectorAll('#chapter-group .quiz-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.classList.toggle('selected');
+      });
+    });
 
-    if (refreshed === 'true') {
-      console.log("已刷新過頁面，執行檢查登入狀態");
-      checkAuthStatus(); // 檢查登入狀態
-    } else {
-      checkAuthStatus(); // 初始化檢查登入狀態
+    function startQuiz() {
+      const selectedCountBtn = document.querySelector('#question-count-group .selected');
+      const selectedUnits = Array.from(document.querySelectorAll('#chapter-group .selected')).map(btn => btn.dataset.unit);
+
+      if (!selectedCountBtn) {
+        alert("請選擇題目數量");
+        return;
+      }
+      if (selectedUnits.length === 0) {
+        alert("請選擇至少一個單元");
+        return;
+      }
+      const questionCount = selectedCountBtn.dataset.value;
+      alert(`你選擇了 ${questionCount} 題，單元包含：${selectedUnits.join('、')}`);
     }
-
-    // 統一檢查登入狀態的函數
-    function checkAuthStatus() {
-      fetch('/api/authUser', { method: 'GET', credentials: 'include' })
-        .then(response => response.json())
-        .then(data => {
-          if (data.message === "已登入") {
-            console.log("用戶資料:", data.userData);
-          } else {
-            ;
-            console.log("用戶未登入");
-          }
-        })
-        .catch(error => console.error('Error fetching authUser:', error));
-    }
-
-    function logout() {
-      fetch('/api/logout', { method: 'POST', credentials: 'include' })
-        .then(response => response.json())
-        .then(result => {
-          if (result.message === "登出成功") {
-            window.location.reload(); // 刷新頁面
-          }
-        })
-        .catch(error => console.error('登出失敗:', error));
-    }
-  });
-</script>
-
+  </script>
 
 
 <!-- Footer -->
