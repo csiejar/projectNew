@@ -185,16 +185,30 @@ function addQuestionForm() {
     // 取得 Modal
     let modal = document.getElementById("addModal");
 
-    // 清空 Modal 內容
+    // 清空 Modal 內容並重新啟用所有輸入框
     document.getElementById("addQuestion").value = "";
+    document.getElementById("addQuestion").disabled = false;
+    
     document.getElementById("addOptionA").value = "";
+    document.getElementById("addOptionA").disabled = false;
+    
     document.getElementById("addOptionB").value = "";
+    document.getElementById("addOptionB").disabled = false;
+    
     document.getElementById("addOptionC").value = "";
+    document.getElementById("addOptionC").disabled = false;
+    
     document.getElementById("addOptionD").value = "";
+    document.getElementById("addOptionD").disabled = false;
+    
     document.getElementById("addAnswer").value = "";
     document.getElementById("addImage").value = "";
     document.getElementById("addSource").value = "";
     document.getElementById("addTopicID").innerHTML = ""; // 清空單元選項
+    
+    // 清空檔案輸入
+    document.getElementById("addFileInput").value = "";
+    uploadedFile = null;
 
     // 顯示 Modal
     modal.style.display = "block";
@@ -232,6 +246,13 @@ async function saveAdd() {
     let image = document.getElementById("addImage").value;
     let source = document.getElementById("addSource").value;
     let files = document.getElementById("addFileInput").files;
+    
+    // 檢查是否已選擇答案
+    if (!answer || answer === "") {
+        alert("請選擇正確答案！");
+        return;
+    }
+    
     console.log(files);
 
     if (files.length > 0) {
@@ -247,9 +268,6 @@ async function saveAdd() {
         })
             .then((response) => {
                 if (response.ok) {
-                    alert("檔案上傳成功！");
-                    // 上傳成功後，將檔案資訊傳給 Google Drive
-
                     return fetch("/uploadToDrive", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
@@ -260,7 +278,7 @@ async function saveAdd() {
                     })
                         .then((response) => {
                             if (response.ok) {
-                                alert("檔案上傳到 Google Drive 成功！");
+                                alert("檔案上傳成功！");
                                 response.json().then((data) => {
                                     url = data.url; // 更新 image 變數為 Google Drive 的檔案 URL
                                     // TODO 新增題目並上傳到資料庫
@@ -365,6 +383,22 @@ document
         uploadedFile = event.target.files[0];
         if (uploadedFile) {
             alert("已選擇檔案：" + uploadedFile.name);
+            
+            // 禁用輸入框並設置為"詳如照片"
+            document.getElementById("addQuestion").value = "詳如照片";
+            document.getElementById("addQuestion").disabled = true;
+            
+            document.getElementById("addOptionA").value = "詳如照片";
+            document.getElementById("addOptionA").disabled = true;
+            
+            document.getElementById("addOptionB").value = "詳如照片";
+            document.getElementById("addOptionB").disabled = true;
+            
+            document.getElementById("addOptionC").value = "詳如照片";
+            document.getElementById("addOptionC").disabled = true;
+            
+            document.getElementById("addOptionD").value = "詳如照片";
+            document.getElementById("addOptionD").disabled = true;
         }
     });
 

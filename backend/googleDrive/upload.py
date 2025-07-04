@@ -29,6 +29,9 @@ async def uploadToDrive(request: UploadRequest):
     from backend.googleDrive.drive import uploadQuestionImage
     try:
         url = uploadQuestionImage(request.topicID,questionID,imagePath)
-        return JSONResponse(content={"url": url, "tempName":questionID}, status_code=200)
+        if url["status"] == "success":
+            return JSONResponse(status_code=200, content={"message": url["message"], "url": f"https://hank.ezborrow.tw/img/{request.topicID}/{questionID}.png"})
+        else:
+            raise HTTPException(status_code=500, detail=url["message"])
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

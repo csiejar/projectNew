@@ -10,3 +10,4 @@ fastapi-sessions == 0.3.2
 dotenv == 0.9.9
 httpx == 0.28.1
 google-api-python-client == 2.169.0
+paramiko == 3.5.1
