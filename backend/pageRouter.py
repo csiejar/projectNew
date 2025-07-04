@@ -1,5 +1,7 @@
 from fastapi import APIRouter, Request
 from fastapi.templating import Jinja2Templates
+from fastapi.responses import FileResponse
+import os
 
 router = APIRouter()
 templates = Jinja2Templates(directory="./frontend/templates")
@@ -35,3 +37,10 @@ async def correctRate(request: Request):
 @router.get("/questionSelector")  # 使用者選擇問題頁面
 async def questionSelector(request: Request):
     return templates.TemplateResponse("questionSelector/index.html", {"request": request})
+
+@router.get("/img/{img_path:path}")  # 圖片路由，支援子資料夾
+async def img(img_path: str):
+    img_full_path = os.path.join("img", img_path)
+    if not os.path.isfile(img_full_path):
+        return {"error": "Image not found"}
+    return FileResponse(img_full_path)
