@@ -1,6 +1,6 @@
 // SideBar目的地設定Add commentMore actions
 document.getElementById("questionBankSideBar").addEventListener("click", function () {
-    window.location.href = "/question";
+    window.location.href = "/questionSelector";
 });
 
   document.getElementById("mainPageSideBar").addEventListener("click", function () {
@@ -8,6 +8,9 @@ document.getElementById("questionBankSideBar").addEventListener("click", functio
 });
 document.getElementById("WrongQuestionBookSideBar").addEventListener("click", function () {
     window.location.href = "/userAnswerRecord";
+});
+document.getElementById("demoTestSideBar").addEventListener("click", function () {
+    window.location.href = "/question";
 });
 
 document.addEventListener("DOMContentLoaded", function () {

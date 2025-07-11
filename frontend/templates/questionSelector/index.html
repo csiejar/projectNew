@@ -254,6 +254,8 @@
       .then(response => response.json())
       .then(data => {
         console.log("API 回傳內容:", data);
+        localStorage.setItem('questionData', JSON.stringify(data));
+        window.location.href = '/question';
         // 這裡可以加入後續處理邏輯
       })
       .catch(error => {

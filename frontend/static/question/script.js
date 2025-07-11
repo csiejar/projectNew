@@ -128,6 +128,24 @@ function loadUserAnswer() {
 }
 
 function getQuestions() {
+    // 優先檢查 sessionStorage 中是否有選擇的題目
+    const selectedQuestions = sessionStorage.getItem('selectedQuestions');
+    
+    if (selectedQuestions) {
+        try {
+            questions = JSON.parse(selectedQuestions);
+            // 清除 sessionStorage 中的題目資料，避免重複使用
+            sessionStorage.removeItem('selectedQuestions');
+            displayQuestion(currentIndex);
+            return;
+        } catch (error) {
+            console.error('解析 sessionStorage 中的題目資料失敗:', error);
+            // 如果解析失敗，清除資料並繼續使用預設 API
+            sessionStorage.removeItem('selectedQuestions');
+        }
+    }
+    
+    // 如果沒有選擇的題目或解析失敗，使用預設 API
     fetch("/api/getQuestionsForQuestionPage")
         .then(res => res.json())
         .then(data => {
@@ -145,7 +163,16 @@ function checkAuthStatus() {
         .then(res => res.json())
         .then(data => {
             if (data.message === "已登入") {
-                getQuestions();
+                if (localStorage.getItem('questionData')) {
+                    var storedQuestions = JSON.parse(localStorage.getItem('questionData')).questions;
+                }
+                if (storedQuestions) {
+                    questions = storedQuestions;
+                    localStorage.removeItem('questionData'); // 清除 localStorage 中的題目資料
+                    displayQuestion(currentIndex);
+                } else {
+                    getQuestions();
+                }
             } else {
                 alert("請先登入！");
                 window.location.href = "/";
