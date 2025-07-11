@@ -30,7 +30,7 @@ async def uploadToDrive(request: UploadRequest):
     try:
         url = uploadQuestionImage(request.topicID,questionID,imagePath)
         if url["status"] == "success":
-            return JSONResponse(status_code=200, content={"message": url["message"], "url": f"https://hank.ezborrow.tw/img/{request.topicID}/{questionID}.png"})
+            return JSONResponse(status_code=200, content={"message": url["message"], "url": f"https://hank.ezborrow.tw/img/{request.topicID}/{questionID}"})
         else:
             raise HTTPException(status_code=500, detail=url["message"])
     except Exception as e:

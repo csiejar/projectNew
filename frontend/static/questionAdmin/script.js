@@ -252,10 +252,36 @@ async function saveAdd() {
         alert("請選擇正確答案！");
         return;
     }
-    
-    console.log(files);
+    if (!topicID || topicID === "") {
+        alert("請選擇單元！");
+        return;
+    }
+
+    if (!question || question === "") {
+        alert("請輸入題目！");
+        return;
+    }
+    if (!optionA || optionA === "") {
+        alert("請輸入選項 A！");
+        return;
+    }
+    if (!optionB || optionB === "") {
+        alert("請輸入選項 B！");
+        return;
+    }
+    if (!optionC || optionC === "") {
+        alert("請輸入選項 C！");
+        return;
+    }
+    if (!optionD || optionD === "") {
+        alert("請輸入選項 D！");
+        return;
+    }
 
     if (files.length > 0) {
+        alert("正在上傳檔案，請稍候...");
+        let saveBtn = document.getElementById("saveAddBtn");
+        saveBtn.disabled = true; // 禁用按鈕，防止重複
         //有上傳檔案
         // 先上傳檔案到伺服器
         let uploadedFile = files[0];
@@ -278,7 +304,6 @@ async function saveAdd() {
                     })
                         .then((response) => {
                             if (response.ok) {
-                                alert("檔案上傳成功！");
                                 response.json().then((data) => {
                                     url = data.url; // 更新 image 變數為 Google Drive 的檔案 URL
                                     // TODO 新增題目並上傳到資料庫
@@ -316,12 +341,12 @@ async function saveAdd() {
                                         );
                                 });
                             } else {
-                                alert("檔案上傳到 Google Drive 失敗！");
+                                alert("檔案上傳到 專題室電腦 失敗！");
                             }
                         })
                         .catch((error) =>
                             console.error(
-                                "檔案上傳到 Google Drive 失敗:",
+                                "檔案上傳到 專題室電腦 失敗！",
                                 error
                             )
                         );

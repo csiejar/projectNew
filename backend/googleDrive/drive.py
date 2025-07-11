@@ -12,10 +12,9 @@ sshIp = os.getenv('SSHIP')
 
 def uploadQuestionImage(topicID,questionID,imagePath):
     local_path = imagePath
-    remote_path = f'C:\\Users\\Ga\\Desktop\\projectNew\\img\\{topicID}\\{questionID}.png'
+    remote_path = f'C:\\Users\\Ga\\Desktop\\projectNew\\img\\{topicID}\\{questionID}'
     print(f"local_path: {local_path}")
     print(f"remote_path: {remote_path}")
-
 
     try:
         # 建立 SSH 連線
@@ -38,6 +37,7 @@ def uploadQuestionImage(topicID,questionID,imagePath):
 
         sftp.close()
         client.close()
+        os.remove(local_path)  # 上傳後刪除本地檔案
         return {"status": "success", "message": f"成功上傳 {local_path} 到遠端 {remote_path_sftp}"}
 
     except Exception as e:
