@@ -96,6 +96,9 @@ function displayQuestion(index) {
 
     const q = questions[currentIndex];
     document.querySelector(".question-text").textContent = q.question;
+    if (q.optionA == "詳如照片") {
+        document.getElementById("optionText").style = "display: none;";
+    }
 
     document.getElementById("optionText").innerHTML =
         "A. " + q.optionA + "<br>" +

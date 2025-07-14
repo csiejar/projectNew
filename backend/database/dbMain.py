@@ -69,7 +69,7 @@ def getAllTopics():
                 "topicID": topic.topicID,
                 "title": topic.title,
                 "content": topic.content,
-                "link": topic.link,
+                "link": f"/questionSelector?topicID={topic.topicID}",
                 "img": topic.img,
             }
             for topic in topics

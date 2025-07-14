@@ -185,6 +185,11 @@
               box.appendChild(grid);
               container.appendChild(box);
             });
+          
+          // 處理 URL 參數自動選取單元
+          setTimeout(() => {
+            processUrlParameters();
+          }, 100); // 延遲一點確保 DOM 已完全生成
         }
       });
 
@@ -222,6 +227,61 @@
         countButtons.forEach(btn => btn.classList.remove('selected'));
         const fallback = document.querySelector(`#question-count-group .quiz-btn[data-value="${maxAvailable}"]`);
         if (fallback) fallback.classList.add('selected');
+      }
+    }
+
+    function processUrlParameters() {
+      const urlParams = new URLSearchParams(window.location.search);
+      
+      // 支援多種參數格式：
+      // ?topicId=26 (單個)
+      // ?topicIds=26,27,28 (多個，逗號分隔)
+      // ?topics=[26,27,28] (JSON 格式)
+      
+      let topicIds = [];
+      
+      // 檢查單個 topicId
+      const singleTopicId = urlParams.get('topicID');
+      if (singleTopicId) {
+        topicIds.push(parseInt(singleTopicId));
+      }
+      
+      // 檢查多個 topicIds (逗號分隔)
+      const multipleTopicIds = urlParams.get('topicIDs');
+      if (multipleTopicIds) {
+        topicIds = multipleTopicIds.split(',').map(id => parseInt(id.trim()));
+      }
+      
+      // 檢查 JSON 格式
+      const jsonTopics = urlParams.get('topics');
+      if (jsonTopics) {
+        try {
+          topicIds = JSON.parse(jsonTopics);
+        } catch (error) {
+          console.error('無法解析 topics 參數:', error);
+        }
+      }
+      
+      // 如果有找到 topicIds，自動選取對應的單元按鈕
+      if (topicIds.length > 0) {
+        console.log('從 URL 參數自動選取單元:', topicIds);
+        
+        topicIds.forEach(topicId => {
+          const button = document.querySelector(`[data-topicid="${topicId}"]`);
+          if (button) {
+            button.classList.add('selected');
+            console.log(`已選取單元 ${topicId}: ${button.textContent}`);
+          } else {
+            console.warn(`找不到 topicID ${topicId} 對應的按鈕`);
+          }
+        });
+        
+        // 重新計算可用題目數量
+        recalculateAvailableQuestions();
+        
+        // 清除 URL 參數（可選）
+        // const newUrl = window.location.pathname;
+        // window.history.replaceState({}, document.title, newUrl);
       }
     }
 

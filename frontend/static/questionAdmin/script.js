@@ -314,7 +314,7 @@ async function saveAdd() {
                                         },
                                         body: JSON.stringify({
                                             topicID: Number(topicID), // 確保是數字
-                                            question: "詳如照片",
+                                            question: "如下圖 請照圖片中描述回答",
                                             optionA: "詳如照片",
                                             optionB: "詳如照片",
                                             optionC: "詳如照片",
@@ -410,7 +410,7 @@ document
             alert("已選擇檔案：" + uploadedFile.name);
             
             // 禁用輸入框並設置為"詳如照片"
-            document.getElementById("addQuestion").value = "詳如照片";
+            document.getElementById("addQuestion").value = "如下圖 請照圖片中描述回答";
             document.getElementById("addQuestion").disabled = true;
             
             document.getElementById("addOptionA").value = "詳如照片";

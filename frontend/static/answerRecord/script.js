@@ -34,10 +34,18 @@ function displayQuestion(index) {
 
     questionText.textContent = q.question;
     questionID.textContent = q.questionID;
+    if (q.optionA === "詳如照片") {
+        optionA.textContent = "A. ";
+        optionB.textContent = "B. ";
+        optionC.textContent = "C. ";
+        optionD.textContent = "D. ";
+    }
+    else {
     optionA.textContent = "A. " + q.optionA;
     optionB.textContent = "B. " + q.optionB;
     optionC.textContent = "C. " + q.optionC;
     optionD.textContent = "D. " + q.optionD;
+}
 
     // 顯示圖片或隱藏
     if (q.image) {
