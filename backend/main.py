@@ -19,7 +19,7 @@ def install_requirements():
         except subprocess.CalledProcessError as e:
             print(f"⚠️ 安裝 `requirements.txt` 失敗：{e}")
             print("請手動執行 `pip install -r requirements.txt`")
-    else:
+    else:   
         print("⚠️ 找不到 requirements.txt 檔案")
     
     # 標記已執行過

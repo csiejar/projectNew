@@ -1,65 +1,68 @@
-/* Sidebar */
+/* Sidebar - 滑出動畫效果 */
 .sidebar {
-    position: fixed; /* 固定在畫面左側 */
-    top: 0; /* 讓 Sidebar 從最頂端開始 */
-    left: 0;
-    width: 250px; /* 展開時的寬度 */
-    height: 100vh; /* 讓 Sidebar 滿版高度 */
+    position: fixed;
+    top: 0;
+    left: -250px; /* 初始隱藏在左邊 */
+    width: 250px;
+    height: 100vh;
     background: #e9e6e6;
-    color: rgb(0, 0, 0);
-    transition: width 0.3s ease-in-out;
+    color: #000;
+    transition: left 0.3s ease-in-out;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     align-items: center;
-    z-index: 10; /* 確保 Sidebar 位於內容區域的上方 */
+    z-index: 10;
 }
 
-/* 收合時 Sidebar */
+/* Sidebar 展開狀態 */
+.sidebar:not(.collapsed) {
+    left: 0;
+}
+
+/* Sidebar 收合狀態（這是預設） */
 .sidebar.collapsed {
-    width: 60px; /* 只留 LOGO 大小 */
+    left: -250px;
 }
 
-/* Sidebar - Logo */
+/* Sidebar - Logo 區域 */
 .sidebar-logo {
-    position: relative; /* 使 LOGO 可以相對定位 */
-    width: 100%; /* 讓 Logo 置中 */
+    width: 100%;
     text-align: center;
-    padding-top: 80px; /* 調整 LOGO 距離上方的距離 */
-    margin-bottom: 20px; /* 增加 LOGO 和選單按鈕之間的間距 */
+    padding-top: 80px;
+    margin-bottom: 20px;
 }
 
-/* LOGO 位置及大小 */
 .sidebar-logo img {
-    width: 40px; /* LOGO 保持適中大小 */
+    width: 40px;
     height: auto;
     transition: width 0.3s ease-in-out;
 }
 
-/* Sidebar 展開時 LOGO 保持大小 */
+/* 展開時 Logo 大小維持 */
 .sidebar:not(.collapsed) .sidebar-logo img {
     width: 40px;
 }
 
-/* Sidebar 切換按鈕 */
+/* 開關按鈕 */
 .toggle-btn {
-    position: fixed; /* 固定按鈕位置 */
-    top: 10px; /* 設定距離頂部的距離 */
-    left: 10px; /* 設定距離左邊的距離 */
+    position: fixed;
+    top: 10px;
+    left: 10px;
     background: #ffffff;
-    color: rgb(0, 0, 0);
+    color: #000;
     border: none;
     padding: 10px;
     cursor: pointer;
-    z-index: 999; /* 確保按鈕在最上層 */
+    z-index: 999;
 }
 
-/* 側邊欄選單 */
+/* 選單區 */
 .sidebar ul {
     list-style: none;
     padding: 0;
     width: 100%;
-    margin-top: 0; /* 確保選單與 LOGO 之間沒有額外的間距 */
+    margin-top: 0;
 }
 
 .sidebar ul li {
@@ -73,24 +76,8 @@
     font-size: 24px;
 }
 
-/* 滑鼠懸停時變色 */
 .sidebar ul li:hover {
     background: #858585;
-}
-
-/* 收合時隱藏文字，保留 icon */
-.sidebar.collapsed ul li {
-    text-align: center;
-}
-
-.sidebar.collapsed ul li i {
-    display: block;
-    margin: auto;
-}
-
-/* 隱藏收合後的選單名稱 */
-.sidebar.collapsed ul li span {
-    display: none;
 }
 
 /* 主內容區域 */

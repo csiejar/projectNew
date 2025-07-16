@@ -13,6 +13,10 @@ document.getElementById("demoTestSideBar").addEventListener("click", function ()
     window.location.href = "/question";
 });
 
+document.getElementById("correctRateSideBar").addEventListener("click", function () {
+    window.location.href = "/correctRate";
+});
+
 document.addEventListener("DOMContentLoaded", function () {
     const menuBtn = document.getElementById("menuBtn");
     const sidebar = document.getElementById("sidebar");
