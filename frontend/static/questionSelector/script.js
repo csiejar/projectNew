@@ -13,5 +13,5 @@ function checkAuthStatus() {
 }
 
 document.addEventListener("DOMContentLoaded", async function () {
-    // checkAuthStatus(); // 檢查登入狀態
+    checkAuthStatus(); // 檢查登入狀態
 });

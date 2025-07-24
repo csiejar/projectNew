@@ -46,6 +46,29 @@
       opacity: 0;
     }
 
+    .sidebar i {
+      font-size: 20px;
+      min-width: 20px;
+    }
+
+    .sidebar-logo {
+      text-align: center;
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+      margin-bottom: 10px;
+    }
+
+    .sidebar-logo img {
+      width: 30px;
+      height: 30px;
+      object-fit: contain;
+    }
+
+    .sidebar.closed .sidebar-logo img {
+      width: 30px;
+      height: 30px;
+    }
+
     .toggle-button {
       position: fixed;
       top: 15px;

@@ -1,8 +1,3 @@
-
-function toggleSidebar() {
-    document.getElementById('sidebar').classList.toggle('collapsed');
-}
-
 function handleCredentialResponse(response) {
     // 發送 token 到後端驗證
     fetch('/api/googleLogin', {
