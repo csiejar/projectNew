@@ -1,99 +1,91 @@
 /* Sidebar */
 .sidebar {
-    position: fixed; /* 固定在畫面左側 */
-    top: 0; /* 讓 Sidebar 從最頂端開始 */
-    left: 0;
-    width: 250px; /* 展開時的寬度 */
-    height: 100vh; /* 讓 Sidebar 滿版高度 */
-    background: #e9e6e6;
-    color: rgb(0, 0, 0);
-    transition: width 0.3s ease-in-out;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    z-index: 10; /* 確保 Sidebar 位於內容區域的上方 */
-}
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: 240px;
+      background-color: white;
+      color: black;
+      transition: width 0.3s ease;
+      overflow: hidden;
+      padding-top: 60px;
+      z-index: 1000;
+      border-right: 1px solid #ccc;
+    }
 
-/* 收合時 Sidebar */
-.sidebar.collapsed {
-    width: 60px; /* 只留 LOGO 大小 */
-}
+    .sidebar.closed {
+      width: 60px;
+    }
 
-/* Sidebar - Logo */
-.sidebar-logo {
-    position: relative; /* 使 LOGO 可以相對定位 */
-    width: 100%; /* 讓 Logo 置中 */
-    text-align: center;
-    padding-top: 80px; /* 調整 LOGO 距離上方的距離 */
-    margin-bottom: 20px; /* 增加 LOGO 和選單按鈕之間的間距 */
-}
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
 
-/* LOGO 位置及大小 */
-.sidebar-logo img {
-    width: 40px; /* LOGO 保持適中大小 */
-    height: auto;
-    transition: width 0.3s ease-in-out;
-}
+    .sidebar li {
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      color: black;
+    }
 
-/* Sidebar 展開時 LOGO 保持大小 */
-.sidebar:not(.collapsed) .sidebar-logo img {
-    width: 40px;
-}
+    .sidebar li:hover {
+      background-color: #eee;
+    }
 
-/* Sidebar 切換按鈕 */
-.toggle-btn {
-    position: fixed; /* 固定按鈕位置 */
-    top: 10px; /* 設定距離頂部的距離 */
-    left: 10px; /* 設定距離左邊的距離 */
-    background: #ffffff;
-    color: rgb(0, 0, 0);
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    z-index: 999; /* 確保按鈕在最上層 */
-}
+    .sidebar .text {
+      transition: opacity 0.3s;
+      white-space: nowrap;
+    }
 
-/* 側邊欄選單 */
-.sidebar ul {
-    list-style: none;
-    padding: 0;
-    width: 100%;
-    margin-top: 0; /* 確保選單與 LOGO 之間沒有額外的間距 */
-}
+    .sidebar.closed .text {
+      opacity: 0;
+    }
 
-.sidebar ul li {
-    padding: 15px;
-    text-align: center;
-    cursor: pointer;
-    transition: background 0.3s;
-}
+    .toggle-button {
+      position: fixed;
+      top: 15px;
+      left: 15px;  /* 預設位置 */
+      width: 30px;
+      height: 24px;
+      cursor: pointer;
+      z-index: 1101;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: left 0.3s ease;
+    }
 
-.sidebar ul li i {
-    font-size: 24px;
-}
+    .toggle-button.open {
+      left: 200px;  /* sidebar 展開時移到右邊 */
+    }
 
-/* 滑鼠懸停時變色 */
-.sidebar ul li:hover {
-    background: #858585;
-}
+    .bar {
+      height: 4px;
+      width: 100%;
+      background-color: black;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
 
-/* 收合時隱藏文字，保留 icon */
-.sidebar.collapsed ul li {
-    text-align: center;
-}
+    .toggle-button.open .top {
+      transform: translateY(10px) rotate(45deg);
+      transform-origin: center;
+    }
 
-.sidebar.collapsed ul li i {
-    display: block;
-    margin: auto;
-}
+    .toggle-button.open .middle {
+      opacity: 0;
+    }
 
-/* 隱藏收合後的選單名稱 */
-.sidebar.collapsed ul li span {
-    display: none;
-}
+    .toggle-button.open .bottom {
+      transform: translateY(-10px) rotate(-45deg);
+      transform-origin: center;
+    }
 
-/* 主內容區域 */
 .main-content {
     margin-left: 250px; /* 讓內容區域不被 Sidebar 擋住 */
     padding: 20px;
@@ -267,3 +259,6 @@
 .fade-out {
     animation: fadeOut 0.3s ease;
 }
+
+
+

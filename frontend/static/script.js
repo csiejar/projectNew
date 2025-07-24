@@ -12,27 +12,13 @@ document.getElementById("WrongQuestionBookSideBar").addEventListener("click", fu
 document.getElementById("demoTestSideBar").addEventListener("click", function () {
     window.location.href = "/question";
 });
+const sidebar = document.getElementById('sidebar');
+const toggle = document.getElementById('toggleButton');
 
-document.addEventListener("DOMContentLoaded", function () {
-    const menuBtn = document.getElementById("menuBtn");
-    const sidebar = document.getElementById("sidebar");
-
-    // 點擊按鈕開啟 Sidebar
-    menuBtn.addEventListener("click", function () {
-        sidebar.classList.add("show"); // 添加 show 類別
-    });    
-
-    // 點擊側邊欄外部時關閉
-    document.addEventListener("click", function (event) {
-        if (!sidebar.contains(event.target) && !menuBtn.contains(event.target)) {
-            sidebar.classList.remove("show");
-        }
+toggle.addEventListener('click', () => {
+sidebar.classList.toggle('closed');
+toggle.classList.toggle('open');
     });
-});
-
-function toggleSidebar() {
-    document.getElementById('sidebar').classList.toggle('collapsed');
-}
 
 function handleCredentialResponse(response) {
     // 發送 token 到後端驗證
