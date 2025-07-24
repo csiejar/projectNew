@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sidebar Demo</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background-color: #f0f0f0;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: 240px;
+      background-color: white;
+      color: black;
+      transition: width 0.3s ease;
+      overflow: hidden;
+      padding-top: 60px;
+      z-index: 1000;
+      border-right: 1px solid #ccc;
+    }
+
+    .sidebar.closed {
+      width: 60px;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .sidebar li {
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      color: black;
+    }
+
+    .sidebar li:hover {
+      background-color: #eee;
+    }
+
+    .sidebar .text {
+      transition: opacity 0.3s;
+      white-space: nowrap;
+    }
+
+    .sidebar.closed .text {
+      opacity: 0;
+    }
+
+    .toggle-button {
+      position: fixed;
+      top: 15px;
+      left: 15px;  /* 預設位置 */
+      width: 30px;
+      height: 24px;
+      cursor: pointer;
+      z-index: 1101;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: left 0.3s ease;
+    }
+
+    .toggle-button.open {
+      left: 200px;  /* sidebar 展開時移到右邊 */
+    }
+
+    .bar {
+      height: 4px;
+      width: 100%;
+      background-color: black;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .toggle-button.open .top {
+      transform: translateY(10px) rotate(45deg);
+      transform-origin: center;
+    }
+
+    .toggle-button.open .middle {
+      opacity: 0;
+    }
+
+    .toggle-button.open .bottom {
+      transform: translateY(-10px) rotate(-45deg);
+      transform-origin: center;
+    }
+  </style>
+</head>
+<body>
+    <div class="sidebar closed" id="sidebar">
+    <ul>
+      <li><i class="bi bi-house"></i> <span class="text">首頁</span></li>
+      <li><i class="bi bi-book"></i> <span class="text">題庫</span></li>
+      <li><i class="bi bi-pencil"></i> <span class="text">模擬測驗</span></li>
+      <li><i class="bi bi-journal-x"></i> <span class="text">錯題本</span></li>
+    </ul>
+  </div>
+
+  <div class="toggle-button" id="toggleButton">
+    <div class="bar top"></div>
+    <div class="bar middle"></div>
+    <div class="bar bottom"></div>
+  </div>
+
+  <script>
+    const sidebar = document.getElementById('sidebar');
+    const toggle = document.getElementById('toggleButton');
+
+    toggle.addEventListener('click', () => {
+      sidebar.classList.toggle('closed');
+      toggle.classList.toggle('open');
+    });
+  </script>
+</body>
+</html>
