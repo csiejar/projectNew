@@ -238,6 +238,13 @@
     background-color: #555;
 }
 
+/* 單獨登出按鈕樣式 */
+.button.logout-only {
+    padding: 12px 24px;
+    font-size: 14px;
+    margin-top: 8px;
+}
+
 /* 按鈕群組 */
 .button-group {
     display: flex;

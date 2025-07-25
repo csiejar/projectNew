@@ -93,8 +93,6 @@
             document.getElementById("userAvatar").src = "../static/img/default-avatar.png";
             document.getElementById("userName").textContent = "您尚未登入";
             document.getElementById("userEmail").textContent = "登入後即顯示";
-            document.getElementById("manageAccountBtn").style.display = "none";
-            document.getElementById("addAccountBtn").style.display = "none";
             document.getElementById("logoutFromCard").style.display = "none";
             userInfoOverlay.style.display = "flex";
           }
@@ -271,11 +269,7 @@
         data-callback="handleCredentialResponse" data-auto_select="true">
       </div>
       <div id="loginBtn" class="g_id_signin" data-type="standard"></div>
-    <button class="button" id="manageAccountBtn">管理帳戶</button>
-    <div class="button-group">
-      <button class="button" id="addAccountBtn">新增帳戶</button>
-      <button class="button" id="logoutFromCard">登出帳戶</button>
-    </div>
+    <button class="button logout-only" id="logoutFromCard">登出帳戶</button>
   </div>
 </div>
 
@@ -308,8 +302,6 @@
             document.getElementById("userAvatar").src = "../static/img/default-avatar.png";
             document.getElementById("userName").textContent = "您尚未登入";
             document.getElementById("userEmail").textContent = "登入後即顯示";
-            document.getElementById("manageAccountBtn").style.display = "none";
-            document.getElementById("addAccountBtn").style.display = "none";
             document.getElementById("logoutFromCard").style.display = "none";
             userInfoOverlay.style.display = "flex";
           }
@@ -339,16 +331,6 @@
 
     // 登出按鈕
     document.getElementById("logoutFromCard").addEventListener("click", logout);
-
-    // 新增帳戶事件處理
-    document.getElementById("addAccountBtn").addEventListener("click", function () {
-      window.location.href = "/addAccount";
-    });
-
-    // 管理帳戶事件處理
-    document.getElementById("manageAccountBtn").addEventListener("click", function () {
-      window.location.href = "/manageAccount";
-    });
 
     // ESC 鍵關閉彈窗
     document.addEventListener('keydown', function(event) {
