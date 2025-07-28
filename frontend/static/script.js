@@ -12,6 +12,9 @@ document.getElementById("WrongQuestionBookSideBar").addEventListener("click", fu
 document.getElementById("demoTestSideBar").addEventListener("click", function () {
     window.location.href = "/question";
 });
+document.getElementById("correctRateSideBar").addEventListener("click", function () {
+    window.location.href = "/correctRate";
+});
 const sidebar = document.getElementById('sidebar');
 const toggle = document.getElementById('toggleButton');
 
