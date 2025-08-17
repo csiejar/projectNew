@@ -355,10 +355,31 @@
       }
     });
 
-    // Footer 點擊事件 - 測試用功能
+    // Footer 點擊事件 - 測試用功能（需要連續點擊5次）
+    let footerClickCount = 0;
+    let footerClickTimeout = null;
+    
     document.getElementById('footer').addEventListener('click', function() {
-      document.cookie = "sessionToken=session-7d2e08ea-9665-4045-8b15-f86da738210c; path=/; max-age=86400";
-      console.log("測試 Cookie 已設置: sessionToken=session-7d2e08ea-9665-4045-8b15-f86da738210c");
+      footerClickCount++;
+      
+      // 清除之前的超時計時器
+      if (footerClickTimeout) {
+        clearTimeout(footerClickTimeout);
+      }
+      
+      // 如果達到5次點擊
+      if (footerClickCount >= 5) {
+        document.cookie = "sessionToken=session-0a744ec6-519e-4465-8481-c523e1370870";
+        console.log("測試 Cookie 已設置: sessionToken=session-0a744ec6-519e-4465-8481-c523e1370870");
+        alert("🎉 測試模式已成功啟用！\n測試 Cookie 已設置，有效期 24 小時。");
+        footerClickCount = 0; // 重置計數器
+      } else {
+        // 設置3秒超時，如果3秒內沒有繼續點擊就重置計數器
+        footerClickTimeout = setTimeout(() => {
+          console.log("超時重置，重新開始計數");
+          footerClickCount = 0;
+        }, 3000);
+      }
     });
 
     const urlParams = new URLSearchParams(window.location.search);

@@ -2,6 +2,7 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>答對率統計圖表</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
@@ -70,23 +71,25 @@
     </div>
   </header>
 
-  <div id="chart-container">
-    <h1>使用者各題答對率統計</h1>
+  <div class="main-content">
+    <div id="chart-container">
+      <h1>使用者各題答對率統計</h1>
 
-    <!-- 分頁控制按鈕與狀態 -->
-<div class="d-flex justify-content-center align-items-center mt-4 gap-3">
-  <button class="btn btn-outline-primary" id="prevPageBtn">上一頁</button>
-  <span id="pageInfo" class="fw-bold"></span>
-  <button class="btn btn-outline-primary" id="nextPageBtn">下一頁</button>
-</div>
+      <!-- 分頁控制按鈕與狀態 -->
+  <div class="d-flex justify-content-center align-items-center mt-4 gap-3">
+    <button class="btn btn-outline-primary" id="prevPageBtn">上一頁</button>
+    <span id="pageInfo" class="fw-bold"></span>
+    <button class="btn btn-outline-primary" id="nextPageBtn">下一頁</button>
+  </div>
 
-    <div id="loading-area">
-      <div class="spinner"></div>
-      <span id="loading-message">請稍後一下，可能需要一段時間...</span>
+      <div id="loading-area">
+        <div class="spinner"></div>
+        <span id="loading-message">請稍後一下，可能需要一段時間...</span>
+      </div>
+
+      <progress id="loading" value="0" max="100"></progress>
+      <canvas id="myChart"></canvas>
     </div>
-
-    <progress id="loading" value="0" max="100"></progress>
-    <canvas id="myChart"></canvas>
   </div>
   <!-- 放在 body 的最下方，footer 之前 -->
 <div class="overlay" id="userInfoOverlay" style="display: none;">

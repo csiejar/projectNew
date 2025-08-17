@@ -9,11 +9,24 @@ body {
     #chart-container {
       max-width: 1400px;
       margin: 60px auto;
-      margin-left: 250px; /* 為桌面版 sidebar 留空間 */
       background: white;
       padding: 60px 50px;
       border-radius: 16px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    /* 桌面版：抵消 main-content 的 margin-left，讓內容居中 */
+    @media (min-width: 1200px) {
+      .main-content {
+        margin-left: 0 !important;
+        padding: 20px;
+      }
+      
+      #chart-container {
+        margin-left: 270px; /* sidebar 寬度 + 一些間距 */
+        margin-right: 20px;
+        max-width: calc(100% - 290px);
+      }
     }
 
     h1 {
@@ -78,11 +91,16 @@ body {
 
     /* 響應式設計 */
     @media (max-width: 1199px) and (min-width: 768px) {
+      .main-content {
+        margin-left: 0 !important;
+        padding: 20px;
+      }
+      
       #chart-container {
-        margin-left: 220px;
+        margin-left: 240px; /* 平板版 sidebar 寬度 + 間距 */
         margin-right: 20px;
         padding: 40px 30px;
-        max-width: calc(100% - 240px);
+        max-width: calc(100% - 260px);
       }
 
       h1 {
@@ -91,9 +109,13 @@ body {
     }
 
     @media (max-width: 767px) {
+      .main-content {
+        margin-left: 0 !important;
+        padding: 10px;
+      }
+      
       #chart-container {
         margin: 20px;
-        margin-left: 20px;
         padding: 20px;
         max-width: calc(100% - 40px);
       }
@@ -120,6 +142,11 @@ body {
     }
 
     @media (max-width: 480px) {
+      .main-content {
+        margin-left: 0 !important;
+        padding: 5px;
+      }
+      
       #chart-container {
         margin: 10px;
         padding: 15px;
