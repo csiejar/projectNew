@@ -290,5 +290,235 @@
     animation: fadeOut 0.3s ease;
 }
 
+/* 響應式設計 - 媒體查詢 */
+
+/* 大型桌面螢幕 (1200px 以上) */
+@media (min-width: 1200px) {
+    .main-content {
+        margin-left: 250px;
+        padding: 20px;
+    }
+    
+    .sidebar {
+        width: 240px;
+    }
+    
+    .sidebar.closed {
+        width: 60px;
+    }
+    
+    .popup-card {
+        width: 280px;
+        height: 280px;
+    }
+}
+
+/* 平板螢幕 (768px - 1199px) */
+@media (max-width: 1199px) and (min-width: 768px) {
+    .main-content {
+        margin-left: 220px;
+        padding: 15px;
+    }
+    
+    .sidebar {
+        width: 200px;
+    }
+    
+    .sidebar.closed {
+        width: 50px;
+    }
+    
+    .sidebar li {
+        padding: 12px 15px;
+        font-size: 14px;
+    }
+    
+    .sidebar i {
+        font-size: 18px;
+    }
+    
+    .popup-card {
+        width: 240px;
+        height: 240px;
+        top: 15px;
+        right: 15px;
+    }
+    
+    .toggle-button.open {
+        left: 170px;
+    }
+    
+    /* 調整科目主題卡片 */
+    .carousel-control-prev {
+        left: -100px !important;
+    }
+    
+    .carousel-control-next {
+        right: -80px !important;
+    }
+}
+
+/* 手機螢幕 (767px 以下) */
+@media (max-width: 767px) {
+    .sidebar {
+        width: 100%;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+    
+    .sidebar:not(.closed) {
+        transform: translateX(0);
+    }
+    
+    .sidebar.closed {
+        transform: translateX(-100%);
+        width: 100%;
+    }
+    
+    .main-content {
+        margin-left: 0;
+        padding: 10px;
+        width: 100%;
+    }
+    
+    .toggle-button {
+        left: 15px;
+        top: 15px;
+        z-index: 1102;
+    }
+    
+    .toggle-button.open {
+        left: 15px;
+    }
+    
+    /* Header 調整 */
+    header {
+        padding: 8px 15px !important;
+        flex-wrap: wrap;
+    }
+    
+    header img {
+        height: 40px !important;
+    }
+    
+    header .btn {
+        padding: 6px 8px;
+        font-size: 14px;
+    }
+    
+    /* 彈出卡片調整 */
+    .popup-card {
+        width: 90%;
+        max-width: 300px;
+        height: auto;
+        min-height: 250px;
+        top: 50%;
+        left: 50%;
+        right: auto;
+        transform: translate(-50%, -50%);
+        margin: 0;
+    }
+    
+    /* 登入按鈕調整 */
+    .loginOutBtn button {
+        width: 100px;
+        height: 60px;
+        font-size: 12px;
+    }
+    
+    /* 科目主題區域調整 */
+    .carousel-control-prev,
+    .carousel-control-next {
+        display: none;
+    }
+    
+    .carousel-inner .card {
+        width: 100% !important;
+        margin: 0 !important;
+    }
+    
+    .carousel-item .row {
+        max-width: 100% !important;
+    }
+    
+    .carousel-item .col {
+        padding: 5px !important;
+    }
+    
+    /* 按鈕區塊調整 */
+    .btn {
+        margin: 5px 0;
+        width: 100%;
+    }
+    
+    /* 公告區域調整 */
+    .fs-5 {
+        font-size: 1rem !important;
+    }
+    
+    h1.fw-bold {
+        font-size: 1.5rem !important;
+    }
+    
+    /* 圖片調整 */
+    .announcemaent img {
+        width: 100% !important;
+        height: auto;
+    }
+}
+
+/* 極小螢幕 (480px 以下) */
+@media (max-width: 480px) {
+    .main-content {
+        padding: 8px;
+    }
+    
+    header {
+        padding: 5px 10px !important;
+    }
+    
+    header img {
+        height: 35px !important;
+    }
+    
+    .popup-card {
+        width: 95%;
+        padding: 12px;
+    }
+    
+    .avatar {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .name {
+        font-size: 14px;
+    }
+    
+    .email {
+        font-size: 10px;
+    }
+    
+    .button.logout-only {
+        padding: 10px 20px;
+        font-size: 12px;
+    }
+    
+    .loginOutBtn button {
+        width: 80px;
+        height: 50px;
+        font-size: 10px;
+    }
+    
+    .sidebar li {
+        padding: 10px 15px;
+        font-size: 12px;
+    }
+    
+    .sidebar i {
+        font-size: 16px;
+    }
+}
+
 
 

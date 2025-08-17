@@ -424,6 +424,24 @@ document
             
             document.getElementById("addOptionD").value = "詳如照片";
             document.getElementById("addOptionD").disabled = true;
+        } else {
+            // 沒有選擇檔案時，重新啟用所有輸入框
+            document.getElementById("addQuestion").value = "";
+            document.getElementById("addQuestion").disabled = false;
+            
+            document.getElementById("addOptionA").value = "";
+            document.getElementById("addOptionA").disabled = false;
+            
+            document.getElementById("addOptionB").value = "";
+            document.getElementById("addOptionB").disabled = false;
+            
+            document.getElementById("addOptionC").value = "";
+            document.getElementById("addOptionC").disabled = false;
+            
+            document.getElementById("addOptionD").value = "";
+            document.getElementById("addOptionD").disabled = false;
+            
+            uploadedFile = null;
         }
     });
 

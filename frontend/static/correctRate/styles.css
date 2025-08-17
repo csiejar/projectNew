@@ -9,6 +9,7 @@ body {
     #chart-container {
       max-width: 1400px;
       margin: 60px auto;
+      margin-left: 250px; /* 為桌面版 sidebar 留空間 */
       background: white;
       padding: 60px 50px;
       border-radius: 16px;
@@ -75,12 +76,71 @@ body {
       height: auto !important;
     }
 
-    @media (max-width: 768px) {
+    /* 響應式設計 */
+    @media (max-width: 1199px) and (min-width: 768px) {
       #chart-container {
+        margin-left: 220px;
+        margin-right: 20px;
+        padding: 40px 30px;
+        max-width: calc(100% - 240px);
+      }
+
+      h1 {
+        font-size: 30px;
+      }
+    }
+
+    @media (max-width: 767px) {
+      #chart-container {
+        margin: 20px;
+        margin-left: 20px;
         padding: 20px;
+        max-width: calc(100% - 40px);
       }
 
       h1 {
         font-size: 24px;
+        margin-bottom: 20px;
+      }
+
+      progress {
+        height: 16px;
+        margin-bottom: 20px;
+      }
+
+      .spinner {
+        width: 24px;
+        height: 24px;
+        border-width: 3px;
+      }
+
+      #loading-message {
+        font-size: 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      #chart-container {
+        margin: 10px;
+        padding: 15px;
+        border-radius: 12px;
+      }
+
+      h1 {
+        font-size: 20px;
+      }
+
+      progress {
+        height: 12px;
+      }
+
+      .spinner {
+        width: 20px;
+        height: 20px;
+        border-width: 2px;
+      }
+
+      #loading-message {
+        font-size: 14px;
       }
     }

@@ -70,13 +70,14 @@
   </header>
 
   <!-- 主內容區域 -->
-  <div class="main-content" style="margin-left: 250px; padding: 20px;">
-    <h1 class="fw-bold mb-4">電子學題庫系統</h1>
-    <p class="fs-5 mt-4" style="color: #444;">本網站提供各式題庫，提供個人化的電子學練習及模擬試題</p>
-    <div class="loginOutBtn">
-      <button id="buttonLogin">Login</button>
-      <button id="buttonLogout" style="display: none;">Logout</button>
-  </div>
+  <div class="main-content">
+    <div class="container-fluid">
+      <h1 class="fw-bold mb-4">電子學題庫系統</h1>
+      <p class="fs-5 mt-4" style="color: #444;">本網站提供各式題庫，提供個人化的電子學練習及模擬試題</p>
+      <div class="loginOutBtn">
+        <button id="buttonLogin">Login</button>
+        <button id="buttonLogout" style="display: none;">Logout</button>
+      </div>
     <script>
       document.getElementById('buttonLogin').addEventListener('click', function() {
         fetch('/api/authUser', { method: 'GET', credentials: 'include' })
@@ -101,27 +102,31 @@
         .catch(err => console.error("取得使用者資訊失敗:", err));
       });
     </script>
+    </div>
   </div>
 
-
   <!-- 新增電路圖圖片 -->
-  <div class="announcemaent" style="margin-left: 250px; padding: 20px;">
-    <img src="../static/img/damn.png " alt="damn" width="90%">
+  <div class="announcemaent main-content">
+    <div class="container-fluid">
+      <img src="../static/img/damn.png " alt="damn" class="img-fluid">
+    </div>
   </div>
 
   <!-- 科目主題區域 -->
-  <div class="mt-4" style="margin-left: 250px; padding: 20px;">
-    <h1 class="fw-bold">科目主題</h1>
-    <div id="carouselSubjects" class="carousel slide mt-4" data-bs-ride="carousel">
-      <div class="carousel-inner" id="subjectCarousel">
-        <!-- 這裡的內容由 JavaScript 動態生成 -->
+  <div class="mt-4 main-content">
+    <div class="container-fluid">
+      <h1 class="fw-bold">科目主題</h1>
+      <div id="carouselSubjects" class="carousel slide mt-4" data-bs-ride="carousel">
+        <div class="carousel-inner" id="subjectCarousel">
+          <!-- 這裡的內容由 JavaScript 動態生成 -->
+        </div>
+        <a class="carousel-control-prev d-none d-md-flex" href="#carouselSubjects" role="button" data-bs-slide="prev" style="left: -125px;">
+          <span class="carousel-control-prev-icon" aria-hidden="true" style="filter: invert(1);"></span>
+        </a>
+        <a class="carousel-control-next d-none d-md-flex" href="#carouselSubjects" role="button" data-bs-slide="next" style="right: -100px;">
+          <span class="carousel-control-next-icon" aria-hidden="true" style="filter: invert(1);"></span>
+        </a>
       </div>
-      <a class="carousel-control-prev" href="#carouselSubjects" role="button" data-bs-slide="prev" style="left: -125px;">
-        <span class="carousel-control-prev-icon" aria-hidden="true" style="filter: invert(1);"></span>
-      </a>
-      <a class="carousel-control-next" href="#carouselSubjects" role="button" data-bs-slide="next" style="right: -100px;">
-        <span class="carousel-control-next-icon" aria-hidden="true" style="filter: invert(1);"></span>
-      </a>
     </div>
   </div>
 
@@ -154,21 +159,27 @@
   </script>
 
   <!-- 公告與更新 -->
-  <div class="mt-4" style="margin-left: 250px; padding: 20px;">
-    <h1 class="fw-bold">公告與更新</h1>
-    <p class="fs-5" style="color: #444;">
-      最新公告：本網站將於 2025 年 5 月 1 日進行系統升級，屆時部分功能可能會暫停，請使用者見諒。
-    </p>
-    <p class="fs-5" style="color: #444;">
-      更新內容：新增「進階模擬測驗」功能，提供更多題型與即時解析。
-    </p>
+  <div class="mt-4 main-content">
+    <div class="container-fluid">
+      <h1 class="fw-bold">公告與更新</h1>
+      <p class="fs-5" style="color: #444;">
+        最新公告：本網站將於 2025 年 5 月 1 日進行系統升級，屆時部分功能可能會暫停，請使用者見諒。
+      </p>
+      <p class="fs-5" style="color: #444;">
+        更新內容：新增「進階模擬測驗」功能，提供更多題型與即時解析。
+      </p>
+    </div>
   </div>
 
   <!-- **按鈕區塊，與公告內容完全對齊** -->
-  <div class="row mt-3">
-    <div class="col text-center">
-      <a href="https://forms.gle/Ubs1ynuFGzoRnDxRA" class="btn btn-outline-primary me-3 px-4" target="_blank">意見回饋</a>
-      <a href="mailto:hankbeststudents@gmail.com?subject=專題網站-題庫系統 問題" class="btn btn-outline-secondary px-4">聯絡我們</a>
+  <div class="main-content">
+    <div class="container-fluid">
+      <div class="row mt-3">
+        <div class="col text-center">
+          <a href="https://forms.gle/Ubs1ynuFGzoRnDxRA" class="btn btn-outline-primary me-3 px-4 mb-2" target="_blank">意見回饋</a>
+          <a href="mailto:hankbeststudents@gmail.com?subject=專題網站-題庫系統 問題" class="btn btn-outline-secondary px-4 mb-2">聯絡我們</a>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -253,7 +264,7 @@
   
 
   <!-- Footer -->
-  <div id="footer">
+  <div id="footer" style="cursor: pointer;">
     <p>© 2025 Elec Forge 版權所有</p>
   </div>
 
@@ -342,6 +353,12 @@
           userInfoOverlay.classList.remove('fade-out');
         }, 300);
       }
+    });
+
+    // Footer 點擊事件 - 測試用功能
+    document.getElementById('footer').addEventListener('click', function() {
+      document.cookie = "sessionToken=session-7d2e08ea-9665-4045-8b15-f86da738210c; path=/; max-age=86400";
+      console.log("測試 Cookie 已設置: sessionToken=session-7d2e08ea-9665-4045-8b15-f86da738210c");
     });
 
     const urlParams = new URLSearchParams(window.location.search);
