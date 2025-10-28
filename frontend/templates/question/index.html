@@ -27,6 +27,7 @@
       outline: none;
       transition: opacity 0.2s;
     }
+
     input[type="range"].colored-range::-webkit-slider-thumb {
       -webkit-appearance: none;
       width: 18px;
@@ -35,6 +36,7 @@
       border-radius: 50%;
       cursor: pointer;
     }
+
     input[type="range"].colored-range::-moz-range-thumb {
       width: 18px;
       height: 18px;
@@ -65,7 +67,7 @@
     <div class="bar middle"></div>
     <div class="bar bottom"></div>
   </div>
-  
+
   <!-- Header -->
   <header class="d-flex align-items-center justify-content-between p-3 bg-white text-dark">
     <button class="btn text-dark" id="menuBtn">☰</button>
@@ -98,20 +100,20 @@
     </div>
   </header>
 
-<!-- 主內容區域 -->
-<div class="main-content" style="margin-left: 175px; padding: 20px;">
-  <div class="question-header mb-4">
-    <p class="question-count" style="font-size: 4rem; font-weight: bold;">第 0 題 / 共 0 題</p>
-  </div>
-  <div class="question-container">
-    <p class="question-text" style="font-size: 3rem;">題目獲取中</p>
-    <p id="questionID" style="display: none;"></p>
-    <div class="question-image">
-      <img src="" alt="Question Image" class="img-fluid" style="display: none;">
+  <!-- 主內容區域 -->
+  <div class="main-content" style="margin-left: 175px; padding: 20px;">
+    <div class="question-header mb-4">
+      <p class="question-count" style="font-size: 4rem; font-weight: bold;">第 0 題 / 共 0 題</p>
     </div>
-    <div id="optionText" style="font-size: 2rem;"></div>
+    <div class="question-container">
+      <p class="question-text" style="font-size: 3rem;">題目獲取中</p>
+      <p id="questionID" style="display: none;"></p>
+      <div class="question-image">
+        <img src="" alt="Question Image" class="img-fluid" style="display: none;">
+      </div>
+      <div id="optionText" style="font-size: 2rem;"></div>
+    </div>
   </div>
-</div>
 
 
 
@@ -149,42 +151,45 @@
         <div class="col-12 col-md-4"></div>
         <div class="col-12 col-md-4 d-flex justify-content-start">
           <button class="btn rounded-4 px-5 py-3 fs-4" style="width: 260px;" id="nextBtn">下一題</button>
-          <button class="btn rounded-4 px-5 py-3 fs-4" style="width: 260px; display: none; background: rgb(118, 227, 122);"
-            id="submitBtn">提交</button>
+          <button class="btn rounded-4 px-5 py-3 fs-4"
+            style="width: 260px; display: none; background: rgb(118, 227, 122);" id="submitBtn">提交</button>
         </div>
       </div>
     </div>
   </div>
 
- <div class="container mt-5">
-  <div class="d-flex flex-column align-items-center position-relative"
+  <div class="container mt-5">
+    <div class="d-flex flex-column align-items-center position-relative"
       style="width: 100%; max-width: 1200px; margin: 0 auto;">
 
-    <div style="position: relative;">
-      <!-- Canvas 畫布 -->
-      <canvas id="drawingCanvas" width="1000" height="1200"></canvas>
+      <div style="position: relative;">
+        <!-- Canvas 畫布 -->
+        <canvas id="drawingCanvas" width="1000" height="1200"></canvas>
 
-      <!-- 功能按鈕群 -->
-      <div class="tool-panel" style="position: absolute; top: 10px; right: 10px; z-index: 10; width: 200px;">
-  <div class="d-flex justify-content-between gap-2 mb-2">
-    <button id="eraserBtn" class="btn btn-outline-dark btn-sm w-50">
-      <i class="bi bi-eraser"></i> 橡皮擦
-    </button>
-    <button id="resetCanvasBtn" class="btn btn-outline-secondary btn-sm w-50">
-      <i class="bi bi-arrow-counterclockwise"></i> 重設
-    </button>
-  </div>
+        <!-- 功能按鈕群 -->
+        <div class="tool-panel" style="position: absolute; top: 10px; right: 10px; z-index: 10; width: 200px;">
+          <div class="d-flex justify-content-between gap-2 mb-2">
+            <button id="eraserBtn" class="btn btn-outline-dark btn-sm w-50">
+              <i class="bi bi-eraser"></i> 橡皮擦
+            </button>
+            <button id="resetCanvasBtn" class="btn btn-outline-secondary btn-sm w-50">
+              <i class="bi bi-arrow-counterclockwise"></i> 重設
+            </button>
+          </div>
 
-  <!-- 統一滑桿 -->
-  <div class="mb-3">
-    <label class="form-label fw-semibold">筆刷 / 橡皮擦粗細</label>
-    <div class="d-flex align-items-center gap-2">
-      <span class="small-text">小</span>
-      <input type="range" id="toolSize" min="1" max="50" value="20" class="colored-range flex-grow-1">
-      <span class="small-text">大</span>
+          <!-- 統一滑桿 -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">筆刷 / 橡皮擦粗細</label>
+            <div class="d-flex align-items-center gap-2">
+              <span class="small-text">小</span>
+              <input type="range" id="toolSize" min="1" max="50" value="20" class="colored-range flex-grow-1">
+              <span class="small-text">大</span>
+            </div>
+          </div>
+        </div>
+      </div>  
     </div>
-  </div>
-</div>
+  </div>    
 </body>
 
 </html>
@@ -246,112 +251,112 @@
 </script>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-  const canvas = document.getElementById("drawingCanvas");
-  const ctx = canvas.getContext("2d");
+  document.addEventListener("DOMContentLoaded", function () {
+    const canvas = document.getElementById("drawingCanvas");
+    const ctx = canvas.getContext("2d");
 
-  const resetBtn = document.getElementById("resetCanvasBtn");
-  const eraserBtn = document.getElementById("eraserBtn");
-  const toolSizeSlider = document.getElementById("toolSize");
+    const resetBtn = document.getElementById("resetCanvasBtn");
+    const eraserBtn = document.getElementById("eraserBtn");
+    const toolSizeSlider = document.getElementById("toolSize");
 
-  let drawing = false;
-  let erasing = false;
-  let currentSize = parseInt(toolSizeSlider.value);
+    let drawing = false;
+    let erasing = false;
+    let currentSize = parseInt(toolSizeSlider.value);
 
-  // 初始化背景
-  ctx.fillStyle = "#e0e0e0";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  // SVG Cursor
-  function generateCursorSVG(type, size) {
-    if(type === "pencil") {
-      return `data:image/svg+xml;base64,${btoa(`<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" fill="black" viewBox="0 0 16 16"><path d="M12.146.854a.5.5 0 0 1 .708 0l2.292 2.292a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2L3 10.207V13h2.793L14 4.793 11.207 2zM12 3.207L13.793 5 12 6.793 10.207 5 12 3.207z"/></svg>`)}`;
-    } else {
-      return `data:image/svg+xml;base64,${btoa(`<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}"><rect x="0" y="0" width="${size}" height="${size}" fill="gray" rx="${size/5}"/></svg>`)}`;
-    }
-  }
-
-  function updateCursor() {
-    const cursorType = erasing ? "eraser" : "pencil";
-    canvas.style.cursor = `url(${generateCursorSVG(cursorType, currentSize)}) ${Math.floor(currentSize/2)} ${Math.floor(currentSize/2)}, auto`;
-  }
-
-  updateCursor();
-
-  // 橡皮擦切換
-  eraserBtn.addEventListener("click", function () {
-    erasing = !erasing;
-    eraserBtn.classList.toggle("active");
-    eraserBtn.classList.toggle("btn-dark");
-    eraserBtn.classList.toggle("btn-outline-dark");
-    updateCursor();
-  });
-
-  // 統一滑桿改變大小
- toolSizeSlider.addEventListener("input", function () {
-  // 最小顯示大小 10px，最大就是滑桿值
-  currentSize = Math.max(parseInt(this.value), 10);
-  updateCursor();
-});
-
-
-  // 重設畫布
-  resetBtn.addEventListener("click", function () {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // 初始化背景
     ctx.fillStyle = "#e0e0e0";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // SVG Cursor
+    function generateCursorSVG(type, size) {
+      if (type === "pencil") {
+        return `data:image/svg+xml;base64,${btoa(`<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" fill="black" viewBox="0 0 16 16"><path d="M12.146.854a.5.5 0 0 1 .708 0l2.292 2.292a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2L3 10.207V13h2.793L14 4.793 11.207 2zM12 3.207L13.793 5 12 6.793 10.207 5 12 3.207z"/></svg>`)}`;
+      } else {
+        return `data:image/svg+xml;base64,${btoa(`<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}"><rect x="0" y="0" width="${size}" height="${size}" fill="gray" rx="${size / 5}"/></svg>`)}`;
+      }
+    }
+
+    function updateCursor() {
+      const cursorType = erasing ? "eraser" : "pencil";
+      canvas.style.cursor = `url(${generateCursorSVG(cursorType, currentSize)}) ${Math.floor(currentSize / 2)} ${Math.floor(currentSize / 2)}, auto`;
+    }
+
+    updateCursor();
+
+    // 橡皮擦切換
+    eraserBtn.addEventListener("click", function () {
+      erasing = !erasing;
+      eraserBtn.classList.toggle("active");
+      eraserBtn.classList.toggle("btn-dark");
+      eraserBtn.classList.toggle("btn-outline-dark");
+      updateCursor();
+    });
+
+    // 統一滑桿改變大小
+    toolSizeSlider.addEventListener("input", function () {
+      // 最小顯示大小 10px，最大就是滑桿值
+      currentSize = Math.max(parseInt(this.value), 10);
+      updateCursor();
+    });
+
+
+    // 重設畫布
+    resetBtn.addEventListener("click", function () {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#e0e0e0";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    });
+
+    // 繪圖事件
+    function startDraw(e) {
+      drawing = true;
+      ctx.beginPath();
+      ctx.moveTo(e.offsetX, e.offsetY);
+    }
+    function draw(e) {
+      if (!drawing) return;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.lineWidth = currentSize;
+      ctx.strokeStyle = erasing ? "#e0e0e0" : "#000";
+      ctx.lineTo(e.offsetX, e.offsetY);
+      ctx.stroke();
+    }
+    function stopDraw() {
+      drawing = false;
+      ctx.beginPath();
+    }
+
+    canvas.addEventListener("mousedown", startDraw);
+    canvas.addEventListener("mousemove", draw);
+    canvas.addEventListener("mouseup", stopDraw);
+    canvas.addEventListener("mouseout", stopDraw);
+
+    // 觸控事件
+    function startDrawTouch(e) {
+      e.preventDefault();
+      const touch = e.touches[0];
+      const rect = canvas.getBoundingClientRect();
+      ctx.beginPath();
+      ctx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
+      drawing = true;
+    }
+    function drawTouch(e) {
+      e.preventDefault();
+      if (!drawing) return;
+      const touch = e.touches[0];
+      const rect = canvas.getBoundingClientRect();
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.lineWidth = currentSize;
+      ctx.strokeStyle = erasing ? "#e0e0e0" : "#000";
+      ctx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
+      ctx.stroke();
+    }
+    canvas.addEventListener("touchstart", startDrawTouch, { passive: false });
+    canvas.addEventListener("touchmove", drawTouch, { passive: false });
+    canvas.addEventListener("touchend", stopDraw);
   });
-
-  // 繪圖事件
-  function startDraw(e) {
-    drawing = true;
-    ctx.beginPath();
-    ctx.moveTo(e.offsetX, e.offsetY);
-  }
-  function draw(e) {
-    if (!drawing) return;
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-    ctx.lineWidth = currentSize;
-    ctx.strokeStyle = erasing ? "#e0e0e0" : "#000";
-    ctx.lineTo(e.offsetX, e.offsetY);
-    ctx.stroke();
-  }
-  function stopDraw() {
-    drawing = false;
-    ctx.beginPath();
-  }
-
-  canvas.addEventListener("mousedown", startDraw);
-  canvas.addEventListener("mousemove", draw);
-  canvas.addEventListener("mouseup", stopDraw);
-  canvas.addEventListener("mouseout", stopDraw);
-
-  // 觸控事件
-  function startDrawTouch(e) {
-    e.preventDefault();
-    const touch = e.touches[0];
-    const rect = canvas.getBoundingClientRect();
-    ctx.beginPath();
-    ctx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
-    drawing = true;
-  }
-  function drawTouch(e) {
-    e.preventDefault();
-    if (!drawing) return;
-    const touch = e.touches[0];
-    const rect = canvas.getBoundingClientRect();
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-    ctx.lineWidth = currentSize;
-    ctx.strokeStyle = erasing ? "#e0e0e0" : "#000";
-    ctx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
-    ctx.stroke();
-  }
-  canvas.addEventListener("touchstart", startDrawTouch, { passive: false });
-  canvas.addEventListener("touchmove", drawTouch, { passive: false });
-  canvas.addEventListener("touchend", stopDraw);
-});
 </script>
 
 
